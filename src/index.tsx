@@ -9,16 +9,18 @@ import Brochure from './Routes/Brochure/Brochure';
 import StoreFront from './Routes/StoreFront/StoreFront';
 import Cart from './Routes/Cart/Cart';
 import Tail from './Tail/Tail';
+import Admin from './Routes/ADMIN/Admin';
 
 const rootElement: HTMLElement | null = document.getElementById('root');
 
 if (rootElement) {
   ReactDOM.render(
     <React.StrictMode>
-      <ContextProvider>
+      <ContextProvider >
         <Router>
           <Navigation />
           <Routes>
+            <Route path='/ADMIN' Component={Admin}/>
             <Route path="/" Component={Brochure}/>
             <Route path="/StoreFront" Component={StoreFront}/>
             <Route path="/Cart" Component={Cart}/>            
