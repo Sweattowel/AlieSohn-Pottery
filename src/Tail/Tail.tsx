@@ -21,6 +21,8 @@ function Tail() {
                     setUserID(response.data.userID);
                     setUserName(userNameAttempt);
                     setWantLogin(false)
+                    setUserNameAttempt('')
+                    setPassWordAttempt('')
                     console.log('Logged in successfully');
                 } else if (response.status === 404) {
                     console.log('No account exists');
@@ -59,6 +61,7 @@ function Tail() {
             const response = await axios.post(`${serverAddress}/api/register`, { userName: userNameAttempt, passWord: passWordAttempt } )
             if (response.status === 200){
                 console.log('Registered successfully');
+                Login('regularJackoff')
                 setWantLogin(false)
             }  else if (response.status === 409){
                 console.log('Username already exists. Please choose a different username.');
@@ -73,61 +76,65 @@ function Tail() {
   return (
     <>
         { wantLogin ? (
-            <div onSubmit={() => Login(caste)} className="fixed bottom-[10%] rounded-lg left-[20%] border-black border-2 text-center justify-center w-[60%] h-[80%] bg-gray-600 text-white">
-                <h1 style={{ fontSize: '2em', width: '80%', margin: 'auto', borderBottom: '2px solid black' }}>
-                    LOGIN MENU                
-                </h1>
-                <h1 className="mt-10">
-                    UserName
-                </h1>
-                <Input onChange={(e) => setUserNameAttempt(e.target.value)} />
-                <h1 className="mt-10">
-                    PassWord
-                </h1>
-                <Input className="mb-10" onChange={(e) => setPassWordAttempt(e.target.value)} type="password"/>
-                <br />
-                <Button
-                onClick={() => Login('regularJackoff')}
-                style={{
-                    width: "125px",
-                    height: '50px',
-                    color: "white",
-                    backgroundColor: "gray",
-                    fontSize: "0.5em",
-                    borderRight: "1px solid black",
-                }}
-                >
-                Regular Jackoff Login
-                </Button>
-                <Button
-                    onClick={() => Login('King')}
-                style={{
-                    width: "125px",
-                    height: '50px',
-                    color: "white",
-                    backgroundColor: "gray",
-                    fontSize: "0.5em",
-                    borderLeft: "1px solid black",
-                }}
-                >
-                Secret Login
-                </Button>
-                <br />
-                <br />
-                <Button
-                    onClick={() => register()}
-                style={{
-                    width: "125px",
-                    height: '50px',
-                    color: "white",
-                    backgroundColor: "gray",
-                    fontSize: "0.5em",
-                    borderLeft: "1px solid black",
-                }}
-                >
-                Register
-                </Button>
-                </div>            
+            <div onClick={() => setWantLogin(false)} className="fixed inset-0 w-full h-full bg-gray-600 bg-opacity-75 flex items-center justify-center z-50">
+                <div onClick={(e) => e.stopPropagation()} onSubmit={() => Login(caste)} className="fixed bottom-[20%] rounded-lg left-[40%] border-black border-2 text-center justify-center w-[20%] h-[60%] bg-gray-600 text-white">
+                    <h1 style={{ fontSize: '2em', width: '80%', margin: 'auto', borderBottom: '2px solid black' }}>
+                        LOGIN MENU                
+                    </h1>
+                    <h1 className="mt-10">
+                        UserName
+                    </h1>
+                    <Input onChange={(e) => setUserNameAttempt(e.target.value)} />
+                    <h1 className="mt-10">
+                        PassWord
+                    </h1>
+                    <Input className="mb-10" onChange={(e) => setPassWordAttempt(e.target.value)} type="password"/>
+                    <br />
+                    <Button
+                    onClick={() => Login('regularJackoff')}
+                    style={{
+                        width: "125px",
+                        height: '50px',
+                        color: "white",
+                        backgroundColor: "gray",
+                        fontSize: "0.5em",
+                        borderRight: "1px solid black",
+                    }}
+                    >
+                    Regular Jackoff Login
+                    </Button>
+                    <Button
+                        onClick={() => Login('King')}
+                    style={{
+                        width: "125px",
+                        height: '50px',
+                        color: "white",
+                        backgroundColor: "gray",
+                        fontSize: "0.5em",
+                        borderLeft: "1px solid black",
+                    }}
+                    >
+                    Secret Login
+                    </Button>
+                    <br />
+                    <br />
+                    <Button
+                        onClick={() => register()}
+                    style={{
+                        width: "125px",
+                        height: '50px',
+                        color: "white",
+                        backgroundColor: "gray",
+                        fontSize: "0.5em",
+                        borderLeft: "1px solid black",
+                    }}
+                    >
+                    Register
+                    </Button>
+                    </div> 
+            </div>
+
+           
             ) : (null)}
 
         

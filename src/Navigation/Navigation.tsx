@@ -15,15 +15,28 @@ function Navigation() {
                     ) : (null)}
                     {(authenticated && superAuthenticated) ? (
                         <img className='h-[63px] mr-2' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYpARmcDnD6YGkauJskZc4CtgEZvMfjRPkddCFk_9tMQ&s'/>
-                    ) : (null)}   
-                    { userID !== -1 ? (userID) : (null)}                    
+                    ) : (null)}                       
                     <div className='w-[50%] m-3 ml-[5%] text-white text-2xl'>
-                        <h1 className='bg-gray-800 h-[40px] w-[200px] justify-center text-center border-b-4 border-black border-solid rounded-t'>
+                        <h1 className='bg-gray-600 h-[40px] w-[200px] justify-center text-center border-b-4 border-black border-solid rounded-t'>
                             Pottery
                         </h1>
                     </div>            
                     <ul className='flex space-x-1 m-2'>
-                        {superAuthenticated ? (
+                    {!authenticated ? (
+                        <li>
+                        <Link to="/MyAccount">
+                            <Button
+                            variant='outlined'
+                            color="primary"
+                            style={ page === 5 ? { border: '2px solid white', backgroundColor: 'black', color: 'white', width: '150px' } : { border: '2px solid black', backgroundColor: 'gray', color: '#ffffff', width: '150px' }}
+                            onClick={() => {setPage(5)}}
+                            >
+                            MyAccount
+                            </Button>
+                        </Link>
+                        </li>                            
+                        ) : (null)}                     
+                        {!superAuthenticated ? (
                         <li>
                         <Link to="/ADMIN">
                             <Button

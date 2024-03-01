@@ -41,14 +41,20 @@ function Cart() {
 
   useEffect(() => {
     setTotalCost(0);
-    cart.forEach((item) => setTotalCost((prevTotal) => prevTotal + parseInt(item.itemPrice)));
+    cart.forEach((item) => setTotalCost((prevTotal) => prevTotal + parseFloat(item.itemPrice ) * item.itemCount));
     setItemCount(cart.length);
   }, [cart]);
 
   const sendOrder = async () => {
     console.log(cart)
     try {
-      const itemIDs = cart.map(item => item.itemID);
+      //const itemIDs = cart.map(item => item.itemID);
+      const itemIDs = []
+      for (let i = 0; i < cart.length; i++){
+        for (let j = 0; j < cart[i].itemCount; j++){
+          itemIDs.push(cart[i].itemID)
+        }
+      }
       const response = await axios.post(`${serverAddress}/api/createOrder`, { userID, userName, itemIDs } )
 
       if (response.status === 200){

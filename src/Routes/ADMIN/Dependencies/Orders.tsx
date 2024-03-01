@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../../Context/ContextProvider";
 import axios from "axios";
-import { Button, Pagination } from "@mui/material";
-
+import { Button, Checkbox, Pagination } from "@mui/material";
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
 function Orders() {
   const [orders, setOrders] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
@@ -18,16 +19,8 @@ function Orders() {
       if (response.status === 200) {
         console.log('Response Data:', response.data);
         let data = response.data
-        let quantizedData = new Map<number, number>()
+        setOrders(data)
 
-        for (let i = 0; i < data.length; i++) {
-          const itemID = data[i].itemID;
-          quantizedData.set(itemID, (quantizedData.get(itemID) || 0) + 1);
-        }
-
-        setOrders([...quantizedData]);
-        console.log('this',[...quantizedData])
-        console.log('Orders collected');
       } else if (response.status === 404) {
         console.log('No orders to collect');
       }
@@ -164,9 +157,12 @@ useEffect(() => {
 
       {selectedCustomer !== -1 ? (
         orders.slice((currentOrdersPage - 1) * ordersPerPage, currentOrdersPage * ordersPerPage).map((order: any, index: number) => (
-          <div key={index} className=" m-2 flex bg-gray-800 text-white justify-center text-center">
-            <h1 className="bg-gray-600 border-black border-2 w-[50%]">Item ID : {order[0]} </h1>
-            <h1 className="bg-gray-600 border-black border-2 w-[50%]">Quantity : {order[1]} </h1>
+          <div key={index} className={ !order.completed ? "m-2 flex bg-gray-800 text-white justify-center text-center" : "opacity-60 m-2 flex bg-gray-800 text-white justify-center text-center"}>
+            <h1 className="bg-gray-600 border-black border-2 w-[25%]">Item ID : {order.itemID} </h1>
+            <h1 className="bg-gray-600 border-black border-2 w-[25%]">Quantity : {order.quantity} </h1>
+            <h1 className="bg-gray-600 border-black border-2 w-[25%]">Completed : {order.completed ? 'TRUE' : "FALSE"} </h1>
+            <Button style={{width: '25%'}}>{ order.completed ? <CheckIcon /> : <ClearIcon />}</Button>
+            
           </div>
         ))
       ) : null}

@@ -9,7 +9,7 @@ function Admin(){
 
     return (
         <>
-            {superAuthenticated ? (
+            {!superAuthenticated ? (
                 <div className="flex h-[80vh]">
                     <div className="w-[50%]">
                         <CreateItem />     

@@ -14,8 +14,9 @@ interface RemoveItemProps {
 }
 function Removeitem(){
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS
-
+    const [locked, setLocked ] = useState(true)
     const [storeItems, setStoreItems] = useState<any[]>([])    
+    // pagination handling
     const [currentPage, setCurrentPage] = useState(1);
     const [itemCount, setItemCount] = useState(0);    
     const itemsPerPage = 5;    
@@ -28,10 +29,7 @@ function Removeitem(){
       ) => {
         setCurrentPage(newPage);
     };
-
-
-
-
+    //
     const collectStoreItems = async () => {
         try {
           const response = await axios.post<storeItem[]>(`${serverAddress}/api/storeItems`);
@@ -50,6 +48,9 @@ function Removeitem(){
       };
 
     const removeStoreItems = async ({ storeItemID }: RemoveItemProps) => {
+        if (locked){
+            return
+        }
         try {
             const response = await axios.post(`${serverAddress}/api/removeItem`, {storeItemID})
             if (response.status === 200){
@@ -75,7 +76,10 @@ useEffect(() => {
                 <h1 className="text-center bg-gray-600 border-black mb-2 text-white h-[30px]" >
                                 Remove store Item
                 </h1>
-                <div className="text-white w-[80%] h-[80%] m-auto text-center">
+                <Button style={ locked ?  { color: 'white', backgroundColor: 'black', width: '100%'} : {color: 'black', backgroundColor: 'white', width: '80%', margin: 'auto', display: 'flex'}} variant="outlined" onClick={() => setLocked(!locked)}>
+                    {locked ? ('LOCKED') : ("UNLOCKED")}
+                </Button>
+                <div className={ !locked ? "text-white w-[80%] h-[80%] m-auto text-center" : "opacity-60 text-grey w-[80%] h-[80%] m-auto text-center"}>
                     {currentItems.map((item: storeItem, index: number) => (
                         <div className="w-[80%] m-auto flex items-center border-black border-2">
                                 <div className="bg-gray-800 items-center text-center flex w-[20%] h-[50px]">
@@ -84,9 +88,15 @@ useEffect(() => {
                                 <div className="w-[50%] text-black">
                                     {item.itemName}
                                 </div>       
+                                {locked ? (
+                                <Button variant="outlined" style={{color: 'black', width: '25%', fontSize: 9, backgroundColor: 'grey'}}>
+                                    Remove Item from store    
+                                </Button>  
+                                ) : (
                                 <Button variant="outlined" style={{color: 'black', width: '25%', fontSize: 9, backgroundColor: 'grey'}} onClick={() => removeStoreItems({storeItemID: item.itemID})}>
                                     Remove Item from store    
-                                </Button>                    
+                                </Button> 
+                                )}                   
                         </div>
 
                     ))}
