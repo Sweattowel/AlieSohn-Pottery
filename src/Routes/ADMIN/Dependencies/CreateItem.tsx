@@ -53,11 +53,11 @@ function CreateItem(){
     ///////////////////////////////////////////////////////////////
     return (
         <div className="bg-gray-600 ml-auto w-[80%] h-[50%]">
-                <div className="bg-gray-400 mr-auto h-full border-r-1 border-l-2 border-t-2 border-b-2 border-black">
-                    <h1 className="text-center bg-gray-600 border-black mb-2 text-white h-[30px]" >
+                <div className="bg-BACKGROUND mr-auto h-full border-r-1 border-l-2 border-t-2 border-b-2 border-black">
+                    <h1 className="text-center bg-SELECTED border-black mb-2 text-white h-[30px]" >
                         Create store Item
                     </h1>
-                    <div className="text-white w-[80%] h-[80%] bg-gray-600 m-auto text-center">
+                    <div className="text-white w-[80%] h-[80%] bg-SELECTED m-auto text-center">
                         <h1> 
                             Item title
                         </h1>
@@ -75,7 +75,7 @@ function CreateItem(){
                         </h1>
                         <Input type="file" onChange={handleFileChange} />  
                         <br />
-                        <Button style={{color: 'white', width: '50%', backgroundColor:'gray', marginTop: '2em'}} variant="outlined" onClick={createStoreItem}>Create Item</Button>   
+                        <Button style={{color: 'white', width: '50%', backgroundColor:'#dc2626', marginTop: '2em'}} variant="outlined" onClick={createStoreItem}>Create Item</Button>   
    
            
                     </div>

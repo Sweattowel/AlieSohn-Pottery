@@ -80,10 +80,10 @@ function StoreFront() {
   ///////////////////////////////////////////
   return (
 
-    <div className="w-[80%] h-[85vh] m-auto border-2 border-black bg-gray-500 text-gray-200 flex">
+    <div className="w-[80%] h-[85vh] m-auto border-2 border-black bg-gray-500 text-gray-200 flex wrap">
       {currentItems.length > 0 ? (
         currentItems.map((item: storeItem, index: number) => (
-          <div key={index} className="w-[400px] h-[80%] border p-2 mt-2 ml-auto mr-auto bg-gray-600">
+          <div key={index} className="w-[400px] h-[400px] border p-2 mt-2 ml-auto mr-auto bg-gray-600">
             <div className="mr-2">
               <div className="border-b-2 border-black">ID: {item.itemID}</div>
               <div className="border-b-2 border-black">Name: {item.itemName}</div>

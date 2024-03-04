@@ -76,8 +76,8 @@ function Tail() {
   return (
     <>
         { wantLogin ? (
-            <div onClick={() => setWantLogin(false)} className="fixed inset-0 w-full h-full bg-gray-600 bg-opacity-75 flex items-center justify-center z-50">
-                <div onClick={(e) => e.stopPropagation()} onSubmit={() => Login(caste)} className="fixed bottom-[20%] rounded-lg left-[40%] border-black border-2 text-center justify-center w-[20%] h-[60%] bg-gray-600 text-white">
+            <div onClick={() => setWantLogin(false)} className="fixed inset-0 w-full h-full bg-opacity-75 flex items-center justify-center z-50">
+                <div onClick={(e) => e.stopPropagation()} onSubmit={() => Login(caste)} className="fixed bottom-[20%] rounded-lg left-[40%] border-black border-2 text-center justify-center w-[20%] h-[60%] bg-BACKGROUND text-white">
                     <h1 style={{ fontSize: '2em', width: '80%', margin: 'auto', borderBottom: '2px solid black' }}>
                         LOGIN MENU                
                     </h1>
@@ -138,12 +138,12 @@ function Tail() {
             ) : (null)}
 
         
-        <div className="w-[90%] ml-[5%] mr-[5%] text-center bg-gray-500 mt-2 fixed bottom-0 rounded-t border-t-2 border-r-2 border-l-2 border-black">
+        <div className="w-[90%] ml-[5%] mr-[5%] text-center bg-BACKGROUND mt-2 fixed bottom-0 rounded-t border-t-2 border-r-2 border-l-2 border-black">
         <div>
             Unoffical private web app for educational purposes, i do not own any of
             the content used
         </div>
-        <div className="bg-black border-black border-2 w-[125px] justify-center flex text-center m-auto mb-1 rounded">
+        <div className="bg-BACKGROUND w-[125px] justify-center flex text-center m-auto mb-1 rounded">
             {authenticated || superAuthenticated ? (
                 <Button
                     onClick={() => logOut()}
@@ -152,7 +152,7 @@ function Tail() {
                         color: "white",
                         backgroundColor: "gray",
                         fontSize: "0.5em",
-                        borderRight: "1px solid black",
+                        borderBottom: "2px solid black",
                     }}
                     >
                         Log out

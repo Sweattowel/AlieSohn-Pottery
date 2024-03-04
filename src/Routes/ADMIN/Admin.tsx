@@ -10,7 +10,7 @@ function Admin(){
     return (
         <>
             {!superAuthenticated ? (
-                <div className="flex h-[80vh]">
+                <div className="flex h-[80vh] bg-BACKGROUND w-[80%] m-auto">
                     <div className="w-[50%]">
                         <CreateItem />     
                         <Removeitem />        

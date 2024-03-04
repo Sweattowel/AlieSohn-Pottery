@@ -122,10 +122,10 @@ useEffect(() => {
             users.slice((currentUsersPage - 1) * usersPerPage, currentUsersPage * usersPerPage).map((user: any, index: number) => (
             <Button style={
               {
-                backgroundColor: "rgb(75 85 99 / var(--tw-bg-opacity))", 
+                backgroundColor: "#dc2626", 
                 margin: "8px", 
-                border: "2px solid #000",
-                color: "#fff",
+                borderBottom: "2px solid #000",
+                color: "white",
                 textAlign: "center",
                 cursor: "pointer",
               }
@@ -137,12 +137,12 @@ useEffect(() => {
             <Button
             className="bg-gray-400 m-2 border-2 border-black text-white text-center"
             style={{
-                backgroundColor: "rgb(75 85 99 / var(--tw-bg-opacity))", 
+                backgroundColor: "#dc2626", 
                 display: 'flex',
                 margin: "auto",
                 marginTop: '10px', 
                 border: "2px solid #000",
-                color: "#fff",
+                color: "white",
                 textAlign: "center",
                 cursor: "pointer",
                 width: '80%'
@@ -157,11 +157,11 @@ useEffect(() => {
 
       {selectedCustomer !== -1 ? (
         orders.slice((currentOrdersPage - 1) * ordersPerPage, currentOrdersPage * ordersPerPage).map((order: any, index: number) => (
-          <div key={index} className={ !order.completed ? "m-2 flex bg-gray-800 text-white justify-center text-center" : "opacity-60 m-2 flex bg-gray-800 text-white justify-center text-center"}>
+          <div key={index} className={ !order.completed ? "m-2 flex bg-SELECTED text-white justify-center text-center" : "opacity-60 m-2 flex bg-SELECTED text-white justify-center text-center"}>
             <h1 className="bg-gray-600 border-black border-2 w-[25%]">Item ID : {order.itemID} </h1>
             <h1 className="bg-gray-600 border-black border-2 w-[25%]">Quantity : {order.quantity} </h1>
             <h1 className="bg-gray-600 border-black border-2 w-[25%]">Completed : {order.completed ? 'TRUE' : "FALSE"} </h1>
-            <Button style={{width: '25%'}}>{ order.completed ? <CheckIcon /> : <ClearIcon />}</Button>
+            <Button style={{width: '25%', border: '1px solid black'}}>{ order.completed ? <CheckIcon /> : <ClearIcon />}</Button>
             
           </div>
         ))

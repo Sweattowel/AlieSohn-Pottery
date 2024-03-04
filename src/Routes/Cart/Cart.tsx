@@ -59,6 +59,7 @@ function Cart() {
 
       if (response.status === 200){
         console.log('successful made order')
+        setCart([])
       } else {
         console.log('Failed to make order')
       }
@@ -69,14 +70,14 @@ function Cart() {
 ///////////////////////////////////////////////////////////////////
   return (
     <div className="w-[80%] h-[85vh] m-auto border-2 border-black bg-gray-400 text-white">
-      <div className="flex">
-        <h1 className="ml-2 mt-5 mb-5 bg-gray-600 rounded w-[20%] text-center">
+      <div className="flex bg-SELECTED">
+        <h1 className="ml-2 mt-5 mb-5 rounded w-[20%] text-center">
           Total cost: ${totalCost}
           <br />
           Item count: {itemCount} items
         </h1>
         {authenticated ? (
-          <Button variant="outlined" style={{ color: 'white', backgroundColor: 'gray', marginTop: 'auto', marginBottom: 'auto', marginLeft: '4em', width: '20%', height: '100%'}} onClick={() => sendOrder()}> Create Order </Button> 
+          <Button style={{ color: 'white', backgroundColor: '#dc2626', marginTop: 'auto', marginBottom: 'auto', marginLeft: '4em', width: '20%', height: '100%', border: '1px solid black'}} onClick={() => sendOrder()}> Create Order </Button> 
         ) : (
           <div className="mt-[auto] mb-[auto] ml-[2em] bg-gray-600 h-[50px] w-[40%] flex justify-center items-center rounded-lg">
             Please Create an account and log in to create an order
