@@ -52,12 +52,12 @@ function CreateItem(){
 
     ///////////////////////////////////////////////////////////////
     return (
-        <div className="bg-gray-600 ml-auto w-[80%] h-[50%]">
-                <div className="bg-BACKGROUND mr-auto h-full border-r-1 border-l-2 border-t-2 border-b-2 border-black">
+        <div className="ml-auto w-[100%] h-[50%]">
+                <div className="mr-auto h-full border-r-1 border-l-2 border-t-2 border-b-2 border-BLACK">
                     <h1 className="text-center bg-SELECTED border-black mb-2 text-white h-[30px]" >
                         Create store Item
                     </h1>
-                    <div className="text-white w-[80%] h-[80%] bg-SELECTED m-auto text-center">
+                    <div className="text-white w-[80%] h-[80%] m-auto text-center">
                         <h1> 
                             Item title
                         </h1>

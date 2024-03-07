@@ -79,19 +79,18 @@ function StoreFront() {
   }, [storeItems]);
   ///////////////////////////////////////////
   return (
-
-    <div className="w-[80%] h-[85vh] m-auto border-2 border-black bg-gray-500 text-gray-200 flex wrap">
+    <div className="w-[80%] h-[90vh] m-auto text-white flex wrap justify-center">
       {currentItems.length > 0 ? (
         currentItems.map((item: storeItem, index: number) => (
-          <div key={index} className="w-[400px] h-[400px] border p-2 mt-2 ml-auto mr-auto bg-gray-600">
+          <div key={index} className="w-[400px] h-[500px] p-2 mt-2 ml-2">
             <div className="mr-2">
-              <div className="border-b-2 border-black">ID: {item.itemID}</div>
-              <div className="border-b-2 border-black">Name: {item.itemName}</div>
-              <div className="border-b-2 border-black mb-2">
+              <div className="border-t-2 border-BLACK text-center">ID: {item.itemID}</div>
+              <div className="text-center">Name: {item.itemName}</div>
+              <div className="mb-2 text-center">
                 Price: ${item.itemPrice}
               </div>
-            <div className="border-black border-2 w-[80%] m-auto text-center">
-              <span className="border-b-black border-b-2">
+            <div className="w-[90%] m-auto text-center">
+              <span className="border-b-BLACK border-b-2">
                 Description:
               </span>
               <br />
@@ -100,23 +99,14 @@ function StoreFront() {
 
             </div>
             <img
-              className="h-[60%] border-black border-2"
-              style={{ width: '80%', margin: 'auto'}}
+              className="h-[60%] border-BLACK border-2"
+              style={{ maxHeight: '55%', maxWidth: '80%', margin: 'auto'}}
               src={url.resolve(serverAddress, item.imagePath)}
               alt={item.itemName}
               onError={() => console.error(`Image not found: ${item.imagePath}`)}
             />
-              <Button
-                style={{
-                  color: "white",
-                  backgroundColor: "black",
-                  border: "2px solid gray",
-                  font: "1em",
-                  height: "4em",
-                  width: "80%",
-                  marginLeft: '10%'
-                }}
-                variant="outlined"
+              <button
+                className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center border-b-2 border-BLACK w-[80%]"
                 onClick={() =>
                   addToCart(
                     item.itemID,
@@ -128,7 +118,7 @@ function StoreFront() {
                 }
               >
                 Add to cart
-              </Button>
+              </button>
           </div>
         ))
       ) : (
@@ -139,7 +129,7 @@ function StoreFront() {
         </h1>
       )}
       <Pagination
-        style={{ position: 'absolute',bottom:'10%', width: '20%', marginLeft: '30%', display: "flex", justifyContent: "center" }}
+        style={{ position: 'absolute',bottom:'10%', width: '20%', display: "flex", justifyContent: "center" }}
         count={Math.ceil(itemCount / itemsPerPage)}
         page={currentPage}
         onChange={handleChangePage}

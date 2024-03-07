@@ -10,8 +10,10 @@ module.exports = {
   ],
   theme: {
     colors: {
-      'TEXT': '#ffffff',
-      'BACKGROUND': '#ef4444',
+      'BLACK': '#000000',
+      'WHITE': '#ffffff',
+      'TEXT': '#8ca9d3',
+      'BACKGROUND': '#dc2626',
       'SELECTED': '#dc2626'
     },
     extend: {},

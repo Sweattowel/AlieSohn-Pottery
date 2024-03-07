@@ -74,9 +74,9 @@ function Removeitem() {
   }, []);
   ///////////////////////////////////////////////////////////////////
   return (
-    <div className="ml-auto w-[80%] h-[50%]">
-      <div className="bg-BACKGROUND mr-auto h-full border-r-1 border-l-2 border-t-2 border-b-2 border-black">
-        <h1 className="text-center bg-SELECTED border-black mb-2 text-white h-[30px]">
+    <div className="ml-auto w-[100%] h-[50%] bg-NONE">
+      <div className="mr-auto h-full border-r-1 border-l-2 border-t-2 border-b-2 border-BLACK">
+        <h1 className="text-center bg-SELECTED border-BLACK mb-2 text-white h-[30px]">
           Remove store Item
         </h1>
         <Button

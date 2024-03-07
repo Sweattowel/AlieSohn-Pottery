@@ -76,8 +76,8 @@ function Tail() {
   return (
     <>
         { wantLogin ? (
-            <div onClick={() => setWantLogin(false)} className="fixed inset-0 w-full h-full bg-opacity-75 flex items-center justify-center z-50">
-                <div onClick={(e) => e.stopPropagation()} onSubmit={() => Login(caste)} className="fixed bottom-[20%] rounded-lg left-[40%] border-black border-2 text-center justify-center w-[20%] h-[60%] bg-BACKGROUND text-white">
+            <div onClick={() => setWantLogin(false)} className="fixed inset-0 w-full h-full bg-opacity-75 flex items-center justify-center z-50 bg-BACKGROUND">
+                <div onClick={(e) => e.stopPropagation()} onSubmit={() => Login(caste)} className="bg-BACKGROUND fixed bottom-[20%] rounded-lg left-[40%] border-black border-2 text-center justify-center w-[20%] h-[60%] text-white">
                     <h1 style={{ fontSize: '2em', width: '80%', margin: 'auto', borderBottom: '2px solid black' }}>
                         LOGIN MENU                
                     </h1>
@@ -90,47 +90,26 @@ function Tail() {
                     </h1>
                     <Input className="mb-10" onChange={(e) => setPassWordAttempt(e.target.value)} type="password"/>
                     <br />
-                    <Button
-                    onClick={() => Login('regularJackoff')}
-                    style={{
-                        width: "125px",
-                        height: '50px',
-                        color: "white",
-                        backgroundColor: "gray",
-                        fontSize: "0.5em",
-                        borderRight: "1px solid black",
-                    }}
+                    <button
+                        onClick={() => Login('regularJackoff')}
+                        className="flex m-auto bg-BACKGROUND mt-2 mb-4 justify-center text-center border-b-2 border-BLACK w-[40%]"
                     >
-                    Regular Jackoff Login
-                    </Button>
-                    <Button
+                    Login
+                    </button>
+                    <button
                         onClick={() => Login('King')}
-                    style={{
-                        width: "125px",
-                        height: '50px',
-                        color: "white",
-                        backgroundColor: "gray",
-                        fontSize: "0.5em",
-                        borderLeft: "1px solid black",
-                    }}
+                        className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center border-b-2 border-BLACK w-[40%]"
                     >
-                    Secret Login
-                    </Button>
+                    Admin
+                    </button>
                     <br />
                     <br />
-                    <Button
+                    <button
                         onClick={() => register()}
-                    style={{
-                        width: "125px",
-                        height: '50px',
-                        color: "white",
-                        backgroundColor: "gray",
-                        fontSize: "0.5em",
-                        borderLeft: "1px solid black",
-                    }}
+                        className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center border-b-2 border-BLACK w-[60%] text-2xl"
                     >
                     Register
-                    </Button>
+                    </button>
                     </div> 
             </div>
 
@@ -138,12 +117,12 @@ function Tail() {
             ) : (null)}
 
         
-        <div className="w-[90%] ml-[5%] mr-[5%] text-center bg-BACKGROUND mt-2 fixed bottom-0 rounded-t border-t-2 border-r-2 border-l-2 border-black">
+        <div className="w-[90%] ml-[5%] mr-[5%] text-center justify-center mt-2 fixed bottom-0 flex ">
         <div>
             Unoffical private web app for educational purposes, i do not own any of
             the content used
         </div>
-        <div className="bg-BACKGROUND w-[125px] justify-center flex text-center m-auto mb-1 rounded">
+        <div className="w-[125px] text-center m-2 rounded flex">
             {authenticated || superAuthenticated ? (
                 <Button
                     onClick={() => logOut()}
@@ -152,25 +131,23 @@ function Tail() {
                         color: "white",
                         backgroundColor: "gray",
                         fontSize: "0.5em",
-                        borderBottom: "2px solid black",
                     }}
                     >
                         Log out
                     </Button>
             ) : 
             (
-            <Button
+            <button
                 onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
             style={{
                 width: "125px",
+                border: '1px solid white',
                 color: "white",
-                backgroundColor: "gray",
                 fontSize: "0.5em",
-                borderRight: "1px solid black",
             }}
             >
                 Login
-            </Button>
+            </button>
             )}
         </div>
         </div>
