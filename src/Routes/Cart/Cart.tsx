@@ -118,7 +118,7 @@ function Cart() {
   }, [cart]);  
   ///////////////////////////////////////////////////////////////////
   return (
-    <div className="w-[80%] h-[90vh] m-auto">
+    <div className="w-[80%] h-full m-auto">
       <div className="flex bg-BACKGROUND rounded text-WHITE">
         <h1 className="ml-2 mt-5 mb-5 rounded w-[20%] text-center ">
           Total cost: ${totalCost.toFixed(2)}

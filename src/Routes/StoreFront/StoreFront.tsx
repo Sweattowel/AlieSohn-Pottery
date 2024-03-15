@@ -91,7 +91,7 @@ useEffect(()=> {
 }, [cart]);  
   ///////////////////////////////////////////
   return (
-    <div className="w-[80%] h-[90vh] m-auto text-white flex wrap justify-center">
+    <div className="w-[80%] h-full m-auto text-white flex wrap justify-center">
       <div className="absolute top-[7%] left-[55%] w-[15%] text-center rounded  text-WHITE text-2xl bg-BACKGROUND">Current Items in cart: {count}</div>
       {currentItems.length > 0 ? (
         currentItems.map((item: storeItem, index: number) => (
