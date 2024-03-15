@@ -12,12 +12,12 @@ function Tail() {
     const [passWordAttempt, setPassWordAttempt] = useState<string>('')
     const [caste, setCaste] = useState<string>('waiting')
 
-    const Login = async (ChosenCaste: string) => {
-        if (ChosenCaste === 'regularJackoff'){
+    const Login = async () => {
             try {
                 const response = await axios.post(`${serverAddress}/api/login`, { userName: userNameAttempt, passWord: passWordAttempt });
                 if (response.status === 200){
                     setAuthenticated(true);
+                    setSuperAuthenticated(false)
                     setUserID(response.data.userID);
                     setUserName(userNameAttempt);
                     setWantLogin(false)
@@ -32,7 +32,8 @@ function Tail() {
             } catch (error) {
                 console.log(error);
             }
-        } else if (ChosenCaste === 'King'){
+    }
+    const superLogin = async () => {
             try {
                 const ResponseSir = await axios.post(`${serverAddress}/api/adminLogin`, { userName: userNameAttempt, passWord: passWordAttempt });
                 if (ResponseSir.status === 200){
@@ -40,6 +41,8 @@ function Tail() {
                     setSuperAuthenticated(true);
                     setUserID(-(ResponseSir.data.adminID));
                     setWantLogin(false)
+                    setUserNameAttempt('')
+                    setPassWordAttempt('')
                     console.log('Logged in successfully Sir');
                 } else if (ResponseSir.status === 404) {
                     console.log('No account exists, please prepare to be terminated');
@@ -50,19 +53,22 @@ function Tail() {
                 console.log(error);
             }
         }
-    }
+
     const logOut = () => {
         setAuthenticated(false)
         setSuperAuthenticated(false)
         setUserID(-1)
         setUserName('')
+        setUserNameAttempt('')
+        setPassWordAttempt('')
+        setCaste('waiting')
     }
     const register = async () => {
         try {
             const response = await axios.post(`${serverAddress}/api/register`, { userName: userNameAttempt, passWord: passWordAttempt } )
             if (response.status === 200){
                 console.log('Registered successfully');
-                Login('regularJackoff')
+                Login()
                 setWantLogin(false)
             }  else if (response.status === 409){
                 console.log('Username already exists. Please choose a different username.');
@@ -78,7 +84,7 @@ function Tail() {
     <>
         { wantLogin ? (
             <div onClick={() => setWantLogin(false)} className="fixed inset-0 w-full h-full flex items-center justify-center z-50">
-                <div onClick={(e) => e.stopPropagation()} onSubmit={() => Login(caste)} className="bg-WHITE fixed bottom-[20%] rounded-lg left-[40%] border-black border-2 text-center justify-center w-[20%] h-[60%] text-BLACK">
+                <div onClick={(e) => e.stopPropagation()} className="bg-WHITE fixed bottom-[20%] rounded-lg left-[40%] border-black border-2 text-center justify-center w-[20%] h-[60%] text-BLACK">
                     <h1 className="text-2xl border-b-2 border-black bg-BACKGROUND rounded-t">
                         LOGIN MENU                
                     </h1>
@@ -92,14 +98,14 @@ function Tail() {
                     <Input className="mb-10" onChange={(e) => setPassWordAttempt(e.target.value)} type="password"/>
                     <br />
                     <button
-                        onClick={() => Login('regularJackoff')}
-                        className="flex m-auto bg-BACKGROUND mt-2 mb-4 justify-center text-center border-b-2 border-BLACK w-[40%] rounded"
+                        onClick={() => Login()}
+                        className="flex m-auto bg-BACKGROUND mt-2 mb-4 justify-center text-center text-WHITE w-[40%] rounded"
                     >
                     Login
                     </button>
                     <button
-                        onClick={() => Login('King')}
-                        className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center border-b-2 border-BLACK w-[40%] rounded"
+                        onClick={() => superLogin()}
+                        className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[40%] rounded"
                     >
                     Admin
                     </button>
@@ -107,7 +113,7 @@ function Tail() {
                     <br />
                     <button
                         onClick={() => register()}
-                        className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center border-b-2 border-BLACK w-[60%] text-2xl rounded"
+                        className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[60%] text-2xl rounded"
                     >
                     Register
                     </button>
@@ -125,27 +131,17 @@ function Tail() {
         </div>
         <div className="w-[125px] text-center m-2 rounded justify-center w-full">
             {authenticated || superAuthenticated ? (
-                <Button
+                <button
                     onClick={() => logOut()}
-                    style={{
-                        width: "125px",
-                        color: "black",
-                        backgroundColor: "gray",
-                        fontSize: "0.5em",
-                    }}
+                    className="bg-BACKGROUND w-[15%] rounded text-WHITE"
                     >
                         Log out
-                    </Button>
+                    </button>
             ) : 
             (
             <button
                 onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
-            style={{
-                width: "125px",
-                border: '1px solid black',
-                color: "black",
-                fontSize: "0.5em",
-            }}
+                className="bg-BACKGROUND w-[15%] rounded text-WHITE"
             >
                 Login
             </button>

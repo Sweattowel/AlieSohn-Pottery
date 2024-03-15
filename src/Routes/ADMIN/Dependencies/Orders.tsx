@@ -104,8 +104,8 @@ useEffect(() => {
 }, [users])
 /////////////////////////////////////
   return (
-    <div className="mr-auto w-[50%] h-full border-2 border-BLACK bg-WHITE text-BLACK">
-        <h1 className="bg-BACKGROUND text-center border-black mb-2 text-white h-[30px]" >
+    <div className="mr-auto w-[50%] h-full bg-WHITE text-WHITE mt-0.5">
+        <h1 className="bg-BACKGROUND text-center rounded mb-2 text-white h-[30px]" >
             Orders
         </h1>
       {selectedCustomer === -1 ? (
@@ -135,19 +135,14 @@ useEffect(() => {
         )}
        
       {selectedCustomer === -1 ? (
-            users.slice((currentUsersPage - 1) * usersPerPage, currentUsersPage * usersPerPage).map((user: any, index: number) => (
-            <Button style={
-              { 
-                margin: "8px", 
-                borderBottom: "2px solid #000",
-                color: "black",
-                textAlign: "center",
-                cursor: "pointer",
-              }
-            } onClick={() => setSelectedCustomer(user.userID)}>
-              User {user.userName}
-            </Button>
-            )) 
+        <div className="mt-2">
+            {users.slice((currentUsersPage - 1) * usersPerPage, currentUsersPage * usersPerPage).map((user: any, index: number) => (
+            <button className="bg-BACKGROUND rounded mb-2 w-[80%] flex justify-center m-auto" 
+              onClick={() => setSelectedCustomer(user.userID)}>
+              {user.userName}
+            </button>
+            
+            ))} </div>
         ) : (
             <Button
             className="m-2 border-2 border-BLACK text-white text-center"
@@ -171,11 +166,11 @@ useEffect(() => {
 
       {selectedCustomer !== -1 ? (
         orders.slice((currentOrdersPage - 1) * ordersPerPage, currentOrdersPage * ordersPerPage).map((order: any, index: number) => (
-          <div key={index} className={ !order.completed ? "m-2 flex bg-SELECTED text-BLACK justify-center text-center" : "opacity-60 m-2 flex bg-BLACK text-BLACK justify-center text-center"}>
-            <h1 className="border-BLACK border-2 w-[25%]"><>Item ID : {order.itemID}</><br /><>Order ID: {order.orderID}</> </h1>
-            <h1 className="border-BLACK border-2 w-[25%]">Name : {order.itemName} </h1>
-            <h1 className="border-BLACK border-2 w-[25%]">Completed : {order.completed ? 'TRUE' : "FALSE"} </h1>
-            <Button onClick={() => {completeOrder(order.orderID, !order.completed ? true : false)}} style={{width: '25%', border: '1px solid black'}}>{ order.completed ? <CheckIcon /> : <ClearIcon />}</Button>
+          <div key={index} className={ !order.completed ? "m-2 flex bg-SELECTED text-WHITE justify-center text-center" : "opacity-80 m-2 flex bg-BACKGROUND text-BLACK justify-center text-center"}>
+            <h1 className="w-[25%]"><>Item ID : {order.itemID}</><br /><>Order ID: {order.orderID}</> </h1>
+            <h1 className="w-[25%]">Name : {order.itemName} </h1>
+            <h1 className="w-[25%]">Completed : {order.completed ? 'TRUE' : "FALSE"} </h1>
+            <Button onClick={() => {completeOrder(order.orderID, !order.completed ? true : false)}} style={{width: '25%', borderLeft: '1px solid black'}}>{ order.completed ? <CheckIcon /> : <ClearIcon />}</Button>
             
           </div>
         ))

@@ -5,7 +5,7 @@ import { Pagination } from "@mui/material";
 
 export default function UserAccount() {
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS
-    const [cart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated, userName, setUserName] = useMyContext();
+    const [, ,cart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated, userName, setUserName] = useMyContext();
     const [orders, setOrders] = useState<any[]>([])
     const ordersPerPage = 15;
     const [currentOrdersPage, setCurrentOrdersPage] = useState(1);
@@ -43,19 +43,16 @@ export default function UserAccount() {
       },[])
 
       return (
-        <div className="w-[80%] h-[90vh] m-auto bg-WHITE text-BLACK rounded-lg justify-center">
-            <h1 className="bg-BACKGROUND text-xl text-white text-center h-[5%]">
-                User: {userName || 'N/a'}
-            </h1>
+        <div className="w-[80%] h-[80vh] m-auto text-WHITE rounded-lg justify-center">
           <div className="bg-WHITE py-2 justify-center">
-            <h1 className="justify-center text-center text-2xl">Order History:</h1>
+            <h1 className="justify-center text-center w-[50%] m-auto rounded font-serif text-2xl bg-BACKGROUND"> User: {userName || 'N/a'} Order History:</h1>
 
             {authenticated ? (
                 orders.slice((currentOrdersPage - 1) * ordersPerPage, currentOrdersPage * ordersPerPage).map((order: any, index: number) => (
                 <div key={index} className={ !order.completed ? "m-2 flex text-white justify-center text-center" : "opacity-60 m-2 flex  text-white justify-center text-center"}>
-                    <h1 className="bg-BACKGROUND border-BLACK border-2 w-[25%]">Item ID : {order.itemID} </h1>
-                    <h1 className="bg-BACKGROUND border-BLACK border-2 w-[25%]">Quantity : {order.itemName} </h1>
-                    <h1 className="bg-BACKGROUND border-BLACK border-2 w-[25%]">Completed : {order.completed ? 'TRUE' : "FALSE"} </h1>
+                    <h1 className="bg-BACKGROUND  w-[25%]">Item ID : {order.itemID} </h1>
+                    <h1 className="bg-BACKGROUND  w-[25%]">Item : {order.itemName} </h1>
+                    <h1 className="bg-BACKGROUND  w-[25%]">Completed : {order.completed ? 'TRUE' : "FALSE"} </h1>
                 </div>
                 ))
             ) : null}

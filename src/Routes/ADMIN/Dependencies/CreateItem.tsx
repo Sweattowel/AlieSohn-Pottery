@@ -52,21 +52,21 @@ function CreateItem(){
 
     ///////////////////////////////////////////////////////////////
     return (
-        <div className="ml-auto w-[100%] h-[50%] bg-WHITE text-BLACK">
-                <div className="mr-auto h-full border-r-1 border-l-2 border-t-2 border-b-2 border-BLACK">
-                    <h1 className="text-center bg-SELECTED border-black mb-2 text-white h-[30px]" >
+        <div className="ml-auto w-[80%] h-[50%] bg-WHITE text-WHITE m-auto">
+                <div className="mr-auto h-full border-r-1 border-l-2 border-t-2">
+                    <h1 className="text-center bg-SELECTED border-black mb-2 text-white h-[30px] rounded" >
                         Create store Item
                     </h1>
-                    <div className="text-white w-[80%] h-[80%] m-auto text-center">
-                        <h1> 
+                    <div className=" w-[80%] h-[80%] m-auto text-center">
+                        <h1 className="bg-BACKGROUND rounded text-WHITE w-[50%] m-auto mt-2"> 
                             Item title
                         </h1>
                         <Input value={item.title} onChange={(e) => handleInputChange("title", e.target.value)}/>
-                        <h1> 
+                        <h1 className="bg-BACKGROUND rounded text-WHITE w-[50%] m-auto mt-2"> 
                             Item Description 
                         </h1>
                         <Input value={item.description} onChange={(e) => handleInputChange("description", e.target.value)}/>
-                        <h1> 
+                        <h1 className="bg-BACKGROUND rounded text-WHITE w-[50%] m-auto mt-2"> 
                             Item Price
                         </h1>
                         <Input value={item.price} onChange={(e) => handleInputChange("price", e.target.value)} />

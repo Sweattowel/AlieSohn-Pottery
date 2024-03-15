@@ -74,23 +74,23 @@ function Removeitem() {
   }, []);
   ///////////////////////////////////////////////////////////////////
   return (
-    <div className="ml-auto w-[100%] h-[50%] bg-WHITE text-BLACK">
-      <div className="mr-auto h-full border-r-1 border-l-2 border-t-2 border-b-2 border-BLACK">
-        <h1 className="text-center bg-SELECTED border-BLACK mb-2 text-white h-[30px]">
+    <div className="ml-auto w-[100%] h-[50%] bg-WHITE text-WHITE">
+      <div className="mr-auto h-full">
+        <h1 className="bg-BACKGROUND rounded text-WHITE text-center w-[80%] m-auto mb-2 h-[30px]">
           Remove store Item
         </h1>
         <Button
           style={
             locked
               ? {
-                  color: "white",
-                  backgroundColor: "#dc2626",
+                  color: "black",
+                  backgroundColor: "#ef4444",
                   width: "100%",
                   border: "1px solid black",
                 }
               : {
-                  color: "black",
-                  backgroundColor: "#ef4444",
+                  color: "white",
+                  backgroundColor: "#dc2626",
                   width: "80%",
                   margin: "auto",
                   display: "flex",
@@ -104,16 +104,16 @@ function Removeitem() {
         <div
           className={
             !locked
-              ? "text-white w-[80%] h-[70%] m-auto text-center"
-              : "opacity-60 text-grey w-[80%] h-[70%] m-auto text-center"
+              ? "text-WHITE w-[80%] h-[70%] m-auto text-center mt-2"
+              : "opacity-60 text-BLACK w-[80%] h-[70%] m-auto text-center mt-2"
           }
         >
           {currentItems.map((item: storeItem, index: number) => (
-            <div className="w-[80%] bg-BACKGROUND m-auto flex items-center border-black border-2">
-              <div className="bg-BACKGROUND items-center text-center flex w-[20%] h-[50px]">
-                {item.itemID}
+            <div className="w-[80%]m-auto flex items-center mb-1 text-BLACK rounded border-b-2">
+              <div className="bg-BACKGROUND rounded text-WHITE justify-center flex w-[20%] h-[50px]">
+                ID: {item.itemID}
               </div>
-              <div className="w-[50%]  text-black">{item.itemName}</div>
+              <div className="w-[50%]">{item.itemName}</div>
               {locked ? (
                 <Button
                   variant="outlined"
@@ -130,7 +130,7 @@ function Removeitem() {
                 <Button
                   variant="outlined"
                   style={{
-                    color: "black",
+                    color: "white",
                     width: "25%",
                     fontSize: 9,
                     backgroundColor: "#dc2626",

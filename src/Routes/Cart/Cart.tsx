@@ -119,7 +119,7 @@ function Cart() {
   ///////////////////////////////////////////////////////////////////
   return (
     <div className="w-[80%] h-[90vh] m-auto">
-      <div className="flex">
+      <div className="flex bg-BACKGROUND rounded text-WHITE">
         <h1 className="ml-2 mt-5 mb-5 rounded w-[20%] text-center ">
           Total cost: ${totalCost.toFixed(2)}
           <br />
@@ -150,21 +150,18 @@ function Cart() {
       <div className="flex flex-wrap justify-center">
         {currentItems.length > 0 ? (
           currentItems.map((item: CartItem, index: number) => (
-            <div key={index} className="bg-BACKGROUND border border-WHITE text-WHITE w-[400px] h-[500px] p-2 mt-2 ml-2 ">
+            <div key={index} className="border border-WHITE text-BLACK w-[400px] h-[500px] p-2 mt-2 ml-2 ">
               <div className="mr-2">
-                <div className=" text-center">
-                  ID: {item.itemID}
+                <div className="text-center text-WHITE font-serif text-2xl bg-BACKGROUND rounded">{item.itemName}</div>
+                <div className="text-center">
+                  ${(item.itemPrice * item.itemCount).toFixed(2)} For {item.itemCount} item/s
                 </div>
-                <div className="text-center">Name: {item.itemName}</div>
-                <div className="mb-2 text-center">
-                  Price: ${(item.itemPrice * item.itemCount).toFixed(2)} For {item.itemCount} item/s
-                </div>
-                <div className="w-[90%] m-auto text-center">
-                  <span className="border-b-WHITE border-b-2">
-                    Description:
-                  </span>
+                <div className="w-[80%] m-auto text-center">
                   <br />
-                  {item.itemDescription}
+                  <div className="h-[70px]">
+                    {item.itemDescription}
+                  </div>
+                  
                 </div>
               </div>
               <img
@@ -176,7 +173,7 @@ function Cart() {
                   console.error(`Image not found: ${item.imagePath}`)
                 }
               />
-              <div className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center border-b-2 border-BLACK w-[80%]">
+              <div className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE rounded w-[80%]">
                 <button
                   className="w-[50%]"
                   onClick={() => removeFromCart(item.itemID, index)}
@@ -194,13 +191,21 @@ function Cart() {
             </div>
           ))
         ) : (
-          <h1 className="ml-2 mt-5 mb-5 bg-gray-800 rounded w-[80%] ml-auto mr-auto h-[80%] flex justify-center text-center">
-            <div className="mt-[15%] text-5xl">Buy some pots now</div>
+          <h1 className="ml-2 mt-5 mb-5 text-BLACK rounded w-[80%] ml-auto mr-auto h-[80%] flex justify-center text-center">
+            <div className="mt-[15%]">
+              <h1 className="text-5xl font-serif">
+                Empty Cart
+              </h1>
+              <div className="mt-8 border-b-2"> 
+                To fill your cart please head to the storefront located at the top right
+              </div>
+            </div>
+            
           </h1>
         )}
       <Pagination
         style={{ position: 'absolute', bottom: '10%', display: "flex", justifyContent: "center" }}
-        count={Math.ceil(itemCount / itemsPerPage)}
+        count={Math.ceil(cart.length / itemsPerPage)}
         page={currentPage}
         onChange={handleChangePage}
         variant="outlined"

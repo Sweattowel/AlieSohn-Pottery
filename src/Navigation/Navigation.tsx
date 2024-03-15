@@ -5,6 +5,8 @@ import { useMyContext } from "../Context/ContextProvider";
 
 function Navigation() {
   const [
+    ,
+    ,
     cart,
     setCart,
     userID,

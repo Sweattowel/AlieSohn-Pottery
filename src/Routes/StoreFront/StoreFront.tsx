@@ -28,7 +28,7 @@ function StoreFront() {
   const currentItems = allItems.slice(indexOfFirstItem, indexOfLastItem);
   
   const serverAddress =`${process.env.REACT_APP_SERVER_ADDRESS}`
-
+  const [clickedItemIndex, setClickedItemIndex] = useState<number | null>(null); 
 
   const collectStoreItems = async () => {
     try {
@@ -95,10 +95,9 @@ useEffect(()=> {
       <div className="absolute top-[7%] left-[55%] w-[15%] text-center rounded  text-WHITE text-2xl bg-BACKGROUND">Current Items in cart: {count}</div>
       {currentItems.length > 0 ? (
         currentItems.map((item: storeItem, index: number) => (
-          <div key={index} className="border-WHITE border bg-BACKGROUND text-WHITE w-[400px] h-[500px] p-2 mt-2 ml-2">
+          <div key={index} className="border-WHITE border text-BLACK w-[400px] h-[500px] p-2 mt-2 ml-2">
             <div className="mr-2">
-              <div className="text-center">ID: {item.itemID}</div>
-              <div className="text-center">Name: {item.itemName}</div>
+              <div className="text-center font-serif text-2xl bg-BACKGROUND rounded text-WHITE">{item.itemName}</div>
               <div className="mb-2 text-center">
                 Price: ${item.itemPrice}
               </div>
@@ -107,28 +106,32 @@ useEffect(()=> {
                 Description:
               </span>
               <br />
-              {item.itemDescription}
             </div>              
-
             </div>
             <img
               className="h-[60%] border-BLACK border-2"
-              style={{ maxHeight: '55%', maxWidth: '80%', margin: 'auto'}}
+              style={{ maxHeight: '55%', maxWidth: '90%', margin: 'auto'}}
               src={url.resolve(serverAddress, item.imagePath)}
               alt={item.itemName}
               onError={() => console.error(`Image not found: ${item.imagePath}`)}
             />
-              <button
-                className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center border-b-2 border-BLACK w-[80%]"
-                onClick={() =>
+            <div className="w-[70%] h-[15%] m-auto">
+              {item.itemDescription}
+            </div>
+            
+            <button
+                className={ clickedItemIndex === index ? "flex m-auto bg-BACKGROUND mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70" : "text-WHITE flex m-auto bg-BACKGROUND mt-2 justify-center text-center w-[80%] rounded"}
+                onClick={() => {
                   addToCart(
                     item.itemID,
                     item.itemName,
                     item.itemPrice,
                     item.imagePath,
                     item.itemDescription
-                  )
-                }
+                  );
+                  setClickedItemIndex(index);
+                  setTimeout(() => setClickedItemIndex(null), 500); // Reset after 1 second
+                }}
               >
                 Add to cart
               </button>
