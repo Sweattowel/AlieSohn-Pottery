@@ -17,7 +17,7 @@ function Navigation() {
 
   const [page, setPage] = useState(1);
   return (
-    <nav className="w-full flex">
+    <nav className="m-auto h-[11vh] flex border-BLACK border-b-2 w-[80%]">
       <div className="flex  w-full mb-2">
         {authenticated && !superAuthenticated ? (
           <img
@@ -32,8 +32,8 @@ function Navigation() {
           />
         ) : null}
         <div className="w-[50%] m-3 ml-[5%]  text-2xl">
-          <h1 className="h-[40px] w-[200px] justify-center text-center text-5xl">
-            Pottery
+          <h1 className="font-serif h-[50%] rounded w-[350px] justify-center text-center text-4xl text-WHITE bg-BACKGROUND">
+            AlieSohn Pottery
           </h1>
         </div>
         <ul className="flex space-x-1 m-2">

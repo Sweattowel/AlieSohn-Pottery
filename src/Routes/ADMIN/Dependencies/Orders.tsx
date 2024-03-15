@@ -17,7 +17,6 @@ function Orders() {
       setOrders([])
       const response = await axios.post(`${serverAddress}/api/getOrders`, { userID: selectedCustomer });
       if (response.status === 200) {
-        console.log('Response Data:', response.data);
         let data = response.data
         setOrders(data)
 
@@ -33,7 +32,6 @@ function Orders() {
     try {
       const response = await axios.post(`${serverAddress}/api/getUsers`);
       if (response.status === 200) {
-        console.log('Response Data:', response.data);
         setUsers(response.data.data);
       } else {
         console.log('Failed to get users');
@@ -68,11 +66,29 @@ const handleChangeOrdersPage = (
     setCurrentOrdersPage(newPage);
 };
 //////////////////////////////////////
+const completeOrder = async (orderID: number, decision: boolean) => {
+  try {
+    if (!selectedCustomer){
+      return
+    }
+      const response = await axios.post(`${serverAddress}/api/completeOrder`, {selectedCustomer, orderID, decision})
+      if (response.status === 200){
+          decision ? console.log('Successfully completed order') : console.log('Successfully rewrote order')
+          getOrders()
+      } else {
+        console.log('Failed to set post')
+      }
+  } catch (error) {
+      console.log(error)
+  }
+}
+
+//////////////////////////////////////
   useEffect(() => {
     if (selectedCustomer !== -1) {
       getOrders();  
     }
-              
+    setCurrentOrdersPage(1)
   }, [selectedCustomer]);
 
   useEffect(() => {
@@ -88,8 +104,8 @@ useEffect(() => {
 }, [users])
 /////////////////////////////////////
   return (
-    <div className="mr-auto w-[50%] h-full border-2 border-BLACK">
-        <h1 className="text-center border-black mb-2 text-white h-[30px]" >
+    <div className="mr-auto w-[50%] h-full border-2 border-BLACK bg-WHITE text-BLACK">
+        <h1 className="bg-BACKGROUND text-center border-black mb-2 text-white h-[30px]" >
             Orders
         </h1>
       {selectedCustomer === -1 ? (
@@ -124,7 +140,7 @@ useEffect(() => {
               { 
                 margin: "8px", 
                 borderBottom: "2px solid #000",
-                color: "white",
+                color: "black",
                 textAlign: "center",
                 cursor: "pointer",
               }
@@ -140,7 +156,7 @@ useEffect(() => {
                 margin: "auto",
                 marginTop: '10px', 
                 border: "2px solid #000",
-                color: "white",
+                color: "black",
                 textAlign: "center",
                 cursor: "pointer",
                 width: '80%'
@@ -155,11 +171,11 @@ useEffect(() => {
 
       {selectedCustomer !== -1 ? (
         orders.slice((currentOrdersPage - 1) * ordersPerPage, currentOrdersPage * ordersPerPage).map((order: any, index: number) => (
-          <div key={index} className={ !order.completed ? "m-2 flex bg-SELECTED text-white justify-center text-center" : "opacity-60 m-2 flex bg-SELECTED text-white justify-center text-center"}>
-            <h1 className="border-BLACK border-2 w-[25%]">Item ID : {order.itemID} </h1>
-            <h1 className="border-BLACK border-2 w-[25%]">Quantity : {order.quantity} </h1>
+          <div key={index} className={ !order.completed ? "m-2 flex bg-SELECTED text-BLACK justify-center text-center" : "opacity-60 m-2 flex bg-BLACK text-BLACK justify-center text-center"}>
+            <h1 className="border-BLACK border-2 w-[25%]"><>Item ID : {order.itemID}</><br /><>Order ID: {order.orderID}</> </h1>
+            <h1 className="border-BLACK border-2 w-[25%]">Name : {order.itemName} </h1>
             <h1 className="border-BLACK border-2 w-[25%]">Completed : {order.completed ? 'TRUE' : "FALSE"} </h1>
-            <Button style={{width: '25%', border: '1px solid black'}}>{ order.completed ? <CheckIcon /> : <ClearIcon />}</Button>
+            <Button onClick={() => {completeOrder(order.orderID, !order.completed ? true : false)}} style={{width: '25%', border: '1px solid black'}}>{ order.completed ? <CheckIcon /> : <ClearIcon />}</Button>
             
           </div>
         ))

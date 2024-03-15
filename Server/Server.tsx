@@ -267,3 +267,11 @@ app.post('/api/removeItem', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error'})
   }
 })
+
+app.post('/api/completeOrder',async (req, res) => {
+  try {
+    const sql = 'UPDATE orders SET completed = true WHERE orderID = ? AND userID = ?'
+    const orderID = req.body.selectedCustomer
+    const 
+  }
+})

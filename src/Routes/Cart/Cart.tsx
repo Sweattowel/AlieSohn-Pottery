@@ -15,6 +15,8 @@ interface CartItem {
 
 function Cart() {
   const [
+    allItems,
+    setAllItems,
     cart,
     setCart,
     userID,
@@ -107,14 +109,19 @@ function Cart() {
         (prevTotal) => prevTotal + parseFloat(item.itemPrice) * item.itemCount
       )
     );
-    setItemCount(cart.length);
+    setItemCount(0);
+    cart.forEach((item) =>
+      setItemCount(
+        (prevTotal) => prevTotal + item.itemCount
+      )
+    );
   }, [cart]);  
   ///////////////////////////////////////////////////////////////////
   return (
     <div className="w-[80%] h-[90vh] m-auto">
       <div className="flex">
         <h1 className="ml-2 mt-5 mb-5 rounded w-[20%] text-center ">
-          Total cost: ${totalCost}
+          Total cost: ${totalCost.toFixed(2)}
           <br />
           Item count: {itemCount} items
         </h1>
@@ -143,17 +150,17 @@ function Cart() {
       <div className="flex flex-wrap justify-center">
         {currentItems.length > 0 ? (
           currentItems.map((item: CartItem, index: number) => (
-            <div key={index} className="w-[400px] h-[500px] p-2 mt-2 ml-2 ">
+            <div key={index} className="bg-BACKGROUND border border-WHITE text-WHITE w-[400px] h-[500px] p-2 mt-2 ml-2 ">
               <div className="mr-2">
-                <div className="border-t-2 border-BLACK text-center">
+                <div className=" text-center">
                   ID: {item.itemID}
                 </div>
                 <div className="text-center">Name: {item.itemName}</div>
                 <div className="mb-2 text-center">
-                  Price: ${item.itemPrice * item.itemCount} For {item.itemCount} item/s
+                  Price: ${(item.itemPrice * item.itemCount).toFixed(2)} For {item.itemCount} item/s
                 </div>
                 <div className="w-[90%] m-auto text-center">
-                  <span className="border-b-BLACK border-b-2">
+                  <span className="border-b-WHITE border-b-2">
                     Description:
                   </span>
                   <br />

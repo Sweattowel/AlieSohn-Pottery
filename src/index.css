@@ -3,6 +3,5 @@
 @import 'tailwindcss/utilities';
 
 body {
-    background: linear-gradient(#dc2626, rgba(220,38,38,0.6));
     color: white;
 }

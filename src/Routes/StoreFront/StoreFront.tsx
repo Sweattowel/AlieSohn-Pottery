@@ -13,7 +13,7 @@ interface storeItem {
 }
 
 function StoreFront() {
-  const [storeItems, setStoreItems] = useState<any[]>([]);
+  const [ allItems, setAllItemscart, cart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated] = useMyContext();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemCount, setItemCount] = useState(0);
   const itemsPerPage = 3;
@@ -25,8 +25,8 @@ function StoreFront() {
   };
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = storeItems.slice(indexOfFirstItem, indexOfLastItem);
-  const [cart, setCart] = useMyContext();
+  const currentItems = allItems.slice(indexOfFirstItem, indexOfLastItem);
+  
   const serverAddress =`${process.env.REACT_APP_SERVER_ADDRESS}`
 
 
@@ -35,7 +35,7 @@ function StoreFront() {
       const response = await axios.post<storeItem[]>(`${serverAddress}/api/storeItems`);
 
       if (response.status === 200) {
-        setStoreItems(response.data);
+        setAllItemscart(response.data);
       } else if (response.status === 404) {
         console.log("No items available to purchase");
       } else {
@@ -72,25 +72,38 @@ function StoreFront() {
   
   ///////////////////////////////////////////
   useEffect(() => {
-    collectStoreItems();
+    if (allItems.length === 0){
+      collectStoreItems();
+    }
+    
   }, []);
   useEffect(() => {
-    setItemCount(storeItems.length);
-  }, [storeItems]);
+    setItemCount(allItems.length);
+  }, [allItems]);
+const [count, setCount] = useState<number>(0)
+useEffect(()=> {
+  setCount(0);
+  cart.forEach((item) =>
+    setCount(
+      (prevTotal) => prevTotal + item.itemCount
+    )
+  );
+}, [cart]);  
   ///////////////////////////////////////////
   return (
     <div className="w-[80%] h-[90vh] m-auto text-white flex wrap justify-center">
+      <div className="absolute top-[7%] left-[55%] w-[15%] text-center rounded  text-WHITE text-2xl bg-BACKGROUND">Current Items in cart: {count}</div>
       {currentItems.length > 0 ? (
         currentItems.map((item: storeItem, index: number) => (
-          <div key={index} className="w-[400px] h-[500px] p-2 mt-2 ml-2">
+          <div key={index} className="border-WHITE border bg-BACKGROUND text-WHITE w-[400px] h-[500px] p-2 mt-2 ml-2">
             <div className="mr-2">
-              <div className="border-t-2 border-BLACK text-center">ID: {item.itemID}</div>
+              <div className="text-center">ID: {item.itemID}</div>
               <div className="text-center">Name: {item.itemName}</div>
               <div className="mb-2 text-center">
                 Price: ${item.itemPrice}
               </div>
             <div className="w-[90%] m-auto text-center">
-              <span className="border-b-BLACK border-b-2">
+              <span className="border-b-WHITE border-b-2">
                 Description:
               </span>
               <br />

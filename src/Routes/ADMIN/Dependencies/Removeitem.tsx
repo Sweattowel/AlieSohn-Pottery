@@ -74,7 +74,7 @@ function Removeitem() {
   }, []);
   ///////////////////////////////////////////////////////////////////
   return (
-    <div className="ml-auto w-[100%] h-[50%] bg-NONE">
+    <div className="ml-auto w-[100%] h-[50%] bg-WHITE text-BLACK">
       <div className="mr-auto h-full border-r-1 border-l-2 border-t-2 border-b-2 border-BLACK">
         <h1 className="text-center bg-SELECTED border-BLACK mb-2 text-white h-[30px]">
           Remove store Item
@@ -104,16 +104,16 @@ function Removeitem() {
         <div
           className={
             !locked
-              ? "text-white w-[80%] h-[80%] m-auto text-center"
+              ? "text-white w-[80%] h-[70%] m-auto text-center"
               : "opacity-60 text-grey w-[80%] h-[70%] m-auto text-center"
           }
         >
           {currentItems.map((item: storeItem, index: number) => (
-            <div className="w-[80%] m-auto flex items-center border-black border-2">
-              <div className="bg-gray-800 items-center text-center flex w-[20%] h-[50px]">
+            <div className="w-[80%] bg-BACKGROUND m-auto flex items-center border-black border-2">
+              <div className="bg-BACKGROUND items-center text-center flex w-[20%] h-[50px]">
                 {item.itemID}
               </div>
-              <div className="w-[50%] text-black">{item.itemName}</div>
+              <div className="w-[50%]  text-black">{item.itemName}</div>
               {locked ? (
                 <Button
                   variant="outlined"
@@ -121,7 +121,7 @@ function Removeitem() {
                     color: "black",
                     width: "25%",
                     fontSize: 9,
-                    backgroundColor: "grey",
+                    backgroundColor: "#dc2626",
                   }}
                 >
                   Remove Item from store
@@ -133,7 +133,7 @@ function Removeitem() {
                     color: "black",
                     width: "25%",
                     fontSize: 9,
-                    backgroundColor: "grey",
+                    backgroundColor: "#dc2626",
                   }}
                   onClick={() => removeStoreItems({ storeItemID: item.itemID })}
                 >

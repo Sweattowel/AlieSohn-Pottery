@@ -1,6 +1,8 @@
 import React, { ReactNode, createContext, useContext, useState } from "react";
 
 interface MyContextProps {
+  allItems: any[],
+  setAllItems: React.Dispatch<React.SetStateAction<any[]>>,
   cart: any[];
   setCart: React.Dispatch<React.SetStateAction<any[]>>,
   userID: number,
@@ -16,6 +18,7 @@ interface MyContextProps {
 const MyContext = createContext<MyContextProps | undefined>(undefined);
 
 export function ContextProvider({ children }: { children: ReactNode}) {
+  const [allItems, setAllItems] = useState<any[]>([])
   const [cart, setCart] = useState<any[]>([]);
   const [userID, setUserID] = useState<number>(0)
   const [authenticated, setAuthenticated] = useState<boolean>(false)
@@ -23,7 +26,7 @@ export function ContextProvider({ children }: { children: ReactNode}) {
   const [userName, setUserName] = useState<string>('')
 
   return (
-    <MyContext.Provider value={{ cart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated, userName, setUserName }}>
+    <MyContext.Provider value={{ allItems, setAllItems, cart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated, userName, setUserName }}>
       {children}
     </MyContext.Provider>
   );
@@ -35,7 +38,7 @@ export function useMyContext() {
   if (!context){
     throw new Error('useContext must be used within a MyContextProvider')
   }
-  const { cart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated, userName, setUserName  } = context
+  const { allItems, setAllItems, cart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated, userName, setUserName  } = context
 
-  return [ cart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated, userName, setUserName ] as const
+  return [ allItems, setAllItems, cart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated, userName, setUserName ] as const
 }
