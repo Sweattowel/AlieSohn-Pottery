@@ -66,10 +66,10 @@ function Brochure() {
                                 alt={item.itemName}
                                 style={{maxHeight: '600px', width: '90%', margin: 'auto'}}
                             />
-                            <div className="bg-WHITE text-BLACK w-[90%] m-auto">
-                                <h1 className="text-2xl font-serif">{item.itemName}</h1>
+                            <div className="text-BLACK w-[90%] m-auto">
+                                <h1 className="text-lg text-WHITE font-serif bg-BACKGROUND rounded-b-lg">{item.itemName}</h1>
                                 <div>${item.itemPrice} </div>   
-                                <div>Happy customers {item.order_count}</div>                             
+                                <div className="text-sm">Happy customers {item.order_count}</div>                             
                             </div>
 
                         </div> 

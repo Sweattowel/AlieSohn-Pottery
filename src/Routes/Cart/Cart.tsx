@@ -138,8 +138,7 @@ function Cart() {
             }}
             onClick={() => sendOrder()}
           >
-            {" "}
-            Create Order{" "}
+            Create Order
           </Button>
         ) : (
           <div className="mt-[auto] mb-[auto] ml-[2em] h-[50px] w-[40%] flex justify-center items-center rounded-lg">
@@ -175,15 +174,15 @@ function Cart() {
               />
               <div className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE rounded w-[80%]">
                 <button
-                  className="w-[50%]"
+                  className="hover:text-BLACK hover:opacity-90 w-[50%] border-b-2 border-l-2 border border-BLACK"
                   onClick={() => removeFromCart(item.itemID, index)}
                 >
                   Remove from cart
                 </button>          
-                <button onClick={() => increment(index)} className="w-[25%] border-l">
+                <button onClick={() => increment(index)} className="w-[25%] border hover:text-BLACK hover:opacity-70 border-b-2 border border-BLACK">
                   ++ 
                 </button>      
-                <button onClick={() => decrement(index)} className="w-[25%] border-l">
+                <button onClick={() => decrement(index)} className="w-[25%] border hover:text-BLACK hover:opacity-70 border-b-2 border border-BLACK">
                   --
                 </button> 
               </div>

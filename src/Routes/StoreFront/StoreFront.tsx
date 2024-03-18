@@ -26,7 +26,8 @@ function StoreFront() {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = allItems.slice(indexOfFirstItem, indexOfLastItem);
-  
+  const [count, setCount] = useState<number>(0) //count of all items for use in left hand information
+  const [totalPrice, setTotalPrice] = useState<number>(0)
   const serverAddress =`${process.env.REACT_APP_SERVER_ADDRESS}`
   const [clickedItemIndex, setClickedItemIndex] = useState<number | null>(null); 
 
@@ -80,32 +81,38 @@ function StoreFront() {
   useEffect(() => {
     setItemCount(allItems.length);
   }, [allItems]);
-const [count, setCount] = useState<number>(0)
-useEffect(()=> {
-  setCount(0);
-  cart.forEach((item) =>
-    setCount(
-      (prevTotal) => prevTotal + item.itemCount
-    )
-  );
-}, [cart]);  
+
+  useEffect(() => {
+    let totalCount = 0;
+    let totalPrice = 0;
+  
+    cart.forEach((item) => {
+      totalCount += item.itemCount;
+      totalPrice += item.itemPrice * item.itemCount;
+    });
+  
+    setCount(totalCount);
+    setTotalPrice(totalPrice);
+  }, [cart]); 
   ///////////////////////////////////////////
   return (
     <div className="w-[80%] h-full m-auto text-white flex wrap justify-center">
-      <div className="absolute top-[7%] left-[55%] w-[15%] text-center rounded  text-WHITE text-2xl bg-BACKGROUND">Current Items in cart: {count}</div>
+      <div className="absolute top-[20%] left-[2%] w-[10%] h-[10%] min-w-44  text-center rounded  text-WHITE text-[1em] bg-BACKGROUND">
+        Current Items in cart:
+        <br /> 
+          {count} item/s
+          <br />
+          ${totalPrice.toFixed(2)}
+        </div>
       {currentItems.length > 0 ? (
         currentItems.map((item: storeItem, index: number) => (
-          <div key={index} className="border-WHITE border text-BLACK w-[400px] h-[500px] p-2 mt-2 ml-2">
+          <div key={index} className="border-WHITE border text-BLACK w-[400px] min-w-44 h-[500px] p-2 mt-2 ml-2">
             <div className="mr-2">
               <div className="text-center font-serif text-2xl bg-BACKGROUND rounded text-WHITE">{item.itemName}</div>
               <div className="mb-2 text-center">
                 Price: ${item.itemPrice}
               </div>
             <div className="w-[90%] m-auto text-center">
-              <span className="border-b-WHITE border-b-2">
-                Description:
-              </span>
-              <br />
             </div>              
             </div>
             <img
@@ -115,12 +122,12 @@ useEffect(()=> {
               alt={item.itemName}
               onError={() => console.error(`Image not found: ${item.imagePath}`)}
             />
-            <div className="w-[70%] h-[15%] m-auto">
+            <div className="w-[70%] h-[15%] max-h-24 m-auto">
               {item.itemDescription}
             </div>
-            
+            <br />
             <button
-                className={ clickedItemIndex === index ? "flex m-auto bg-BACKGROUND mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70" : "text-WHITE flex m-auto bg-BACKGROUND mt-2 justify-center text-center w-[80%] rounded"}
+                className={ clickedItemIndex === index ? "flex m-auto bg-BACKGROUND mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70 border-b-2 border-l-2 border border-BLACK" : "text-WHITE flex m-auto bg-BACKGROUND mt-2 justify-center text-center w-[80%] rounded hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"}
                 onClick={() => {
                   addToCart(
                     item.itemID,

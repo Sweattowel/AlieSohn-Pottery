@@ -34,143 +34,74 @@ function Navigation() {
           />
         ) : null}
         <div className="w-[50%] m-3 ml-[5%]  text-2xl">
-          <h1 className="font-serif h-[50%] rounded w-[350px] justify-center text-center text-4xl text-WHITE bg-BACKGROUND">
-            AlieSohn Pottery
-          </h1>
+        <h1 className="font-serif h-full rounded w-[350px] flex items-center justify-center text-4xl text-WHITE bg-BACKGROUND">
+          AlieSohn Pottery
+        </h1>
+
         </div>
-        <ul className="flex space-x-1 m-2">
-          {authenticated ? (
+        <ul className="flex space-x-1 h-full items-center ">
+          {authenticated  && superAuthenticated ? (
             <li>
-              <Link to="/MyAccount">
-                <Button
-                  color="primary"
-                  style={
-                    page === 5
-                      ? {
-                          borderBottom: "2px solid white",
-                          backgroundColor: "#dc2626",
-                          color: "white",
-                          width: "150px",
-                        }
-                      : {
-                          borderBottom: "2px solid #fca5a5",
-                          color: "black",
-                          width: "150px",
-                        }
-                  }
+              <Link to={`/MyAccount/${userID}`}>
+                <button
+                  className={page === 5 ? "text-WHITE bg-BACKGROUND w-[150px] h-[50px] rounded" : " border-b border-SELECTED text-BLACK bg-WHITE w-[150px] h-[50px] rounded"}
                   onClick={() => {
                     setPage(5);
                   }}
                 >
                   MyAccount
-                </Button>
+                </button>
               </Link>
             </li>
           ) : null}
           {superAuthenticated ? (
             <li>
               <Link to="/ADMIN">
-                <Button
-                  color="primary"
-                  style={
-                    page === 4
-                      ? {
-                          borderBottom: "2px solid white",
-                          backgroundColor: "#dc2626",
-                          color: "white",
-                          width: "150px",
-                        }
-                      : {
-                          borderBottom: "2px solid #fca5a5",
-                          color: "black",
-                          width: "150px",
-                        }
-                  }
+                <button
+                  className={page === 4 ? "text-WHITE bg-BACKGROUND w-[150px] h-[50px] rounded" : " border-b border-SELECTED text-BLACK bg-WHITE w-[150px] h-[50px] rounded"}
                   onClick={() => {
                     setPage(4);
                   }}
                 >
-                  ADMIN
-                </Button>
+                  Admin
+                </button>
               </Link>
             </li>
           ) : null}
           <li>
             <Link to="/">
-              <Button
-                color="primary"
-                style={
-                  page === 1
-                    ? {
-                        borderBottom: "2px solid white",
-                        backgroundColor: "#dc2626",
-                        color: "white",
-                        width: "150px",
-                      }
-                    : {
-                        borderBottom: "2px solid #fca5a5",
-                        color: "black",
-                        width: "150px",
-                      }
-                }
-                onClick={() => {
-                  setPage(1);
-                }}
-              >
-                Brochure
-              </Button>
+                <button
+                  className={page === 1 ? "text-WHITE bg-BACKGROUND w-[150px] h-[50px] rounded" : " border-b border-SELECTED text-BLACK bg-WHITE w-[150px] h-[50px] rounded"}
+                  onClick={() => {
+                    setPage(1);
+                  }}
+                >
+                  Brochure
+                </button>
             </Link>
           </li>
           <li>
             <Link to="/StoreFront">
-              <Button
-                color="primary"
-                style={
-                  page === 2
-                    ? {
-                        borderBottom: "2px solid white",
-                        backgroundColor: "#dc2626",
-                        color: "white",
-                        width: "150px",
-                      }
-                    : {
-                        borderBottom: "2px solid #fca5a5",
-                        color: "black",
-                        width: "150px",
-                      }
-                }
-                onClick={() => {
-                  setPage(2);
-                }}
-              >
-                Store Front
-              </Button>
+            <button
+                  className={page === 2 ? "text-WHITE bg-BACKGROUND w-[150px] h-[50px] rounded" : " border-b border-SELECTED text-BLACK bg-WHITE w-[150px] h-[50px] rounded"}
+                  onClick={() => {
+                    setPage(2);
+                  }}
+                >
+                  StoreFront
+                </button>
             </Link>
           </li>
           <li>
             <Link to="/Cart">
-              <Button
-                color="primary"
-                style={
-                  page === 3
-                    ? {
-                        borderBottom: "2px solid white",
-                        backgroundColor: "#dc2626",
-                        color: "white",
-                        width: "150px",
-                      }
-                    : {
-                        borderBottom: "2px solid #fca5a5",
-                        color: "black",
-                        width: "150px",
-                      }
-                }
-                onClick={() => {
-                  setPage(3);
-                }}
-              >
-                Cart
-              </Button>
+            <button
+                  className={page === 3 ? "text-WHITE bg-BACKGROUND w-[150px] h-[50px] rounded" : " border-b border-SELECTED text-BLACK bg-WHITE w-[150px] h-[50px] rounded"}
+                  onClick={() => {
+                    setPage(3);
+                  }}
+                >
+                  CART
+                </button>
             </Link>
           </li>
         </ul>

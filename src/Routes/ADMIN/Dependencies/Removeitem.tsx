@@ -109,36 +109,23 @@ function Removeitem() {
           }
         >
           {currentItems.map((item: storeItem, index: number) => (
-            <div className="w-[80%]m-auto flex items-center mb-1 text-BLACK rounded border-b-2">
-              <div className="bg-BACKGROUND rounded text-WHITE justify-center flex w-[20%] h-[50px]">
+            <div className="w-[90%] bg-BACKGROUND m-auto flex items-center mb-1 text-WHITE rounded border-b-2 border-BLACK hover:text-BLACK">
+              <div className=" rounded justify-center flex w-[20%] h-full align-middle ">
                 ID: {item.itemID}
               </div>
               <div className="w-[50%]">{item.itemName}</div>
               {locked ? (
-                <Button
-                  variant="outlined"
-                  style={{
-                    color: "black",
-                    width: "25%",
-                    fontSize: 9,
-                    backgroundColor: "#dc2626",
-                  }}
-                >
-                  Remove Item from store
-                </Button>
+                <button
+                  >
+                  Unlock to remove
+                </button>
               ) : (
-                <Button
-                  variant="outlined"
-                  style={{
-                    color: "white",
-                    width: "25%",
-                    fontSize: 9,
-                    backgroundColor: "#dc2626",
-                  }}
+                <button
+                className="border-l border-BLACK hover:text-BLACK hover:opacity-60"
                   onClick={() => removeStoreItems({ storeItemID: item.itemID })}
                 >
                   Remove Item from store
-                </Button>
+                </button>
               )}
             </div>
           ))}

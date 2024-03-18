@@ -75,7 +75,7 @@ function CreateItem(){
                         </h1>
                         <Input type="file" onChange={handleFileChange} />  
                         <br />
-                        <Button style={{color: 'white', width: '50%', backgroundColor:'#dc2626', marginTop: '2em'}} variant="outlined" onClick={createStoreItem}>Create Item</Button>   
+                        <button className="border-b-2 border-l-2 border border-BLACK bg-BACKGROUND w-[60%] rounded mt-4 hover:text-BLACK hover:opacity-90" onClick={createStoreItem}>Create Item</button>   
    
            
                     </div>

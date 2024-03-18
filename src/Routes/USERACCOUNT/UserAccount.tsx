@@ -26,7 +26,6 @@ export default function UserAccount() {
           setOrders([])
           const response = await axios.post(`${serverAddress}/api/getOrders`, { userID: userID });
           if (response.status === 200) {
-            console.log('Response Data:', response.data);
             let data = response.data
             setOrders(data)
             setOrderCount(data.length)
@@ -47,9 +46,9 @@ export default function UserAccount() {
           <div className="bg-WHITE py-2 justify-center">
             <h1 className="justify-center text-center w-[50%] m-auto rounded font-serif text-2xl bg-BACKGROUND"> User: {userName || 'N/a'} Order History:</h1>
 
-            {authenticated ? (
+            {authenticated && !superAuthenticated ? (
                 orders.slice((currentOrdersPage - 1) * ordersPerPage, currentOrdersPage * ordersPerPage).map((order: any, index: number) => (
-                <div key={index} className={ !order.completed ? "m-2 flex text-white justify-center text-center" : "opacity-60 m-2 flex  text-white justify-center text-center"}>
+                <div key={index} className={ !order.completed ? "m-2 flex text-white justify-center text-center hover:opacity-90 hover:text-BLACK" : "opacity-60 m-2 flex  text-white justify-center text-center"}>
                     <h1 className="bg-BACKGROUND  w-[25%]">Item ID : {order.itemID} </h1>
                     <h1 className="bg-BACKGROUND  w-[25%]">Item : {order.itemName} </h1>
                     <h1 className="bg-BACKGROUND  w-[25%]">Completed : {order.completed ? 'TRUE' : "FALSE"} </h1>
@@ -58,7 +57,7 @@ export default function UserAccount() {
             ) : null}
           </div>
             <Pagination
-                style={{ position: 'absolute', bottom: '10%', display: "flex", left: '48%' }}
+                style={{ justifyContent: 'center', display: 'flex', alignContent: 'center' }}
                 count={Math.ceil(orderCount / ordersPerPage)}
                 page={currentOrdersPage}
                 onChange={handleChangeOrdersPage}

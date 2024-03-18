@@ -99,13 +99,13 @@ function Tail() {
                     <br />
                     <button
                         onClick={() => Login()}
-                        className="flex m-auto bg-BACKGROUND mt-2 mb-4 justify-center text-center text-WHITE w-[40%] rounded"
+                        className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 mb-4 justify-center text-center text-WHITE w-[40%] rounded"
                     >
                     Login
                     </button>
                     <button
                         onClick={() => superLogin()}
-                        className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[40%] rounded"
+                        className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[40%] rounded"
                     >
                     Admin
                     </button>
@@ -113,7 +113,7 @@ function Tail() {
                     <br />
                     <button
                         onClick={() => register()}
-                        className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[60%] text-2xl rounded"
+                        className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[60%] text-2xl rounded"
                     >
                     Register
                     </button>
@@ -133,7 +133,7 @@ function Tail() {
             {authenticated || superAuthenticated ? (
                 <button
                     onClick={() => logOut()}
-                    className="bg-BACKGROUND w-[15%] rounded text-WHITE"
+                    className="bg-BACKGROUND w-[15%] rounded text-WHITE hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"
                     >
                         Log out
                     </button>
@@ -141,7 +141,7 @@ function Tail() {
             (
             <button
                 onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
-                className="bg-BACKGROUND w-[15%] rounded text-WHITE"
+                className="bg-BACKGROUND w-[15%] rounded text-WHITE hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"
             >
                 Login
             </button>

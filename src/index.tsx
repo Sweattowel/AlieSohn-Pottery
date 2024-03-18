@@ -22,7 +22,7 @@ if (rootElement) {
           <Navigation />
           <Routes>
             <Route path='/ADMIN' Component={Admin}/>
-            <Route path='/MyAccount' Component={UserAccount}/>
+            <Route path='/MyAccount/:userID' Component={UserAccount}/>
             <Route path="/" Component={Brochure}/>
             <Route path="/StoreFront" Component={StoreFront}/>
             <Route path="/Cart" Component={Cart}/>            
