@@ -11,19 +11,21 @@ interface StoreItem {
     itemName: string;
     itemPrice: number;
     imagePath: string;
-    itemDescription: string;
+    order_count: number;
 }
 
 function Brochure() {
     const serverAddress =`${process.env.REACT_APP_SERVER_ADDRESS}`
     const [ allItems, setAllItemscart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated] = useMyContext();
+    const [ brochure, setBrochure ] = useState<any[]>([])
 
-    const collectStoreItems = async () => {
+
+    const getBrochure = async () => {
         try {
-            const response = await axios.post<StoreItem[]>(`${serverAddress}/api/storeItems`);
-
+            const response = await axios.post<StoreItem[]>(`${serverAddress}/api/getBrochure`);
             if (response.status === 200) {
-                setAllItemscart(response.data);
+                setBrochure(response.data);
+
             } else if (response.status === 404) {
                 console.log("No items available");
             } else {
@@ -35,9 +37,10 @@ function Brochure() {
     };
 
     useEffect(() => {
-        if (allItems.length == 0){
-            collectStoreItems();
+        if (brochure.length == 0){
+            getBrochure();            
         }
+
     }, []);
 
     // react slick settings and configuration
@@ -55,7 +58,7 @@ function Brochure() {
         <div className="text-BLACK h-[85vh] w-[50%] m-auto text-center">
             <h1 className="font-serif text-4xl mt-2 mb-8 border-BLACK bg-BACKGROUND rounded text-WHITE h-[5%]">Most popular Items</h1>
             <Slider {...settings}>
-                    {allItems.map((item: StoreItem, index: number) => (
+                    {brochure.map((item: StoreItem, index: number) => (
                         <div className="border-BLACK text-center w-[80%] m-auto flex">    
                             <img
                                 key={item.itemID}
@@ -65,7 +68,8 @@ function Brochure() {
                             />
                             <div className="bg-WHITE text-BLACK w-[90%] m-auto">
                                 <h1 className="text-2xl font-serif">{item.itemName}</h1>
-                                <div>${item.itemPrice}</div>                                
+                                <div>${item.itemPrice} </div>   
+                                <div>Happy customers {item.order_count}</div>                             
                             </div>
 
                         </div> 
