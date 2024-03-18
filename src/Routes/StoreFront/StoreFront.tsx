@@ -97,7 +97,7 @@ function StoreFront() {
   ///////////////////////////////////////////
   return (
     <div className="w-[80%] h-full m-auto text-white flex wrap justify-center">
-      <div className="absolute top-[20%] left-[2%] w-[10%] h-[10%] min-w-44  text-center rounded  text-WHITE text-[1em] bg-BACKGROUND">
+      <div className="absolute top-[20%] left-[2%] w-[10%] h-[10%] min-w-44  text-center rounded  text-WHITE text-[1em] bg-BACKGROUND justify-center items-center flex">
         Current Items in cart:
         <br /> 
           {count} item/s

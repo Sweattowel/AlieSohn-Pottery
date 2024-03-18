@@ -59,7 +59,7 @@ function Brochure() {
             <h1 className="font-serif text-4xl mt-2 mb-8 border-BLACK bg-BACKGROUND rounded text-WHITE h-[5%]">Most popular Items</h1>
             <Slider {...settings}>
                     {brochure.map((item: StoreItem, index: number) => (
-                        <div className="border-BLACK text-center w-[80%] m-auto flex">    
+                        <div key={index} className="border-BLACK text-center w-[80%] m-auto flex">    
                             <img
                                 key={item.itemID}
                                 src={url.resolve(serverAddress, item.imagePath)}
