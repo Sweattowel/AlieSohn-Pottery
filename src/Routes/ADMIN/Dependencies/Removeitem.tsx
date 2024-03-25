@@ -19,7 +19,7 @@ function Removeitem() {
   // pagination handling
   const [currentPage, setCurrentPage] = useState(1);
   const [itemCount, setItemCount] = useState(0);
-  const itemsPerPage = 5;
+  const itemsPerPage = 3;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = storeItems.slice(indexOfFirstItem, indexOfLastItem);
@@ -74,9 +74,9 @@ function Removeitem() {
   }, []);
   ///////////////////////////////////////////////////////////////////
   return (
-    <div className="ml-auto w-[100%] h-[50%] bg-WHITE text-WHITE">
-      <div className="mr-auto h-full">
-        <h1 className="bg-BACKGROUND rounded text-WHITE text-center w-[80%] m-auto mb-2 h-[30px]">
+    <div className="w-[40vw] h-[50vh] bg-WHITE text-WHITE">
+      <div className="h-full mb-40">
+        <h1 className="bg-BACKGROUND rounded text-WHITE text-center w-[100%] m-auto mb-2 h-[30px]">
           Remove store Item
         </h1>
         <Button
@@ -109,7 +109,7 @@ function Removeitem() {
           }
         >
           {currentItems.map((item: storeItem, index: number) => (
-            <div className="w-[90%] bg-BACKGROUND m-auto flex items-center mb-1 text-WHITE rounded border-b-2 border-BLACK hover:text-BLACK">
+            <div className="bg-BACKGROUND m-auto flex items-center mb-1 text-[0.7rem] text-WHITE rounded border-b-2 border-BLACK hover:text-BLACK">
               <div className=" rounded justify-center flex w-[20%] h-full align-middle ">
                 ID: {item.itemID}
               </div>
@@ -129,14 +129,15 @@ function Removeitem() {
               )}
             </div>
           ))}
+          <Pagination
+            style={{display: 'flex', alignItems:'center', justifyContent: "center", width: '100%' }}
+            count={Math.ceil(itemCount / itemsPerPage)}
+            page={currentPage}
+            onChange={handleChangePage}
+            variant="outlined"
+          />          
         </div>
-        <Pagination
-          style={{ display: "flex", width: "100%", justifyContent: "center" }}
-          count={Math.ceil(itemCount / itemsPerPage)}
-          page={currentPage}
-          onChange={handleChangePage}
-          variant="outlined"
-        />
+
       </div>
     </div>
   );

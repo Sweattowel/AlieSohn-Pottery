@@ -19,32 +19,20 @@ function Navigation() {
 
   const [page, setPage] = useState(1);
   return (
-    <nav className="m-auto h-[11vh] flex border-BLACK border-b-2 w-[80%]">
+    <nav className="m-auto h-[11vh] flex border-BLACK border-b-2 w-[80vw]">
       <div className="flex  w-full mb-2">
-        {authenticated && !superAuthenticated ? (
-          <img
-            className="h-[63px] mr-2"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaTYzo8bURp5Bgcmi6qUgZA09Bc9daAa_E4jvlb60J9g&s"
-          />
-        ) : null}
-        {authenticated && superAuthenticated ? (
-          <img
-            className="h-[63px] mr-2"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYpARmcDnD6YGkauJskZc4CtgEZvMfjRPkddCFk_9tMQ&s"
-          />
-        ) : null}
         <div className="w-[50%] m-3 ml-[5%]  text-2xl">
-        <h1 className="font-serif h-full rounded w-[350px] flex items-center justify-center text-4xl text-WHITE bg-BACKGROUND">
+        <h1 className="font-serif h-full rounded w-[25vw] text-center flex items-center justify-center text-[1.3rem] text-WHITE bg-BACKGROUND">
           AlieSohn Pottery
         </h1>
 
         </div>
-        <ul className="flex space-x-1 h-full items-center ">
+        <ul className="flex space-x-1 h-full w-full items-center text-[0.6em] flex-wrap">
           {authenticated  && superAuthenticated ? (
             <li>
               <Link to={`/MyAccount/${userID}`}>
                 <button
-                  className={page === 5 ? "text-WHITE bg-BACKGROUND w-[150px] h-[50px] rounded" : " border-b border-SELECTED text-BLACK bg-WHITE w-[150px] h-[50px] rounded"}
+                  className={page === 5 ? "font-bold text-WHITE bg-BACKGROUND w-[8vw] h-[5vh] rounded" : "border-b border-SELECTED text-BLACK bg-WHITE w-[8vw] h-[5vh] rounded"}
                   onClick={() => {
                     setPage(5);
                   }}
@@ -58,7 +46,7 @@ function Navigation() {
             <li>
               <Link to="/ADMIN">
                 <button
-                  className={page === 4 ? "text-WHITE bg-BACKGROUND w-[150px] h-[50px] rounded" : " border-b border-SELECTED text-BLACK bg-WHITE w-[150px] h-[50px] rounded"}
+                  className={page === 4 ? "font-bold text-WHITE bg-BACKGROUND w-[8vw] h-[5vh] rounded" : "border-b border-SELECTED text-BLACK bg-WHITE w-[8vw] h-[5vh] rounded"}
                   onClick={() => {
                     setPage(4);
                   }}
@@ -71,7 +59,7 @@ function Navigation() {
           <li>
             <Link to="/">
                 <button
-                  className={page === 1 ? "text-WHITE bg-BACKGROUND w-[150px] h-[50px] rounded" : " border-b border-SELECTED text-BLACK bg-WHITE w-[150px] h-[50px] rounded"}
+                  className={page === 1 ? "font-bold text-WHITE bg-BACKGROUND w-[8vw] h-[5vh] rounded" : "border-b border-SELECTED text-BLACK bg-WHITE w-[8vw] h-[5vh] rounded"}
                   onClick={() => {
                     setPage(1);
                   }}
@@ -83,7 +71,7 @@ function Navigation() {
           <li>
             <Link to="/StoreFront">
             <button
-                  className={page === 2 ? "text-WHITE bg-BACKGROUND w-[150px] h-[50px] rounded" : " border-b border-SELECTED text-BLACK bg-WHITE w-[150px] h-[50px] rounded"}
+                  className={page === 2 ? "font-bold text-WHITE bg-BACKGROUND w-[8vw] h-[5vh] rounded" : "border-b border-SELECTED text-BLACK bg-WHITE w-[8vw] h-[5vh] rounded"}
                   onClick={() => {
                     setPage(2);
                   }}
@@ -95,7 +83,7 @@ function Navigation() {
           <li>
             <Link to="/Cart">
             <button
-                  className={page === 3 ? "text-WHITE bg-BACKGROUND w-[150px] h-[50px] rounded" : " border-b border-SELECTED text-BLACK bg-WHITE w-[150px] h-[50px] rounded"}
+                  className={page === 3 ? "font-bold text-WHITE bg-BACKGROUND w-[8vw] h-[5vh] rounded" : "border-b border-SELECTED text-BLACK bg-WHITE w-[8vw] h-[5vh] rounded"}
                   onClick={() => {
                     setPage(3);
                   }}

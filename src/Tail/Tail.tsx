@@ -11,8 +11,20 @@ function Tail() {
     const [userNameAttempt, setUserNameAttempt] = useState<string>('')
     const [passWordAttempt, setPassWordAttempt] = useState<string>('')
     const [caste, setCaste] = useState<string>('waiting')
+    const [attempts, setAttempts] = useState<number>(4)
+    const [adminAttempts, setAdminAttempts] = useState<number>(4)
+    const [registrationAttempts, setRegistrationAttempts] = useState<number>(4)
+    const [error, setError] = useState<string>('')
 
     const Login = async () => {
+        if (attempts == 0){
+            setError('Out of attempts')
+            //return
+        }
+        if (userNameAttempt == '' || passWordAttempt == ''){
+            setError('Please finish inputting details')
+            return
+        }
             try {
                 const response = await axios.post(`${serverAddress}/api/login`, { userName: userNameAttempt, passWord: passWordAttempt });
                 if (response.status === 200){
@@ -24,16 +36,25 @@ function Tail() {
                     setUserNameAttempt('')
                     setPassWordAttempt('')
                     console.log('Logged in successfully');
-                } else if (response.status === 404) {
-                    console.log('No account exists');
                 } else {
                     console.log('Failed to log in');
                 }
             } catch (error) {
-                console.log(error);
+                setAttempts((prevAttempts) => 
+                    Math.max(prevAttempts - 1, 0)
+                )
+                setError(`No account exists, ${attempts} attempts remaining`)
             }
     }
     const superLogin = async () => {
+        if (adminAttempts == 0){
+            setError('Notifying cyberpolice')
+            return
+        }
+        if (userNameAttempt == '' || passWordAttempt == ''){
+            setError('Please finish inputting details')
+            return
+        }
             try {
                 const ResponseSir = await axios.post(`${serverAddress}/api/adminLogin`, { userName: userNameAttempt, passWord: passWordAttempt });
                 if (ResponseSir.status === 200){
@@ -44,13 +65,14 @@ function Tail() {
                     setUserNameAttempt('')
                     setPassWordAttempt('')
                     console.log('Logged in successfully Sir');
-                } else if (ResponseSir.status === 404) {
-                    console.log('No account exists, please prepare to be terminated');
                 } else {
                     console.log('Failed to log in');
                 }
             } catch (error) {
-                console.log(error);
+                setAdminAttempts((prevAttempts) => 
+                    Math.max(prevAttempts - 1, 0)
+                )
+                setError(`False Prophet, You are running out of time ${adminAttempts}`)
             }
         }
 
@@ -64,6 +86,10 @@ function Tail() {
         setCaste('waiting')
     }
     const register = async () => {
+        if (userNameAttempt == '' || passWordAttempt == ''){
+            setError(`Please finish inputting details`)
+            return
+        }
         try {
             const response = await axios.post(`${serverAddress}/api/register`, { userName: userNameAttempt, passWord: passWordAttempt } )
             if (response.status === 200){
@@ -76,15 +102,22 @@ function Tail() {
                 console.log('Failed to create account');
             }
         } catch (error) {
-            console.log(error)
+            setRegistrationAttempts((prevAttempts) => 
+                Math.max(prevAttempts - 1, 0)
+            )
+            setError(`Failed to register ${registrationAttempts}`)
         }
     }
-
+/////////////////////////////////////
+useEffect(() => {
+    setPassWordAttempt('')
+    setUserNameAttempt('')
+},[wantLogin])
   return (
     <>
         { wantLogin ? (
             <div onClick={() => setWantLogin(false)} className="fixed inset-0 w-full h-full flex items-center justify-center z-50">
-                <div onClick={(e) => e.stopPropagation()} className="bg-WHITE fixed bottom-[20%] rounded-lg left-[40%] border-black border-2 text-center justify-center w-[20%] h-[60%] text-BLACK">
+                <div onClick={(e) => e.stopPropagation()} className="bg-WHITE fixed bottom-[20%] rounded-lg left-[35%] border-black border-2 text-center justify-center w-[30%] h-[60%] text-BLACK opacity-100">
                     <h1 className="text-2xl border-b-2 border-black bg-BACKGROUND rounded-t">
                         LOGIN MENU                
                     </h1>
@@ -95,7 +128,13 @@ function Tail() {
                     <h1 className="mt-10">
                         PassWord
                     </h1>
-                    <Input className="mb-10" onChange={(e) => setPassWordAttempt(e.target.value)} type="password"/>
+                    <Input className="mb-10" onChange={(e) => setPassWordAttempt(e.target.value)} 
+                    onKeyDown={(e) => {
+                        if (e.key == 'Enter'){
+                            Login()
+                        }
+                    }} 
+                    type="password"/>
                     <br />
                     <button
                         onClick={() => Login()}
@@ -117,23 +156,26 @@ function Tail() {
                     >
                     Register
                     </button>
+                    {error.length > 0 ? (
+                        <div className="mt-10 font-bold">
+                            {error}
+                        </div>
+                    ) : (null)}                  
                     </div> 
             </div>
-
-           
             ) : (null)}
 
         
-        <div className="w-[80%] ml-[10%] mr-[10%] text-center justify-center mt-2 fixed bottom-0 text-BLACK border-t-2 border-BLACK">
-        <div>
+        <div className="w-[100vw] text-center text-[0.7rem] justify-center mt-2 fixed bottom-0 text-BLACK border-t-2 border-BLACK bg-WHITE">
+        <div className="flex justify-center m-auto w-[80%]">
             Unoffical private web app for educational purposes, i do not own any of
             the content used
         </div>
-        <div className="w-[125px] text-center m-2 rounded justify-center w-full">
+        <div className="w-[125px] text-center mb-2 rounded justify-center w-full">
             {authenticated || superAuthenticated ? (
                 <button
                     onClick={() => logOut()}
-                    className="bg-BACKGROUND w-[15%] rounded text-WHITE hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"
+                    className="bg-BACKGROUND w-[15%] rounded text-WHITE hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK mb-2"
                     >
                         Log out
                     </button>

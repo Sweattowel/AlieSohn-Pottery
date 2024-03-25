@@ -104,7 +104,7 @@ useEffect(() => {
 }, [users])
 /////////////////////////////////////
   return (
-    <div className="mr-auto w-[50%] h-full bg-WHITE text-WHITE mt-0.5">
+    <div className="w-[40vw] h-full bg-WHITE text-WHITE mt-0.5 ml-0.5">
         <h1 className="bg-BACKGROUND text-center rounded mb-2 text-white h-[30px]" >
             Orders
         </h1>
@@ -134,6 +134,8 @@ useEffect(() => {
             }}
             count={Math.ceil(userCount / usersPerPage)}
             page={currentUsersPage}
+            boundaryCount={0}
+            siblingCount={1}
             onChange={handleChangeUsersPage}
             variant="outlined"
         />
@@ -146,6 +148,8 @@ useEffect(() => {
             }}
             count={Math.ceil(orderCount / ordersPerPage)}
             page={currentOrdersPage}
+            boundaryCount={0}
+            siblingCount={1}
             onChange={handleChangeOrdersPage}
             variant="outlined"
         />
@@ -156,10 +160,10 @@ useEffect(() => {
 
       {selectedCustomer !== -1 ? (
         orders.slice((currentOrdersPage - 1) * ordersPerPage, currentOrdersPage * ordersPerPage).map((order: any, index: number) => (
-          <div key={index} className={ !order.completed ? "m-2 flex bg-SELECTED text-WHITE justify-center text-center hover:text-BLACK hover:opacity-90" : "opacity-60 m-2 flex bg-BACKGROUND text-BLACK justify-center text-center "}>
-            <h1 className="w-[25%]"><>Item ID : {order.itemID}</><br /><>Order ID: {order.orderID}</> </h1>
-            <h1 className="w-[25%]">Name : {order.itemName} </h1>
-            <h1 className="w-[25%]">Completed : {order.completed ? 'TRUE' : "FALSE"} </h1>
+          <div key={index} className={ !order.completed ? "m-2 flex bg-SELECTED text-WHITE justify-center text-center hover:text-BLACK hover:opacity-90 w-[40vw] text-[0.5rem] items-center" : "opacity-60 m-2 flex bg-BACKGROUND text-BLACK justify-center text-center items-center w-[40vw] text-[0.5rem]"}>
+            <h1 className="w-[20%]"><>Item : {order.itemID}</><br /><>Order {order.orderID}</> </h1>
+            <h1 className="w-[20%]">{order.itemName} </h1>
+            <h1 className="w-[20%]">{order.completed ? 'SUCC' : "NOT"} </h1>
             <Button onClick={() => {completeOrder(order.orderID, !order.completed ? true : false)}} style={{width: '25%', borderLeft: '1px solid black'}}>{ order.completed ? <CheckIcon /> : <ClearIcon />}</Button>
             
           </div>

@@ -16,7 +16,7 @@ function StoreFront() {
   const [ allItems, setAllItemscart, cart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated] = useMyContext();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemCount, setItemCount] = useState(0);
-  const itemsPerPage = 3;
+  const itemsPerPage = 8;
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
     newPage: number
@@ -96,19 +96,26 @@ function StoreFront() {
   }, [cart]); 
   ///////////////////////////////////////////
   return (
-    <div className="w-[80%] h-full m-auto text-white flex wrap justify-center">
-      <div className="absolute top-[20%] left-[2%] w-[10%] h-[10%] min-w-44  text-center rounded  text-WHITE text-[1em] bg-BACKGROUND justify-center items-center flex">
+    <div className="w-[90%] m-auto text-white flex flex-wrap justify-center mb-40">
+      <div className="flex fixed bottom-[10vh] m-auto w-[60vw] h-[6vh]  text-center rounded  text-WHITE text-[0.7em] bg-BACKGROUND justify-center items-center">
         Current Items in cart:
         <br /> 
           {count} item/s
           <br />
           ${totalPrice.toFixed(2)}
-        </div>
+          <Pagination
+            style={{display: "flex", justifyContent: "center", alignItems: 'center' }}
+            count={Math.ceil(itemCount / itemsPerPage)}
+            page={currentPage}
+            onChange={handleChangePage}
+            variant="outlined"
+          />  
+      </div>
       {currentItems.length > 0 ? (
         currentItems.map((item: storeItem, index: number) => (
-          <div key={index} className="border-WHITE border text-BLACK w-[400px] min-w-44 h-[500px] p-2 mt-2 ml-2">
+          <div key={index} className="border-WHITE border text-BLACK w-[20%] h-[40vh] min-w-44 p-2 mt-2 ml-2">
             <div className="mr-2">
-              <div className="text-center font-serif text-2xl bg-BACKGROUND rounded text-WHITE">{item.itemName}</div>
+              <div className="text-center font-serif text-[1em] bg-BACKGROUND rounded text-WHITE">{item.itemName}</div>
               <div className="mb-2 text-center">
                 Price: ${item.itemPrice}
               </div>
@@ -122,7 +129,7 @@ function StoreFront() {
               alt={item.itemName}
               onError={() => console.error(`Image not found: ${item.imagePath}`)}
             />
-            <div className="w-[70%] h-[15%] max-h-24 m-auto">
+            <div className="w-[80%] h-[5vh] max-h-24 m-auto text-center text-[0.8rem]">
               {item.itemDescription}
             </div>
             <br />
@@ -151,13 +158,7 @@ function StoreFront() {
           </div>
         </h1>
       )}
-      <Pagination
-        style={{ position: 'absolute',bottom:'10%', width: '20%', display: "flex", justifyContent: "center" }}
-        count={Math.ceil(itemCount / itemsPerPage)}
-        page={currentPage}
-        onChange={handleChangePage}
-        variant="outlined"
-      />  
+
     </div>   
   );
 

@@ -1,6 +1,7 @@
 import { Button, Input } from "@mui/material"
 import axios from "axios";
 import React, { ChangeEvent, useState } from "react"
+import { useMyContext } from "../../../Context/ContextProvider";
 
 interface Item {
     title: string,
@@ -11,7 +12,7 @@ interface Item {
 
 function CreateItem(){
     const serverAddress = process.env.REACT_APP_SERVER_ADDRESS
-
+    const [allItems, setAllItems, cart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated, userName, setUserName] = useMyContext();
     const [item, setItem] = useState<Item>({
         title: "",
         description: "",
@@ -42,6 +43,13 @@ function CreateItem(){
             const response = await axios.post(`${serverAddress}/api/createItem`, formData)
             if (response.status === 200){
                 console.log('Successfully added to store')
+                setItem({
+                    title: "",
+                    description: "",
+                    price: '0',
+                    picture: null
+                })
+                setAllItems([])
             } else {
                 console.log('Failed to upload to store')
             }
@@ -52,12 +60,12 @@ function CreateItem(){
 
     ///////////////////////////////////////////////////////////////
     return (
-        <div className="ml-auto w-[80%] h-[50%] bg-WHITE text-WHITE m-auto">
+        <div className="ml-auto w-[40vw] h-[50vh] bg-WHITE text-WHITE m-auto">
                 <div className="mr-auto h-full border-r-1 border-l-2 border-t-2">
                     <h1 className="text-center bg-SELECTED border-black mb-2 text-white h-[30px] rounded" >
                         Create store Item
                     </h1>
-                    <div className=" w-[80%] h-[80%] m-auto text-center">
+                    <div className=" w-[40vw] h-[80%] m-auto text-center">
                         <h1 className="bg-BACKGROUND rounded text-WHITE w-[50%] m-auto mt-2"> 
                             Item title
                         </h1>

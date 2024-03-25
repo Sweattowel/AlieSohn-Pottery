@@ -47,7 +47,7 @@ function Brochure() {
     const settings = {
         dots: true,
         speed: 2000,
-        slidesToShow: 3,
+        slidesToShow: 2,
         slidesToScroll: 1,
         infinite: true,
         autoplay: true,
@@ -55,19 +55,19 @@ function Brochure() {
       };
 
     return (
-        <div className="text-BLACK h-[85vh] w-[50%] m-auto text-center">
-            <h1 className="font-serif text-4xl mt-2 mb-8 border-BLACK bg-BACKGROUND rounded text-WHITE h-[5%]">Most popular Items</h1>
+        <div className="text-BLACK h-[80vh] w-[80vw] m-auto text-center">
+            <h1 className="font-serif text-[2em] mt-2 mb-8 border-BLACK bg-BACKGROUND rounded text-WHITE h-[5vh] h-[10vh] items-center justify-center flex">Our Top Sellers!</h1>
             <Slider {...settings}>
                     {brochure.map((item: StoreItem, index: number) => (
-                        <div key={index} className="border-BLACK text-center w-[80%] m-auto flex">    
+                        <div key={index} className="border-BLACK text-center m-auto flex">    
                             <img
                                 key={item.itemID}
                                 src={url.resolve(serverAddress, item.imagePath)}
                                 alt={item.itemName}
-                                style={{maxHeight: '600px', width: '90%', margin: 'auto'}}
+                                style={{height:'40vh', maxHeight: '400px', width: '80%', margin: 'auto'}}
                             />
-                            <div className="text-BLACK w-[90%] m-auto">
-                                <h1 className="text-lg text-WHITE font-serif bg-BACKGROUND rounded-b-lg">{item.itemName}</h1>
+                            <div className="text-BLACK w-[80%] m-auto">
+                                <h1 className="text-[1.5em] text-WHITE h-[8vh] font-serif bg-BACKGROUND rounded-b-lg justify-center items-center flex">{item.itemName}</h1>
                                 <div>${item.itemPrice} </div>   
                                 <div className="text-sm">Happy customers {item.order_count}</div>                             
                             </div>

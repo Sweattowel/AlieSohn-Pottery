@@ -118,28 +118,20 @@ function Cart() {
   }, [cart]);  
   ///////////////////////////////////////////////////////////////////
   return (
-    <div className="w-[80%] h-full m-auto">
-      <div className="flex bg-BACKGROUND rounded text-WHITE">
-        <h1 className="ml-2 mt-5 mb-5 rounded w-[20%] text-center ">
-          Total cost: ${totalCost.toFixed(2)}
+    <div className="w-[90vw] h-full m-auto mb-20">
+      <div className="flex rounded h-[10vh]">
+        <h1 className="flex m-auto rounded w-[40%] text-center justify-center items-center bg-BACKGROUND">
+          Total cost: ${totalCost.toFixed(2)} Item count: {itemCount} items
           <br />
-          Item count: {itemCount} items
+          
         </h1>
         {authenticated ? (
-          <Button
-            style={{
-              color: "white",
-              marginTop: "auto",
-              marginBottom: "auto",
-              marginLeft: "4em",
-              width: "20%",
-              height: "100%",
-              border: "1px solid black",
-            }}
+          <button
+            className="border-BLACK border w-[20vw] bg-BACKGROUND rounded m-auto justify-center text-center items-center flex hover:opacity-90 hover:text-BLACK hover:border-BLACK"
             onClick={() => sendOrder()}
           >
             Create Order
-          </Button>
+          </button>
         ) : (
           <div className="mt-[auto] mb-[auto] ml-[2em] h-[50px] w-[40%] flex justify-center items-center rounded-lg">
             Please Create an account and log in to create an order
@@ -149,7 +141,7 @@ function Cart() {
       <div className="flex flex-wrap justify-center">
         {currentItems.length > 0 ? (
           currentItems.map((item: CartItem, index: number) => (
-            <div key={index} className="border border-WHITE text-BLACK w-[400px] h-[500px] p-2 mt-2 ml-2 ">
+            <div key={index} className="border-WHITE border text-BLACK w-[20%] h-[40vh] min-w-44 p-2 mt-2 ml-2 mb-20">
               <div className="mr-2">
                 <div className="text-center text-WHITE font-serif text-2xl bg-BACKGROUND rounded">{item.itemName}</div>
                 <div className="text-center">
@@ -157,15 +149,11 @@ function Cart() {
                 </div>
                 <div className="w-[80%] m-auto text-center">
                   <br />
-                  <div className="h-[70px]">
-                    {item.itemDescription}
-                  </div>
-                  
                 </div>
               </div>
               <img
                 className="h-[60%] border-BLACK border-2"
-                style={{ maxHeight: "55%", maxWidth: "80%", margin: "auto" }}
+                style={{ maxHeight: '55%', maxWidth: '90%', margin: 'auto'}}
                 src={url.resolve(serverAddress, item.imagePath)}
                 alt={item.itemName}
                 onError={() =>
@@ -174,7 +162,7 @@ function Cart() {
               />
               <div className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE rounded w-[80%]">
                 <button
-                  className="hover:text-BLACK hover:opacity-90 w-[50%] border-b-2 border-l-2 border border-BLACK"
+                  className="hover:text-BLACK hover:opacity-90 w-[50%] "
                   onClick={() => removeFromCart(item.itemID, index)}
                 >
                   Remove from cart
@@ -203,7 +191,7 @@ function Cart() {
           </h1>
         )}
       <Pagination
-        style={{ position: 'absolute', bottom: '10%', display: "flex", justifyContent: "center" }}
+        style={{ position: 'fixed', bottom: '10%', display: "flex", justifyContent: "center" }}
         count={Math.ceil(cart.length / itemsPerPage)}
         page={currentPage}
         onChange={handleChangePage}
