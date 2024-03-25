@@ -58,18 +58,28 @@ const upload = multer({ storage: storage })
 app.post('/api/register', async (req, res) => {
   try {
     console.log('Received Registration attempt')
-    const sql = 'SELECT * FROM userData WHERE userName = ?'
+    
     const userName = req.body.userName
     const passWord = req.body.passWord
-    const response = db.execute(sql, [userName])
 
-    if ((response.length > 0)){
-      res.status(409).json({ error: 'Invalid username: data already exists' })
-    } else {
-      const sql2 ="INSERT INTO userData (userName, passWord) VALUES (?, ?)"
-      db.execute(sql2, [userName, passWord])
-      res.status(200).json({ message: 'Successfully registered'})
-    }
+    const sql = 'SELECT * FROM userData WHERE userName = ?'
+    db.execute(sql, [userName], (err, results) => {
+      if (err){
+        console.log(err)
+        res.status(500).json({error: 'Internal server error'})
+      } else if (results.length > 0){
+        res.status(409).json({ error: 'Invalid username: data already exists' })
+      } else if (results.length == 0) {
+        const sql2 ="INSERT INTO userData (userName, passWord) VALUES (?, ?)"
+        db.execute(sql2, [userName, passWord], (err, results) => {
+          if (err){
+            res.status(500).json({ error: 'Internal server error'})
+          } else {
+            res.status(200).json({ message: 'Successfully registered'})
+          }
+        })
+      }
+    })
 
   } catch (error) {
     console.log(error)
@@ -89,6 +99,9 @@ app.post('/api/login', async (req, res) => {
     db.execute(sql, [userName, passWord], (err, results) => {
       if (err) {
         console.log(err)
+      } else if(results.length > 1){
+        console.log('Too many accounts with the same userName/Password please fix immediately')
+        res.status(500).json({error: 'Server Failure'})
       } else if (results.length === 1){
         console.log('login success')
         const userID = results[0].userID
@@ -149,18 +162,32 @@ app.post('/api/storeItems', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+//////// brochure handler
+
+let brochure = null
+const createBrochure = () => {
+  console.log('Making Brochure')
+  const sql = 'SELECT storeItems.itemID, storeItems.itemName, storeItems.imagePath, storeItems.itemPrice, COUNT(orders.orderID) AS order_count FROM storeItems JOIN orders ON storeItems.itemID = orders.itemID GROUP BY storeItems.itemID, storeItems.itemName ORDER BY order_count DESC LIMIT 3;'
+  db.execute(sql, (err, results) => {
+    if (err){
+      console.log(err)
+    } else {
+      console.log('Brochure made')
+      brochure = results
+    }
+  })
+}
+const updateBrochure = () => {
+  createBrochure()
+  setInterval(createBrochure, 5 * 60 * 1000)
+}
+updateBrochure()
 app.post('/api/getBrochure', async (req, res) => {
   console.log('Received Request for Brochure')
   try {
-    const sql = 'SELECT storeItems.itemID, storeItems.itemName, storeItems.imagePath, storeItems.itemPrice, COUNT(orders.orderID) AS order_count FROM storeItems JOIN orders ON storeItems.itemID = orders.itemID GROUP BY storeItems.itemID, storeItems.itemName ORDER BY order_count DESC LIMIT 3;'
-    db.execute(sql, (err, results) => {
-      if (err){
-        console.log(err)
-        res.status(500).json({Error: 'Internal Server Error'})
-      } else {
-        res.status(200).json(results)
-      }
-    })
+    if (brochure){
+      res.status(200).json(brochure)
+    }
   } catch (error) {
     console.log(error)
     res.status(500).json({Error: 'Internal Server Error'})
