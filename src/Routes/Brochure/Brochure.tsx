@@ -25,7 +25,6 @@ function Brochure() {
             const response = await axios.post<StoreItem[]>(`${serverAddress}/api/getBrochure`);
             if (response.status === 200) {
                 setBrochure(response.data);
-
             } else if (response.status === 404) {
                 console.log("No items available");
             } else {
