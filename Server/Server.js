@@ -125,8 +125,29 @@ app.post('/api/login', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-// SUPERUSER LOG IN
+// SUPERUSER REGISTRATION DETAILS
+// SUPERUSER CREATION
+app.post('/api/adminRegistration', async (req, res) => {
+  try {
+    const { userName, passWord } = req.body
+    const hashedPassword = await bcrypt.hash(passWord, 10)
 
+    const sql = 'INSERT INTO admins (userName, passWord) VALUES (? , ?)'
+
+    db.execute(sql, [userName, hashedPassword], (err, results) => {
+      if (err){
+        console.log(err)
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        res.status(200).json({ message: 'ADMIN SUCCESSFULLY MADE' });
+      }
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
+// SUPERUSER LOGIN
 app.post('/api/adminLogin', async (req, res) => {
   try {
     console.log('Received admin login attempt');

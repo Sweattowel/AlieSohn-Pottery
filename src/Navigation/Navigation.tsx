@@ -28,7 +28,7 @@ function Navigation() {
 
         </div>
         <ul className="flex space-x-1 h-full w-[80vw] justify-center items-center text-[0.6em]">
-          {authenticated  && superAuthenticated ? (
+          {authenticated  && !superAuthenticated ? (
             <li>
               <Link to={`/MyAccount/${userID}`}>
                 <button

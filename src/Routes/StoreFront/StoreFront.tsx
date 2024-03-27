@@ -3,6 +3,7 @@ import { useMyContext } from "../../Context/ContextProvider";
 import { Button, Pagination } from "@mui/material";
 import axios from "axios";
 import url from 'url'
+import CreateNewAdmin from "../ADMIN/Dependencies/CreateNewAdmin";
 //%%^$%
 interface storeItem {
   itemID: number;
@@ -122,7 +123,7 @@ function StoreFront() {
   ///////////////////////////////////////////
   return (
     <div className="w-[90%] m-auto text-white flex flex-wrap justify-center mb-20">
-
+      <CreateNewAdmin />
       {currentItems.length > 0 ? (
         currentItems.map((item: storeItem, index: number) => (
           <div key={index} className="border-WHITE border text-BLACK w-[20%] h-[40vh] min-w-44 p-2 mt-2 ml-2">
