@@ -133,7 +133,7 @@ function Cart() {
             Create Order
           </button>
         ) : (
-          <div className="mt-[auto] mb-[auto] ml-[2em] h-[50px] w-[40%] flex justify-center items-center rounded-lg">
+          <div className="mt-[auto] mb-[auto] ml-[1em] h-[50px] w-[40vw] text-center flex justify-center items-center rounded-lg bg-BACKGROUND text-[0.8em]">
             Please Create an account and log in to create an order
           </div>
         )}
@@ -143,8 +143,8 @@ function Cart() {
           currentItems.map((item: CartItem, index: number) => (
             <div key={index} className="border-WHITE border text-BLACK w-[20%] h-[40vh] min-w-44 p-2 mt-2 ml-2 mb-20">
               <div className="mr-2">
-                <div className="text-center text-WHITE font-serif text-2xl bg-BACKGROUND rounded">{item.itemName}</div>
-                <div className="text-center">
+                <div className="text-center text-[1em] text-WHITE font-serif bg-BACKGROUND rounded">{item.itemName}</div>
+                <div className="text-center text-[0.8em]">
                   ${(item.itemPrice * item.itemCount).toFixed(2)} For {item.itemCount} item/s
                 </div>
                 <div className="w-[80%] m-auto text-center">
@@ -160,7 +160,7 @@ function Cart() {
                   console.error(`Image not found: ${item.imagePath}`)
                 }
               />
-              <div className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE rounded w-[80%]">
+              <div className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE text-[0.8em] rounded w-[80%]">
                 <button
                   className="hover:text-BLACK hover:opacity-90 w-[50%] "
                   onClick={() => removeFromCart(item.itemID, index)}

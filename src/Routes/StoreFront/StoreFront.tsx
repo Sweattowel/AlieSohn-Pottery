@@ -166,7 +166,7 @@ function StoreFront() {
         </h1>
       )}
       <div className="flex  m-auto mt-10 w-[60vw] h-[6vh]  text-center rounded  text-WHITE text-[0.7em] justify-center items-center">
-        <div className="bg-BACKGROUND rounded w-[10vw]">
+        <div className="bg-BACKGROUND rounded w-[20vw]">
         Current Items in cart:
         <br /> 
             {count} item/s
