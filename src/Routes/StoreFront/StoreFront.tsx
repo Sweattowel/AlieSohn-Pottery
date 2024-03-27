@@ -3,7 +3,7 @@ import { useMyContext } from "../../Context/ContextProvider";
 import { Button, Pagination } from "@mui/material";
 import axios from "axios";
 import url from 'url'
-
+//%%^$%
 interface storeItem {
   itemID: number;
   itemName: string;
@@ -30,6 +30,13 @@ function StoreFront() {
   const [totalPrice, setTotalPrice] = useState<number>(0)
   const serverAddress =`${process.env.REACT_APP_SERVER_ADDRESS}`
   const [clickedItemIndex, setClickedItemIndex] = useState<number | null>(null); 
+  const [selectedStoreItem, setSelectedStoreItem] = useState({
+    itemID: -1,
+    itemName: "",
+    itemPrice: 0,
+    imagePath: "",
+    itemDescription: ""
+  })
 
   const collectStoreItems = async () => {
     try {
@@ -94,45 +101,45 @@ function StoreFront() {
     setCount(totalCount);
     setTotalPrice(totalPrice);
   }, [cart]); 
+
+  useEffect(() => {
+    const handleScroll = () => {
+        setSelectedStoreItem({
+            itemID: -1,
+            itemName: "",
+            itemPrice: 0,
+            imagePath: "",
+            itemDescription: ""
+        });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+        window.removeEventListener('scroll', handleScroll);
+    };
+}, []);
   ///////////////////////////////////////////
   return (
-    <div className="w-[90%] m-auto text-white flex flex-wrap justify-center mb-40">
-      <div className="flex fixed bottom-[10vh] m-auto w-[60vw] h-[6vh]  text-center rounded  text-WHITE text-[0.7em] bg-BACKGROUND justify-center items-center">
-        Current Items in cart:
-        <br /> 
-          {count} item/s
-          <br />
-          ${totalPrice.toFixed(2)}
-          <Pagination
-            style={{display: "flex", justifyContent: "center", alignItems: 'center' }}
-            count={Math.ceil(itemCount / itemsPerPage)}
-            page={currentPage}
-            onChange={handleChangePage}
-            variant="outlined"
-          />  
-      </div>
+    <div className="w-[90%] m-auto text-white flex flex-wrap justify-center mb-20">
+
       {currentItems.length > 0 ? (
         currentItems.map((item: storeItem, index: number) => (
           <div key={index} className="border-WHITE border text-BLACK w-[20%] h-[40vh] min-w-44 p-2 mt-2 ml-2">
-            <div className="mr-2">
-              <div className="text-center font-serif text-[1em] bg-BACKGROUND rounded text-WHITE">{item.itemName}</div>
-              <div className="mb-2 text-center">
-                Price: ${item.itemPrice}
-              </div>
-            <div className="w-[90%] m-auto text-center">
-            </div>              
-            </div>
+            
+              <div className="text-center mb-2 font-serif text-[1em] bg-BACKGROUND rounded text-WHITE">{item.itemName}</div>            
+           
             <img
               className="h-[60%] border-BLACK border-2"
               style={{ maxHeight: '55%', maxWidth: '90%', margin: 'auto'}}
               src={url.resolve(serverAddress, item.imagePath)}
               alt={item.itemName}
               onError={() => console.error(`Image not found: ${item.imagePath}`)}
+              onClick={() => setSelectedStoreItem(item)}
             />
-            <div className="w-[80%] h-[5vh] max-h-24 m-auto text-center text-[0.8rem]">
-              {item.itemDescription}
-            </div>
-            <br />
+              <div className="mb-2 text-center">
+                Price: ${item.itemPrice}
+              </div>            
             <button
                 className={ clickedItemIndex === index ? "flex m-auto bg-BACKGROUND mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70 border-b-2 border-l-2 border border-BLACK" : "text-WHITE flex m-auto bg-BACKGROUND mt-2 justify-center text-center w-[80%] rounded hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"}
                 onClick={() => {
@@ -158,6 +165,52 @@ function StoreFront() {
           </div>
         </h1>
       )}
+      <div className="flex  m-auto mt-10 w-[60vw] h-[6vh]  text-center rounded  text-WHITE text-[0.7em] justify-center items-center">
+        <div className="bg-BACKGROUND rounded w-[10vw]">
+        Current Items in cart:
+        <br /> 
+            {count} item/s
+            <br />
+            ${totalPrice.toFixed(2)}
+        </div> 
+          <Pagination
+            style={{display: "flex", justifyContent: "center", alignItems: 'center' }}
+            count={Math.ceil(itemCount / itemsPerPage)}
+            page={currentPage}
+            onChange={handleChangePage}
+            variant="outlined"
+          />  
+      </div>
+      {selectedStoreItem.itemID !== -1 ? (
+        <div className="fixed w-full h-full bg-WHITE top-0 left-0" style={{ backgroundColor: "rgba(255,255,255,0.9)" }} onClick={() => setSelectedStoreItem({
+          itemID: -1,
+          itemName: "",
+          itemPrice: 0,
+          imagePath: "",
+          itemDescription: ""
+        })}>
+          <img
+          style={{
+            display: 'flex',
+            margin:'auto',
+            marginTop: '10vh',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '40vw',
+            borderTopLeftRadius:'2%',
+            borderTopRightRadius:'2%'
+          }}
+            src={url.resolve(serverAddress, selectedStoreItem.imagePath)}
+          />
+
+          <div className="bg-BACKGROUND m-auto text-center w-[40vw]">
+            <h1 className="text-bold font-serif border-b border-WHITE w-[80%] m-auto">
+              The {selectedStoreItem.itemName} for only ${selectedStoreItem.itemPrice}
+            </h1>            
+            {selectedStoreItem.itemDescription}
+          </div>
+        </div>        
+      ) : (null)}
 
     </div>   
   );

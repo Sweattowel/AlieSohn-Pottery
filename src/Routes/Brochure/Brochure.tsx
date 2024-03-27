@@ -34,27 +34,42 @@ function Brochure() {
             console.log(error);
         }
     };
-
+    ///////////////////////////////////////// USEEFFECT
     useEffect(() => {
         if (brochure.length == 0){
             getBrochure();            
         }
 
     }, []);
+    useEffect(() => {
+        const handleResize = () => {
+            const screenWidth = window.innerWidth;
+            const slidesToShow = screenWidth < 768 ? 1 : 3; // Adjust this threshold as per your design
+            setSettings({
+                ...settings,
+                slidesToShow: slidesToShow
+            });
+        };
 
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    },[])
     // react slick settings and configuration
-    const settings = {
+    const [settings, setSettings] = useState({
         dots: true,
         speed: 2000,
-        slidesToShow: 2,
+        slidesToShow: 1,
         slidesToScroll: 1,
         infinite: true,
         autoplay: true,
         autoplaySpeed: 4000,
-      };
+      });
 
     return (
-        <div className="text-BLACK h-[80vh] w-[80vw] m-auto text-center">
+        <div className="text-BLACK h-[80vh] w-[90vw] m-auto text-center">
             <h1 className="font-serif text-[2em] mt-2 mb-8 border-BLACK bg-BACKGROUND rounded text-WHITE h-[5vh] h-[10vh] items-center justify-center flex">Our Top Sellers!</h1>
             <Slider {...settings}>
                     {brochure.map((item: StoreItem, index: number) => (

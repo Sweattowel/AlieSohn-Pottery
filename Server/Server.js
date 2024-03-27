@@ -21,15 +21,7 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 }
 app.use(cors(corsOptions))
-/*
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
-  next()
-})
-app.use(bodyParser.json())
-*/
+
 const db = mysql.createConnection({
   connectionLimit: 10,
   host: process.env.REACT_APP_DATABASE_HOST,
@@ -40,6 +32,8 @@ const db = mysql.createConnection({
 
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }))
+
+///////////////////////////////////////////////////////// IMAGE STORAGE DIRECTORY DEFINITION
 app.use('/StoreImages', express.static(path.join(__dirname, 'StoreImages')))
 
 const storage = multer.diskStorage({
@@ -53,7 +47,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 
-/////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////// AUTHENTICATION AND REGISTRATION SECTION
+const bcrypt = require('bcrypt');
 
 app.post('/api/register', async (req, res) => {
   try {
@@ -63,7 +58,7 @@ app.post('/api/register', async (req, res) => {
     const passWord = req.body.passWord
 
     const sql = 'SELECT * FROM userData WHERE userName = ?'
-    db.execute(sql, [userName], (err, results) => {
+    db.execute(sql, [userName], async (err, results) => {
       if (err){
         console.log(err)
         res.status(500).json({error: 'Internal server error'})
@@ -71,7 +66,8 @@ app.post('/api/register', async (req, res) => {
         res.status(409).json({ error: 'Invalid username: data already exists' })
       } else if (results.length == 0) {
         const sql2 ="INSERT INTO userData (userName, passWord) VALUES (?, ?)"
-        db.execute(sql2, [userName, passWord], (err, results) => {
+        const hashedPassword = await bcrypt.hash(passWord, 10)
+        db.execute(sql2, [userName, hashedPassword], (err, results) => {
           if (err){
             res.status(500).json({ error: 'Internal server error'})
           } else {
@@ -87,62 +83,91 @@ app.post('/api/register', async (req, res) => {
   }
 })
 
-/////////////////////////////////////////////////////////
+// REGULAR USER LOGIN
 
 app.post('/api/login', async (req, res) => {
   try {
-    const sql = 'SELECT userID FROM userData WHERE userName = ? AND passWord = ?'
-    const userName = req.body.userName
-    const passWord = req.body.passWord
-    console.log('Received jackoff log in attempt', userName, passWord)
+    const sql = 'SELECT userID, userName, passWord FROM userData WHERE userName = ?';
+    const userName = req.body.userName;
+    const passWord = req.body.passWord;
+    console.log('Received login attempt', userName);
 
-    db.execute(sql, [userName, passWord], (err, results) => {
+    db.execute(sql, [userName], async (err, results) => {
       if (err) {
-        console.log(err)
-      } else if(results.length > 1){
-        console.log('Too many accounts with the same userName/Password please fix immediately')
-        res.status(500).json({error: 'Server Failure'})
-      } else if (results.length === 1){
-        console.log('login success')
-        const userID = results[0].userID
-        const userName = results[0].userName
-        console.log(userID)
-        res.status(200).json({ message: 'Successfully Logged in', userID: userID, userName:userName })
+        console.log(err);
+        res.status(500).json({ error: 'Server Failure' });
+      } else if (results.length !== 1) {
+        console.log('Invalid username or password');
+        res.status(401).json({ error: 'Invalid username or password' });
       } else {
-        res.status(404).json({ error: 'No user exists for this data'})
+        const user = results[0];
+        const hashedPassword = user.passWord;
+
+        try {
+          const passwordMatch = await bcrypt.compare(passWord, hashedPassword);
+          if (passwordMatch) {
+            console.log('Login success');
+            const userID = user.userID;
+            const userName = user.userName;
+            res.status(200).json({ message: 'Successfully logged in', userID, userName });
+          } else {
+            console.log('Invalid username or password');
+            res.status(401).json({ error: 'Invalid username or password' });
+          }
+        } catch (compareError) {
+          console.log(compareError);
+          res.status(500).json({ error: 'Internal server error' });
+        }
       }
-    })
-
+    });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: 'Internal Server Error'})
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-})
-//////////////////////////
+});
+// SUPERUSER LOG IN
 
-app.post('/api/adminLogin', async ( req, res) => {
+app.post('/api/adminLogin', async (req, res) => {
   try {
-    console.log('Received admin log in attempt')
-    const sql = 'SELECT * FROM admins WHERE userName = ? AND passWord = ?'
-    const userName = req.body.userName
-    const passWord = req.body.passWord
-    db.execute(sql, [userName, passWord], (err, results) => {
-      if (err){
-        console.log(err)
-      } else if (results.length === 1){
-        const userID = results[0].adminID
-        console.log(userID, ' logged in')
-        res.status(200).json({ message: 'Successfully Logged in', userID })
+    console.log('Received admin login attempt');
+    const sql = 'SELECT * FROM admins WHERE userName = ?';
+    const userName = req.body.userName;
+    const passWord = req.body.passWord;
+
+    db.execute(sql, [userName], async (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else if (results.length !== 1) {
+        console.log('No admin user exists with this username');
+        res.status(404).json({ error: 'No admin user exists with this username' });
       } else {
-        res.status(404).json({ error: 'No user exists for this data'})
+        const admin = results[0];
+        const hashedPassword = admin.passWord;
+
+        try {
+          const passwordMatch = await bcrypt.compare(passWord, hashedPassword);
+          if (passwordMatch) {
+            console.log('Admin login success');
+            const adminID = admin.adminID;
+            res.status(200).json({ message: 'Successfully logged in', adminID });
+          } else {
+            console.log('Invalid admin username or password');
+            res.status(401).json({ error: 'Invalid admin username or password' });
+          }
+        } catch (compareError) {
+          console.log(compareError);
+          res.status(500).json({ error: 'Internal server error' });
+        }
       }
-    })
+    });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ error: 'Internal Server Error'})
+    console.log(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-})
-/////////////////////////////////////////////////////////
+});
+
+///////////////////////////////////////////////////////// STOREDATA COLLECTION
 
 app.post('/api/storeItems', async (req, res) => {
   console.log('Request received for storeData')
@@ -162,8 +187,8 @@ app.post('/api/storeItems', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-//////// brochure handler
-
+///////////////////////////////////////////////////////// BROCHURE CREATOR
+// BROCHURE CALL
 let brochure = null
 const createBrochure = () => {
   console.log('Making Brochure')
@@ -177,11 +202,15 @@ const createBrochure = () => {
     }
   })
 }
+// BROCHURE UPDATE SCHEDULING
 const updateBrochure = () => {
   createBrochure()
   setInterval(createBrochure, 5 * 60 * 1000)
 }
 updateBrochure()
+
+// BROCHURE DELIVERY
+
 app.post('/api/getBrochure', async (req, res) => {
   console.log('Received Request for Brochure')
   try {
@@ -193,8 +222,8 @@ app.post('/api/getBrochure', async (req, res) => {
     res.status(500).json({Error: 'Internal Server Error'})
   }
 })
-/////////////////////////////////////////////////////////
-
+///////////////////////////////////////////////////////// ORDER HANDLING
+// ORDER CREATION
 app.post('/api/createOrder', async (req, res) => {
   try {
     console.log('orders received')
@@ -214,7 +243,8 @@ app.post('/api/createOrder', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error'})
   }
 })
-/////////////////////////////////////////////////////////
+
+// ORDER COLLECTION 
 
 app.post('/api/getOrders', async (req, res) => {
   try {
@@ -236,6 +266,7 @@ app.post('/api/getOrders', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error'})
   }
 })
+///////////////////////////////////////////////////////// USER COLLECTION
 app.post('/api/getUsers', async (req, res) => {
   try {
     const sql = 'SELECT userID, userName FROM userData'
@@ -254,6 +285,9 @@ app.post('/api/getUsers', async (req, res) => {
   }
 
 })
+
+///////////////////////////////////////////////////////// STORE ITEM HANDLING
+// STORE ITEM CREATION
 
 app.post('/api/CreateItem', upload.single('picture'), async (req, res) => {
   try {
@@ -280,6 +314,8 @@ app.post('/api/CreateItem', upload.single('picture'), async (req, res) => {
   }
 })
 import fs from 'fs'
+
+// STORE ITEM REMOVAL
 
 app.post('/api/removeItem', async (req, res) => {
   try {
@@ -321,7 +357,7 @@ app.post('/api/removeItem', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error'})
   }
 })
-
+// ADMIN ORDER COMPLETION
 app.post('/api/completeOrder', async (req, res) => {
   try {
     const sql = 'UPDATE orders SET completed = ? WHERE orderID = ? AND userID = ?'

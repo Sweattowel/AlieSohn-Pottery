@@ -117,7 +117,7 @@ useEffect(() => {
     <>
         { wantLogin ? (
             <div onClick={() => setWantLogin(false)} className="fixed inset-0 w-full h-full flex items-center justify-center z-50">
-                <div onClick={(e) => e.stopPropagation()} className="bg-WHITE fixed bottom-[20%] rounded-lg left-[35%] border-black border-2 text-center justify-center w-[30%] h-[60%] text-BLACK opacity-100">
+                <div onClick={(e) => e.stopPropagation()} className="bg-WHITE fixed bottom-[20%] rounded-lg border-black border-2 text-center justify-center w-[80%] h-[60%] text-BLACK opacity-100">
                     <h1 className="text-2xl border-b-2 border-black bg-BACKGROUND rounded-t">
                         LOGIN MENU                
                     </h1>
