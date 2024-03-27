@@ -46,7 +46,7 @@ export default function UserDelete() {
   }
 
   return (
-    <div className="w-[40%] m-auto h-[20vh] space-y-2">
+    <div className="w-[40%] ml-auto mr-auto mt-2 h-[20vh] space-y-2">
       <h1 className="bg-BACKGROUND text-center rounded">
         Delete your account?
       </h1>
