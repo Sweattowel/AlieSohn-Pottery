@@ -3,6 +3,7 @@ import { useMyContext } from "../../Context/ContextProvider";
 import { Button, Pagination } from "@mui/material";
 import url from "url";
 import axios from "axios";
+import CardHandle from "./Dependencies/CardHandle";
 
 interface CartItem {
   itemID: number;
@@ -29,7 +30,7 @@ function Cart() {
     setUserName,
   ] = useMyContext();
   const serverAddress = `${process.env.REACT_APP_SERVER_ADDRESS}`;
-
+  const [showCardHandle, setShowCardHandle] = useState(false);
   const [totalCost, setTotalCost] = useState(0);
   const [itemCount, setItemCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,6 +56,18 @@ function Cart() {
   };
 
   const sendOrder = async () => {
+    if (cart.length == 0){
+      console.log('No items in cart')
+      return
+    }
+    setShowCardHandle(true); // Show card handling component when "Create Order" is clicked
+  };
+
+  const handleCardConfirm = () => {
+    setShowCardHandle(false); // Hide card handling component on confirmation
+    createOrder(); // Proceed with creating the order
+  };
+  const createOrder = async () => {
     console.log(cart);
     try {
       //const itemIDs = cart.map(item => item.itemID);
@@ -192,6 +205,10 @@ function Cart() {
             </div>
           </h1>
         )}
+        {showCardHandle && (
+          <CardHandle onConfirm={handleCardConfirm} onCancel={() => setShowCardHandle(false)} />
+        )}
+        
         <Pagination
           style={{
             position: "fixed",
