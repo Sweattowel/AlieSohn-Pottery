@@ -54,8 +54,6 @@ function Cart() {
     setCurrentPage(newPage);
   };
 
-
-
   const sendOrder = async () => {
     console.log(cart);
     try {
@@ -85,9 +83,7 @@ function Cart() {
   const increment = (index: number) => {
     setCart((prevItems) =>
       prevItems.map((item, i) =>
-        i === index
-          ? { ...item, itemCount: item.itemCount + 1 }
-          : item
+        i === index ? { ...item, itemCount: item.itemCount + 1 } : item
       )
     );
   };
@@ -96,12 +92,12 @@ function Cart() {
     setCart((prevItems) =>
       prevItems.map((item, i) =>
         i === index
-          ? { ...item, itemCount: Math.max(1, item.itemCount - 1 ) }
+          ? { ...item, itemCount: Math.max(1, item.itemCount - 1) }
           : item
       )
     );
   };
-  
+
   useEffect(() => {
     setTotalCost(0);
     cart.forEach((item) =>
@@ -111,11 +107,9 @@ function Cart() {
     );
     setItemCount(0);
     cart.forEach((item) =>
-      setItemCount(
-        (prevTotal) => prevTotal + item.itemCount
-      )
+      setItemCount((prevTotal) => prevTotal + item.itemCount)
     );
-  }, [cart]);  
+  }, [cart]);
   ///////////////////////////////////////////////////////////////////
   return (
     <div className="w-[90vw] h-full m-auto mb-20">
@@ -123,7 +117,6 @@ function Cart() {
         <h1 className="flex m-auto rounded w-[40%] text-center justify-center items-center bg-BACKGROUND">
           Total cost: ${totalCost.toFixed(2)} Item count: {itemCount} items
           <br />
-          
         </h1>
         {authenticated ? (
           <button
@@ -141,11 +134,17 @@ function Cart() {
       <div className="flex flex-wrap justify-center">
         {currentItems.length > 0 ? (
           currentItems.map((item: CartItem, index: number) => (
-            <div key={index} className="border-WHITE border text-BLACK w-[20%] h-[40vh] min-w-44 p-2 mt-2 ml-2 mb-20">
+            <div
+              key={index}
+              className="border-WHITE border text-BLACK w-[20%] h-[40vh] min-w-44 p-2 mt-2 ml-2 mb-20"
+            >
               <div className="mr-2">
-                <div className="text-center text-[1em] text-WHITE font-serif bg-BACKGROUND rounded">{item.itemName}</div>
+                <div className="text-center text-[1em] text-WHITE font-serif bg-BACKGROUND rounded">
+                  {item.itemName}
+                </div>
                 <div className="text-center text-[0.8em]">
-                  ${(item.itemPrice * item.itemCount).toFixed(2)} For {item.itemCount} item/s
+                  ${(item.itemPrice * item.itemCount).toFixed(2)} For{" "}
+                  {item.itemCount} item/s
                 </div>
                 <div className="w-[80%] m-auto text-center">
                   <br />
@@ -153,52 +152,59 @@ function Cart() {
               </div>
               <img
                 className="h-[60%] border-BLACK border-2"
-                style={{ maxHeight: '55%', maxWidth: '90%', margin: 'auto'}}
+                style={{ maxHeight: "55%", maxWidth: "90%", margin: "auto" }}
                 src={url.resolve(serverAddress, item.imagePath)}
                 alt={item.itemName}
                 onError={() =>
                   console.error(`Image not found: ${item.imagePath}`)
                 }
               />
-              <div className="flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE text-[0.8em] rounded w-[80%]">
+              <div className="flex m-auto mt-2 justify-center text-center text-WHITE text-[0.8em] rounded w-[80%]">
                 <button
-                  className="hover:text-BLACK hover:opacity-90 w-[50%] "
+                  className="rounded bg-BACKGROUND mr-1 hover:text-BLACK hover:opacity-90 w-[50%] shadow-lg"
                   onClick={() => removeFromCart(item.itemID, index)}
                 >
                   Remove from cart
-                </button>          
-                <button onClick={() => increment(index)} className="w-[25%] border hover:text-BLACK hover:opacity-70 border-b-2 border border-BLACK">
-                  ++ 
-                </button>      
-                <button onClick={() => decrement(index)} className="w-[25%] border hover:text-BLACK hover:opacity-70 border-b-2 border border-BLACK">
+                </button>
+                <button
+                  onClick={() => increment(index)}
+                  className="rounded w-[25%] hover:text-BLACK hover:opacity-70 bg-BACKGROUND mr-1 shadow-lg"
+                >
+                  ++
+                </button>
+                <button
+                  onClick={() => decrement(index)}
+                  className="rounded w-[25%] hover:text-BLACK hover:opacity-70 bg-BACKGROUND shadow-lg "
+                >
                   --
-                </button> 
+                </button>
               </div>
-  
             </div>
           ))
         ) : (
           <h1 className="ml-2 mt-5 mb-5 text-BLACK rounded w-[80%] ml-auto mr-auto h-[80%] flex justify-center text-center">
             <div className="mt-[15%]">
-              <h1 className="text-5xl font-serif">
-                Empty Cart
-              </h1>
-              <div className="mt-8 border-b-2"> 
-                To fill your cart please head to the storefront located at the top right
+              <h1 className="text-5xl font-serif">Empty Cart</h1>
+              <div className="mt-8 border-b-2">
+                To fill your cart please head to the storefront located at the
+                top right
               </div>
             </div>
-            
           </h1>
         )}
-      <Pagination
-        style={{ position: 'fixed', bottom: '10%', display: "flex", justifyContent: "center" }}
-        count={Math.ceil(cart.length / itemsPerPage)}
-        page={currentPage}
-        onChange={handleChangePage}
-        variant="outlined"
-      />        
+        <Pagination
+          style={{
+            position: "fixed",
+            bottom: "10%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+          count={Math.ceil(cart.length / itemsPerPage)}
+          page={currentPage}
+          onChange={handleChangePage}
+          variant="outlined"
+        />
       </div>
-
     </div>
   );
 }

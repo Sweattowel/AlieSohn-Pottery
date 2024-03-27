@@ -4,192 +4,211 @@ import React, { useState, useEffect } from "react";
 import { useMyContext } from "../Context/ContextProvider";
 
 function Tail() {
-    const [allItems, setAllItems, cart, setCart, userID, setUserID, authenticated, setAuthenticated, superAuthenticated, setSuperAuthenticated, userName, setUserName] = useMyContext();
-    const serverAddress = process.env.REACT_APP_SERVER_ADDRESS
+  const [
+    allItems,
+    setAllItems,
+    cart,
+    setCart,
+    userID,
+    setUserID,
+    authenticated,
+    setAuthenticated,
+    superAuthenticated,
+    setSuperAuthenticated,
+    userName,
+    setUserName,
+  ] = useMyContext();
+  const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
 
-    const [wantLogin, setWantLogin] = useState<boolean>(false)
-    const [userNameAttempt, setUserNameAttempt] = useState<string>('')
-    const [passWordAttempt, setPassWordAttempt] = useState<string>('')
-    const [caste, setCaste] = useState<string>('waiting')
-    const [attempts, setAttempts] = useState<number>(4)
-    const [adminAttempts, setAdminAttempts] = useState<number>(4)
-    const [registrationAttempts, setRegistrationAttempts] = useState<number>(4)
-    const [error, setError] = useState<string>('')
+  const [wantLogin, setWantLogin] = useState<boolean>(false);
+  const [userNameAttempt, setUserNameAttempt] = useState<string>("");
+  const [passWordAttempt, setPassWordAttempt] = useState<string>("");
+  const [caste, setCaste] = useState<string>("waiting");
+  const [attempts, setAttempts] = useState<number>(4);
+  const [adminAttempts, setAdminAttempts] = useState<number>(4);
+  const [registrationAttempts, setRegistrationAttempts] = useState<number>(4);
+  const [error, setError] = useState<string>("");
 
-    const Login = async () => {
-        if (attempts == 0){
-            setError('Out of attempts')
-            //return
-        }
-        if (userNameAttempt == '' || passWordAttempt == ''){
-            setError('Please finish inputting details')
-            return
-        }
-            try {
-                const response = await axios.post(`${serverAddress}/api/login`, { userName: userNameAttempt, passWord: passWordAttempt });
-                if (response.status === 200){
-                    setAuthenticated(true);
-                    setSuperAuthenticated(false)
-                    setUserID(response.data.userID);
-                    setUserName(userNameAttempt);
-                    setWantLogin(false)
-                    setUserNameAttempt('')
-                    setPassWordAttempt('')
-                    console.log('Logged in successfully');
-                } else {
-                    console.log('Failed to log in');
-                }
-            } catch (error) {
-                setAttempts((prevAttempts) => 
-                    Math.max(prevAttempts - 1, 0)
-                )
-                setError(`No account exists, ${attempts} attempts remaining`)
-            }
+  const Login = async () => {
+    if (attempts == 0) {
+      setError("Out of attempts");
+      //return
     }
-    const superLogin = async () => {
-        if (adminAttempts == 0){
-            setError('Notifying cyberpolice')
-            return
-        }
-        if (userNameAttempt == '' || passWordAttempt == ''){
-            setError('Please finish inputting details')
-            return
-        }
-            try {
-                const ResponseSir = await axios.post(`${serverAddress}/api/adminLogin`, { userName: userNameAttempt, passWord: passWordAttempt });
-                if (ResponseSir.status === 200){
-                    setAuthenticated(true);
-                    setSuperAuthenticated(true);
-                    setUserID(-(ResponseSir.data.adminID));
-                    setWantLogin(false)
-                    setUserNameAttempt('')
-                    setPassWordAttempt('')
-                    console.log('Logged in successfully Sir');
-                } else {
-                    console.log('Failed to log in');
-                }
-            } catch (error) {
-                setAdminAttempts((prevAttempts) => 
-                    Math.max(prevAttempts - 1, 0)
-                )
-                setError(`False Prophet, You are running out of time ${adminAttempts}`)
-            }
-        }
+    if (userNameAttempt == "" || passWordAttempt == "") {
+      setError("Please finish inputting details");
+      return;
+    }
+    try {
+      const response = await axios.post(`${serverAddress}/api/login`, {
+        userName: userNameAttempt,
+        passWord: passWordAttempt,
+      });
+      if (response.status === 200) {
+        setAuthenticated(true);
+        setSuperAuthenticated(false);
+        setUserID(response.data.userID);
+        setUserName(userNameAttempt);
+        setWantLogin(false);
+        setUserNameAttempt("");
+        setPassWordAttempt("");
+        console.log("Logged in successfully");
+      } else {
+        console.log("Failed to log in");
+      }
+    } catch (error) {
+      setAttempts((prevAttempts) => Math.max(prevAttempts - 1, 0));
+      setError(`No account exists, ${attempts} attempts remaining`);
+    }
+  };
+  const superLogin = async () => {
+    if (adminAttempts == 0) {
+      setError("Notifying cyberpolice");
+      return;
+    }
+    if (userNameAttempt == "" || passWordAttempt == "") {
+      setError("Please finish inputting details");
+      return;
+    }
+    try {
+      const ResponseSir = await axios.post(`${serverAddress}/api/adminLogin`, {
+        userName: userNameAttempt,
+        passWord: passWordAttempt,
+      });
+      if (ResponseSir.status === 200) {
+        setAuthenticated(true);
+        setSuperAuthenticated(true);
+        setUserID(-ResponseSir.data.adminID);
+        setWantLogin(false);
+        setUserNameAttempt("");
+        setPassWordAttempt("");
+        console.log("Logged in successfully Sir");
+      } else {
+        console.log("Failed to log in");
+      }
+    } catch (error) {
+      setAdminAttempts((prevAttempts) => Math.max(prevAttempts - 1, 0));
+      setError(`False Prophet, You are running out of time ${adminAttempts}`);
+    }
+  };
 
-    const logOut = () => {
-        setAuthenticated(false)
-        setSuperAuthenticated(false)
-        setUserID(-1)
-        setUserName('')
-        setUserNameAttempt('')
-        setPassWordAttempt('')
-        setCaste('waiting')
+  const logOut = () => {
+    setAuthenticated(false);
+    setSuperAuthenticated(false);
+    setUserID(-1);
+    setUserName("");
+    setUserNameAttempt("");
+    setPassWordAttempt("");
+    setCaste("waiting");
+  };
+  const register = async () => {
+    if (userNameAttempt == "" || passWordAttempt == "") {
+      setError(`Please finish inputting details`);
+      return;
     }
-    const register = async () => {
-        if (userNameAttempt == '' || passWordAttempt == ''){
-            setError(`Please finish inputting details`)
-            return
-        }
-        try {
-            const response = await axios.post(`${serverAddress}/api/register`, { userName: userNameAttempt, passWord: passWordAttempt } )
-            if (response.status === 200){
-                console.log('Registered successfully');
-                Login()
-                setWantLogin(false)
-            }  else if (response.status === 409){
-                console.log('Username already exists. Please choose a different username.');
-            } else {
-                console.log('Failed to create account');
-            }
-        } catch (error) {
-            setRegistrationAttempts((prevAttempts) => 
-                Math.max(prevAttempts - 1, 0)
-            )
-            setError(`Failed to register ${registrationAttempts}`)
-        }
+    try {
+      const response = await axios.post(`${serverAddress}/api/register`, {
+        userName: userNameAttempt,
+        passWord: passWordAttempt,
+      });
+      if (response.status === 200) {
+        console.log("Registered successfully");
+        Login();
+        setWantLogin(false);
+      } else if (response.status === 409) {
+        console.log(
+          "Username already exists. Please choose a different username."
+        );
+      } else {
+        console.log("Failed to create account");
+      }
+    } catch (error) {
+      setRegistrationAttempts((prevAttempts) => Math.max(prevAttempts - 1, 0));
+      setError(`Failed to register ${registrationAttempts}`);
     }
-/////////////////////////////////////
-useEffect(() => {
-    setPassWordAttempt('')
-    setUserNameAttempt('')
-},[wantLogin])
+  };
+  /////////////////////////////////////
+  useEffect(() => {
+    setPassWordAttempt("");
+    setUserNameAttempt("");
+  }, [wantLogin]);
   return (
     <>
-        { wantLogin ? (
-            <div onClick={() => setWantLogin(false)} className="fixed inset-0 w-full h-full flex items-center justify-center z-50">
-                <div onClick={(e) => e.stopPropagation()} className="bg-WHITE fixed bottom-[20%] rounded-lg border-black border-2 text-center justify-center w-[80%] h-[60%] text-BLACK opacity-100">
-                    <h1 className="text-2xl border-b-2 border-black bg-BACKGROUND rounded-t">
-                        LOGIN MENU                
-                    </h1>
-                    <h1 className="mt-10">
-                        UserName
-                    </h1>
-                    <Input onChange={(e) => setUserNameAttempt(e.target.value)} />
-                    <h1 className="mt-10">
-                        PassWord
-                    </h1>
-                    <Input className="mb-10" onChange={(e) => setPassWordAttempt(e.target.value)} 
-                    onKeyDown={(e) => {
-                        if (e.key == 'Enter'){
-                            Login()
-                        }
-                    }} 
-                    type="password"/>
-                    <br />
-                    <button
-                        onClick={() => Login()}
-                        className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 mb-4 justify-center text-center text-WHITE w-[40%] rounded"
-                    >
-                    Login
-                    </button>
-                    <button
-                        onClick={() => superLogin()}
-                        className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[40%] rounded"
-                    >
-                    Admin
-                    </button>
-                    <br />
-                    <br />
-                    <button
-                        onClick={() => register()}
-                        className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[60%] text-2xl rounded"
-                    >
-                    Register
-                    </button>
-                    {error.length > 0 ? (
-                        <div className="mt-10 font-bold">
-                            {error}
-                        </div>
-                    ) : (null)}                  
-                    </div> 
-            </div>
-            ) : (null)}
+      {wantLogin ? (
+        <div
+          onClick={() => setWantLogin(false)}
+          className="fixed inset-0 w-full h-full flex items-center justify-center z-50"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-WHITE fixed bottom-[20%] rounded-lg border-black border-2 text-center justify-center w-[80%] h-[60%] text-BLACK opacity-100"
+          >
+            <h1 className="text-2xl border-b-2 border-black bg-BACKGROUND rounded-t">
+              LOGIN MENU
+            </h1>
+            <h1 className="mt-10">UserName</h1>
+            <Input onChange={(e) => setUserNameAttempt(e.target.value)} />
+            <h1 className="mt-10">PassWord</h1>
+            <Input
+              className="mb-10"
+              onChange={(e) => setPassWordAttempt(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key == "Enter") {
+                  Login();
+                }
+              }}
+              type="password"
+            />
+            <br />
+            <button
+              onClick={() => Login()}
+              className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 mb-4 justify-center text-center text-WHITE w-[40%] rounded"
+            >
+              Login
+            </button>
+            <button
+              onClick={() => superLogin()}
+              className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[40%] rounded"
+            >
+              Admin
+            </button>
+            <br />
+            <br />
+            <button
+              onClick={() => register()}
+              className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[60%] text-2xl rounded"
+            >
+              Register
+            </button>
+            {error.length > 0 ? (
+              <div className="mt-10 font-bold">{error}</div>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
 
-        
-        <div className="w-[100vw] text-center text-[0.7rem] justify-center mt-2 fixed bottom-0 text-BLACK border-t-2 border-BLACK bg-WHITE">
+      <div className="w-[100vw] text-center text-[0.7rem] justify-center mt-2 fixed bottom-0 text-BLACK border-t-2 border-BLACK bg-WHITE">
         <div className="flex justify-center m-auto w-[80%]">
-            Unoffical private web app for educational purposes, i do not own any of
-            the content used
+          Unoffical private web app for educational purposes, i do not own any
+          of the content used
         </div>
         <div className="w-[125px] text-center mb-2 rounded justify-center w-full">
-            {authenticated || superAuthenticated ? (
-                <button
-                    onClick={() => logOut()}
-                    className="bg-BACKGROUND w-[15%] rounded text-WHITE hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK mb-2"
-                    >
-                        Log out
-                    </button>
-            ) : 
-            (
+          {authenticated || superAuthenticated ? (
             <button
-                onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
-                className="bg-BACKGROUND w-[15%] rounded text-WHITE hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"
+              onClick={() => logOut()}
+              className="bg-BACKGROUND w-[15%] rounded text-WHITE hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK mb-2"
             >
-                Login
+              Log out
             </button>
-            )}
+          ) : (
+            <button
+              onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
+              className="bg-BACKGROUND w-[15%] rounded text-WHITE hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"
+            >
+              Login
+            </button>
+          )}
         </div>
-        </div>
+      </div>
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { Button, Pagination } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useMyContext } from "../../../Context/ContextProvider";
 
 interface storeItem {
   itemID: number;
@@ -13,6 +14,20 @@ interface RemoveItemProps {
   storeItemID: number;
 }
 function Removeitem() {
+  const [
+    allItems,
+    setAllItems,
+    cart,
+    setCart,
+    userID,
+    setUserID,
+    authenticated,
+    setAuthenticated,
+    superAuthenticated,
+    setSuperAuthenticated,
+    userName,
+    setUserName,
+  ] = useMyContext();
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
   const [locked, setLocked] = useState(true);
   const [storeItems, setStoreItems] = useState<any[]>([]);
@@ -74,8 +89,9 @@ function Removeitem() {
   }, []);
   ///////////////////////////////////////////////////////////////////
   return (
-    <div className="w-[40vw] h-[40vh] bg-WHITE text-WHITE">
-      <div className="h-full mb-30">
+    <div>
+      {superAuthenticated ? (<div className="w-[40vw] h-[60vh] bg-WHITE text-WHITE">
+      <div className="h-full mb-20">
         <h1 className="bg-BACKGROUND rounded text-WHITE text-center w-[100%] m-auto mb-2 h-[30px]">
           Remove store Item
         </h1>
@@ -115,13 +131,10 @@ function Removeitem() {
               </div>
               <div className="w-[50%]">{item.itemName}</div>
               {locked ? (
-                <button
-                  >
-                  Unlock to remove
-                </button>
+                <button>Unlock to remove</button>
               ) : (
                 <button
-                className="border-l border-BLACK hover:text-BLACK hover:opacity-60"
+                  className="border-l border-BLACK hover:text-BLACK hover:opacity-60"
                   onClick={() => removeStoreItems({ storeItemID: item.itemID })}
                 >
                   Remove Item from store
@@ -130,16 +143,22 @@ function Removeitem() {
             </div>
           ))}
           <Pagination
-            style={{display: 'flex', alignItems:'center', justifyContent: "center", width: '100%' }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+            }}
             count={Math.ceil(itemCount / itemsPerPage)}
             page={currentPage}
             onChange={handleChangePage}
             variant="outlined"
-          />          
+          />
         </div>
-
       </div>
+    </div>) : (<div className="bg-BACKGROUND text-center">no access</div>)}
     </div>
+    
   );
 }
 

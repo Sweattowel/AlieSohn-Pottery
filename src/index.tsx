@@ -10,7 +10,7 @@ import StoreFront from './Routes/StoreFront/StoreFront';
 import Cart from './Routes/Cart/Cart';
 import Tail from './Tail/Tail';
 import Admin from './Routes/ADMIN/Admin';
-import UserAccount from './Routes/USERACCOUNT/UserAccount';
+import UserHandle from './Routes/USERACCOUNT/UserHandle';
 
 const rootElement: HTMLElement | null = document.getElementById('root');
 
@@ -22,7 +22,7 @@ if (rootElement) {
           <Navigation />
           <Routes>
             <Route path='/ADMIN' Component={Admin}/>
-            <Route path='/MyAccount/:userID' Component={UserAccount}/>
+            <Route path='/MyAccount/:userID' Component={UserHandle}/>
             <Route path="/" Component={Brochure}/>
             <Route path="/StoreFront" Component={StoreFront}/>
             <Route path="/Cart" Component={Cart}/>            
