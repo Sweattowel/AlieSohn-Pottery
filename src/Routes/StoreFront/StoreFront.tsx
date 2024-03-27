@@ -3,8 +3,7 @@ import { useMyContext } from "../../Context/ContextProvider";
 import { Button, Pagination } from "@mui/material";
 import axios from "axios";
 import url from 'url'
-import CreateNewAdmin from "../ADMIN/Dependencies/CreateNewAdmin";
-//%%^$%
+
 interface storeItem {
   itemID: number;
   itemName: string;
@@ -123,7 +122,6 @@ function StoreFront() {
   ///////////////////////////////////////////
   return (
     <div className="w-[90%] m-auto text-white flex flex-wrap justify-center mb-20">
-      <CreateNewAdmin />
       {currentItems.length > 0 ? (
         currentItems.map((item: storeItem, index: number) => (
           <div key={index} className="border-WHITE border text-BLACK w-[20%] h-[40vh] min-w-44 p-2 mt-2 ml-2">
@@ -142,7 +140,7 @@ function StoreFront() {
                 Price: ${item.itemPrice}
               </div>            
             <button
-                className={ clickedItemIndex === index ? "flex m-auto bg-BACKGROUND mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70 border-b-2 border-l-2 border border-BLACK" : "text-WHITE flex m-auto bg-BACKGROUND mt-2 justify-center text-center w-[80%] rounded hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"}
+                className={ clickedItemIndex === index ? "text-WHITE flex m-auto bg-BACKGROUND mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70 border-b-2 border-l-2 border border-BLACK" : "text-WHITE flex m-auto bg-BACKGROUND mt-2 justify-center text-center w-[80%] rounded hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"}
                 onClick={() => {
                   addToCart(
                     item.itemID,

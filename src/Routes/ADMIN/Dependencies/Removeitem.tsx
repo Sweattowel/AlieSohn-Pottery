@@ -19,7 +19,7 @@ function Removeitem() {
   // pagination handling
   const [currentPage, setCurrentPage] = useState(1);
   const [itemCount, setItemCount] = useState(0);
-  const itemsPerPage = 3;
+  const itemsPerPage = 8;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = storeItems.slice(indexOfFirstItem, indexOfLastItem);
@@ -74,8 +74,8 @@ function Removeitem() {
   }, []);
   ///////////////////////////////////////////////////////////////////
   return (
-    <div className="w-[40vw] h-[50vh] bg-WHITE text-WHITE">
-      <div className="h-full mb-40">
+    <div className="w-[40vw] h-[40vh] bg-WHITE text-WHITE">
+      <div className="h-full mb-30">
         <h1 className="bg-BACKGROUND rounded text-WHITE text-center w-[100%] m-auto mb-2 h-[30px]">
           Remove store Item
         </h1>

@@ -44,7 +44,7 @@ function Brochure() {
     useEffect(() => {
         const handleResize = () => {
             const screenWidth = window.innerWidth;
-            const slidesToShow = screenWidth < 768 ? 1 : 3; // Adjust this threshold as per your design
+            const slidesToShow = (screenWidth / 2) < 268 ? 1 : 3; // Adjust this threshold as per your design
             setSettings({
                 ...settings,
                 slidesToShow: slidesToShow
@@ -61,7 +61,7 @@ function Brochure() {
     const [settings, setSettings] = useState({
         dots: true,
         speed: 2000,
-        slidesToShow: 1,
+        slidesToShow: 3,
         slidesToScroll: 1,
         infinite: true,
         autoplay: true,
