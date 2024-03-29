@@ -307,17 +307,23 @@ app.post("/api/getBrochure", async (req, res) => {
 app.post("/api/createOrder", async (req, res) => {
   try {
     console.log("orders received");
-    const userID = req.body.userID;
-    const userName = req.body.userName;
-    const itemIDs = req.body.itemIDs;
+    const {userID, userName, itemIDs} = req.body;
+    const orderDate = new Date()
+    const formattedDate = orderDate.toISOString().slice(0, 19).replace("T", " ")
     const sql =
-      "INSERT INTO orders (userName, userID, itemID) VALUES (? ,? ,? )";
+      "INSERT INTO orders (userName, userID, itemID, orderDate) VALUES (? ,? ,?, ? )";
 
     for (const itemID of itemIDs) {
-      await db.execute(sql, [userName, userID, itemID]);
+      await db.execute(sql, [userName, userID, itemID, formattedDate], (err, results) => {
+        if (err){
+          res.status(500).json({ error: "Internal Server Error" });
+        } else {
+          res.status(200).json({ message: "orders successfully placed" });
+        }
+      });
     }
 
-    res.status(200).json({ message: "orders successfully placed" });
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });

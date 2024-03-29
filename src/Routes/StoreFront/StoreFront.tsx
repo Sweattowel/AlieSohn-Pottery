@@ -224,28 +224,17 @@ function StoreFront() {
             })
           }
         >
-          <img
-            style={{
-              display: "flex",
-              margin: "auto",
-              marginTop: "10vh",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "40vw",
-              borderTopLeftRadius: "2%",
-              borderTopRightRadius: "2%",
-            }}
-            src={url.resolve(serverAddress, selectedStoreItem.imagePath)}
-          />
-
-          <div className="bg-BACKGROUND m-auto text-center w-[40vw]">
-            <h1 className="text-bold font-serif border-b border-WHITE w-[80%] m-auto">
-              The {selectedStoreItem.itemName} for only $
-              {selectedStoreItem.itemPrice}
-            </h1>
-            {selectedStoreItem.itemDescription}
-          </div>
-        </div>
+      <img
+        className="flex m-auto max-w-[60vw] max-h-[60vh] mt-[10vh] rounded-t"
+        src={url.resolve(serverAddress, selectedStoreItem.imagePath)}
+      />
+      <div className="bg-BACKGROUND m-auto text-center max-w-[50vw] rounded-b border-t border-BLACK">
+        <h1 className="text-bold font-serif border-b border-WHITE w-[80%] m-auto">
+          The {selectedStoreItem.itemName} for only ${selectedStoreItem.itemPrice}
+        </h1>
+        {selectedStoreItem.itemDescription}
+      </div>            
+      </div>
       ) : null}
     </div>
   );

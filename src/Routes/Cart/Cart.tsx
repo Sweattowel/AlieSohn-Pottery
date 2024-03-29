@@ -77,10 +77,12 @@ function Cart() {
           itemIDs.push(cart[i].itemID);
         }
       }
+      const orderDate = new Date()
       const response = await axios.post(`${serverAddress}/api/createOrder`, {
         userID,
         userName,
         itemIDs,
+        orderDate
       });
 
       if (response.status === 200) {
@@ -93,6 +95,7 @@ function Cart() {
       console.log(error);
     }
   };
+  // decrement and increment the specified item's amount
   const increment = (index: number) => {
     setCart((prevItems) =>
       prevItems.map((item, i) =>

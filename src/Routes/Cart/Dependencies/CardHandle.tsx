@@ -86,7 +86,7 @@ const CardHandle: React.FC<Props> = ({ onConfirm, onCancel }) => {
                         AGREEMENT
                     </h1>
                     <div className="text-BLACK flex text-center justify-center items-center mb-20">
-                        By continuing you acknowledge that this is not a real transaction, that should you enter any data in here you agree that there has been adequate warning TO NOT enter any sensitive info and that any harm occured is your responsibility
+                        By continuing you acknowledge that this is not a real transaction, that should you enter any data in here, you agree that there has been adequate warning TO NOT enter any sensitive info and that any harm occured is your responsibility
                     </div>
                     <button onClick={() => setTermAgreement(true)} className="bg-BACKGROUND m-auto flex justify-center text-center border border-BLACK w-40 rounded shadow-lg">I AGREE</button>
                 </div>
