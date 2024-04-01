@@ -68,7 +68,7 @@ function Cart() {
       console.log('No items in cart')
       return
     }
-    setShowCardHandle(true); // Show card handling component when "Create Order" is clicked
+    setShowCardHandle(true); 
   };
 
   const handleCardConfirm = () => {
@@ -140,14 +140,14 @@ function Cart() {
   ///////////////////////////////////////////////////////////////////
   return (
     <div className="w-[90vw] h-full m-auto mb-20">
-      <div className="flex rounded h-[10vh]">
+      <div className="flex rounded-b h-[10vh] bg-BACKGROUND">
         <h1 className="flex m-auto rounded w-[40%] text-center justify-center items-center bg-BACKGROUND">
           Total cost: ${totalCost.toFixed(2)} Item count: {itemCount} items
           <br />
         </h1>
         {authenticated ? (
           <button
-            className="border-BLACK border w-[20vw] bg-BACKGROUND rounded m-auto justify-center text-center items-center flex hover:opacity-90 hover:text-BLACK hover:border-BLACK"
+            className="border-BLACK border w-[20vw] bg-WHITE rounded m-auto justify-center text-center text-BACKGROUND items-center flex hover:opacity-90 hover:border-BLACK"
             onClick={() => sendOrder()}
           >
             Create Order
@@ -165,7 +165,7 @@ function Cart() {
               key={index}
               className="border-WHITE border text-BLACK w-[20vw] h-[40vh] md:h-[60vh] min-w-40 mt-1 ml-1 bg-BACKGROUND rounded flex flex-col mb-14"
             >
-            <div className="flex items-center font-serif text-[1em] bg-BACKGROUND rounded text-WHITE h-[13%] md:h-[5%] border-b">
+            <div className="flex items-center font-serif text-[1em] bg-BACKGROUND rounded-t text-WHITE h-[13%] md:h-[5%]">
               <span className="relative left-2 hover:opacity-90">
                 <InfoIcon               
                   onClick={() => setSelectedStoreItem(item)}

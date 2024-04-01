@@ -119,7 +119,7 @@ function Orders() {
   /////////////////////////////////////
   return (
     <div>
-      {!superAuthenticated ? (
+      {superAuthenticated ? (
           <div className="w-[40vw] h-full bg-WHITE text-WHITE mt-0.5 ml-0.5">
           <h1 className="bg-BACKGROUND text-center rounded mb-2 text-white h-[30px]">
             Orders
