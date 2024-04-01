@@ -4,6 +4,8 @@ import { Button, Pagination } from "@mui/material";
 import url from "url";
 import axios from "axios";
 import CardHandle from "./Dependencies/CardHandle";
+import InfoIcon from '@mui/icons-material/Info';
+import './Dependencies/Cart.css'
 
 interface CartItem {
   itemID: number;
@@ -47,7 +49,13 @@ function Cart() {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = cart.slice(indexOfFirstItem, indexOfLastItem);
-
+  const [selectedStoreItem, setSelectedStoreItem] = useState({
+    itemID: -1,
+    itemName: "",
+    itemPrice: 0,
+    imagePath: "",
+    itemDescription: "",
+  });
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
     newPage: number
@@ -114,6 +122,9 @@ function Cart() {
     );
   };
 
+  const [confirmationMessages, setConfirmationMessages] = useState<{ index: number; id: number, type: string }[]>([]);
+
+///////////////////////////////////////////////////////////////////////
   useEffect(() => {
     setTotalCost(0);
     cart.forEach((item) =>
@@ -147,56 +158,72 @@ function Cart() {
           </div>
         )}
       </div>
-      <div className="flex flex-wrap justify-center">
+      <div className="w-[90%] m-auto text-white flex flex-wrap justify-center mb-20">
         {currentItems.length > 0 ? (
           currentItems.map((item: CartItem, index: number) => (
             <div
               key={index}
-              className="border-WHITE border text-BLACK w-[20%] h-[40vh] min-w-44 p-2 mt-2 ml-2 mb-20"
+              className="border-WHITE border text-BLACK w-[20vw] h-[40vh] md:h-[60vh] min-w-40 mt-1 ml-1 bg-BACKGROUND rounded flex flex-col mb-14"
             >
-              <div className="mr-2">
-                <div className="text-center text-[1em] text-WHITE font-serif bg-BACKGROUND rounded">
-                  {item.itemName}
-                </div>
-                <div className="text-center text-[0.8em]">
-                  ${(item.itemPrice * item.itemCount).toFixed(2)} For{" "}
-                  {item.itemCount} item/s
-                </div>
-                <div className="w-[80%] m-auto text-center">
-                  <br />
-                </div>
-              </div>
-              <img
-                className="h-[60%] border-BLACK border-2"
-                style={{ maxHeight: "55%", maxWidth: "90%", margin: "auto" }}
-                src={url.resolve(serverAddress, item.imagePath)}
-                alt={item.itemName}
-                onError={() =>
-                  console.error(`Image not found: ${item.imagePath}`)
-                }
-              />
-              <div className="flex m-auto mt-2 justify-center text-center text-WHITE text-[0.8em] rounded w-[80%]">
-                <button
-                  className="rounded bg-BACKGROUND mr-1 hover:text-BLACK hover:opacity-90 w-[50%] shadow-lg"
-                  onClick={() => removeFromCart(item.itemID, index)}
-                >
-                  Remove from cart
-                </button>
-                <button
-                  onClick={() => increment(index)}
-                  className="rounded w-[25%] hover:text-BLACK hover:opacity-70 bg-BACKGROUND mr-1 shadow-lg"
-                >
-                  ++
-                </button>
-                <button
-                  onClick={() => decrement(index)}
-                  className="rounded w-[25%] hover:text-BLACK hover:opacity-70 bg-BACKGROUND shadow-lg "
-                >
-                  --
-                </button>
+            <div className="flex items-center font-serif text-[1em] bg-BACKGROUND rounded text-WHITE h-[13%] md:h-[5%] border-b">
+              <span className="relative left-2 hover:opacity-90">
+                <InfoIcon               
+                  onClick={() => setSelectedStoreItem(item)}
+                />
+              </span>            
+              <div className="flex-grow text-center justify-center items-center flex">
+                {item.itemName}
               </div>
             </div>
+              <div className="text-center text-[0.8em] text-WHITE">
+                ${(item.itemPrice * item.itemCount).toFixed(2)} For {item.itemCount} item/s
+              </div>
+              <img
+                className="w-full border-BLACK border-b border-t h-[60%] md:h-[80%] bg-WHITE"
+                src={url.resolve(serverAddress, item.imagePath)}
+                alt={item.itemName}
+                onError={() => console.error(`Image not found: ${item.imagePath}`)}
+              />
+             <div className="flex items-center justify-center text-center text-BACKGROUND bg-BACKGROUND flex-grow text-[0.6em] md:text-[0.7em] w-[90%] m-auto relative">
+              <button
+                onClick={() => {
+                  removeFromCart(item.itemID, index);
+                  setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: 'Removed' }]);
+                  setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
+                }}
+                className="border rounded bg-WHITE mr-1 hover:opacity-90 flex-grow shadow-lg"
+              >
+                Remove from cart
+              </button>
+              <button
+                onClick={() => {
+                  increment(index);
+                  setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '++' }]);
+                  setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
+                }}
+                className="border rounded hover:opacity-70 flex-grow bg-WHITE mr-1 shadow-lg"
+              >
+                ++
+              </button>
+              <button
+                onClick={() => {
+                  decrement(index);
+                  setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '--' }]);
+                  setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
+                }}
+                className="border rounded hover:opacity-70 flex-grow bg-WHITE shadow-lg"
+              >
+                --
+              </button>
+              {confirmationMessages.map((msg, i) => msg.index === index && (
+                <div key={msg.id} className="absolute top-0 right-0 mt-1 bg-white text-WHITE p-1 rounded animate-floatAway">
+                  {msg.type}
+                </div>
+              ))}
+            </div>
+            </div>
           ))
+          
         ) : (
           <h1 className="ml-2 mt-5 mb-5 text-BLACK rounded w-[80%] ml-auto mr-auto h-[80%] flex justify-center text-center">
             <div className="mt-[15%]">
@@ -225,6 +252,37 @@ function Cart() {
           variant="outlined"
         />
       </div>
+      {selectedStoreItem.itemID !== -1 ? (
+        <div
+          className="fixed top-0 left-0 flex w-full h-full bg-WHITE items-center"
+          style={{ backgroundColor: "rgba(255,255,255,0.9)" }}
+          onClick={() =>
+            setSelectedStoreItem({
+              itemID: -1,
+              itemName: "",
+              itemPrice: 0,
+              imagePath: "",
+              itemDescription: "",
+            })
+          }
+        >
+          <div className="m-auto w-[60%] md:w-[25%]">      
+            <img
+              className="flex m-auto w-[100%] rounded-t"
+              src={url.resolve(serverAddress, selectedStoreItem.imagePath)}
+            />
+            <div className="bg-BACKGROUND m-auto text-center w-full rounded-b border-t border-BLACK">
+              <h1 className="text-bold font-serif border-b border-WHITE w-[80%] m-auto">
+                The {selectedStoreItem.itemName} for only ${selectedStoreItem.itemPrice}
+              </h1>
+              <div className="w-[90%] m-auto">
+                {selectedStoreItem.itemDescription}
+              </div>
+              
+            </div>   
+          </div>
+      </div>
+      ) : null}
     </div>
   );
 }

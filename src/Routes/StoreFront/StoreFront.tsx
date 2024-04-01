@@ -3,6 +3,8 @@ import { useMyContext } from "../../Context/ContextProvider";
 import { Button, Pagination } from "@mui/material";
 import axios from "axios";
 import url from "url";
+import InfoIcon from '@mui/icons-material/Info';
+import './Dependencies/StoreFront.css'
 
 interface storeItem {
   itemID: number;
@@ -41,13 +43,14 @@ function StoreFront() {
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const serverAddress = `${process.env.REACT_APP_SERVER_ADDRESS}`;
   const [clickedItemIndex, setClickedItemIndex] = useState<number | null>(null);
-  const [selectedStoreItem, setSelectedStoreItem] = useState({
+  const [selectedStoreItem, setSelectedStoreItem] = useState<storeItem>({
     itemID: -1,
     itemName: "",
     itemPrice: 0,
     imagePath: "",
     itemDescription: "",
   });
+  const [confirmationMessages, setConfirmationMessages] = useState<{ index: number; id: number }[]>([]);
 
   const collectStoreItems = async () => {
     try {
@@ -145,43 +148,61 @@ function StoreFront() {
         currentItems.map((item: storeItem, index: number) => (
           <div
             key={index}
-            className="border-WHITE border text-BLACK w-[20%] h-[40vh] min-w-44 p-2 mt-2 ml-2"
+            className="border-WHITE border text-BLACK w-[20vw] h-[40vh] md:h-[60vh] min-w-40 mt-1 ml-1 bg-BACKGROUND rounded"
           >
-            <div className="text-center mb-2 font-serif text-[1em] bg-BACKGROUND rounded text-WHITE">
-              {item.itemName}
+            <div className="flex items-center font-serif text-[1em] bg-BACKGROUND rounded text-WHITE h-[13%] md:h-[5%]">
+              <span className="relative left-2 hover:opacity-90">
+                <InfoIcon               
+                  onClick={() => setSelectedStoreItem(item)}
+                />
+              </span>            
+              <div className="flex-grow text-center justify-center items-center flex">
+                {item.itemName}
+              </div>
             </div>
 
             <img
-              className="h-[60%] border-BLACK border-2"
-              style={{ maxHeight: "55%", maxWidth: "90%", margin: "auto" }}
+              className="w-full border-BLACK border-b border-t h-[60%] md:h-[80%] bg-WHITE"
               src={url.resolve(serverAddress, item.imagePath)}
               alt={item.itemName}
               onError={() =>
                 console.error(`Image not found: ${item.imagePath}`)
               }
-              onClick={() => setSelectedStoreItem(item)}
             />
-            <div className="mb-2 text-center">Price: ${item.itemPrice}</div>
-            <button
-              className={
-                clickedItemIndex === index
-                  ? "shadow-lg text-WHITE flex m-auto bg-BACKGROUND mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70 border-b-2 border-l-2 border border-BLACK"
-                  : "shadow-lg text-WHITE flex m-auto bg-BACKGROUND mt-2 justify-center text-center w-[80%] rounded hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"
-              }
-              onClick={() => {
-                addToCart(
-                  item.itemID,
-                  item.itemName,
-                  item.itemPrice,
-                  item.imagePath,
-                  item.itemDescription
-                );
-                setClickedItemIndex(index);
-                setTimeout(() => setClickedItemIndex(null), 100);
-              }}
-            >
-              Add to cart
-            </button>
+            <div className="mb-2 text-center text-WHITE border-b w-[30%] m-auto">Price: ${item.itemPrice}</div>
+             <div className="relative">
+              <button
+                className={
+                  clickedItemIndex === index
+                    ? "shadow-lg text-BACKGROUND flex m-auto bg-WHITE mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70 border-b-2 border-l-2 border border-BLACK"
+                    : "shadow-lg text-BACKGROUND flex m-auto bg-WHITE mt-2 justify-center text-center w-[80%] rounded hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"
+                }
+                onClick={() => {
+                  addToCart(
+                    item.itemID,
+                    item.itemName,
+                    item.itemPrice,
+                    item.imagePath,
+                    item.itemDescription
+                  );
+                  setClickedItemIndex(index);
+                  setConfirmationMessages(prev => [...prev, { index, id: Date.now() }]);
+                  setTimeout(() => {
+                    setConfirmationMessages(prev => {
+                      const filteredMessages = prev.filter(msg => msg.id !== prev[0]?.id);
+                      return filteredMessages;
+                    });
+                  }, 2000);
+                }}
+              >
+                Add to cart
+              </button>
+              {confirmationMessages.map((msg, i) => msg.index === index && (
+                <div key={msg.id} className="absolute top-0 right-0 text-WHITE p-1 rounded animate-floatAway">
+                  +1
+                </div>
+              ))}
+            </div>
           </div>
         ))
       ) : (
@@ -212,7 +233,7 @@ function StoreFront() {
       </div>
       {selectedStoreItem.itemID !== -1 ? (
         <div
-          className="fixed w-full h-full bg-WHITE top-0 left-0"
+          className="fixed top-0 left-0 flex w-full h-full bg-WHITE items-center"
           style={{ backgroundColor: "rgba(255,255,255,0.9)" }}
           onClick={() =>
             setSelectedStoreItem({
@@ -224,16 +245,20 @@ function StoreFront() {
             })
           }
         >
-      <img
-        className="flex m-auto max-w-[60vw] max-h-[60vh] mt-[10vh] rounded-t"
-        src={url.resolve(serverAddress, selectedStoreItem.imagePath)}
-      />
-      <div className="bg-BACKGROUND m-auto text-center max-w-[50vw] rounded-b border-t border-BLACK">
-        <h1 className="text-bold font-serif border-b border-WHITE w-[80%] m-auto">
-          The {selectedStoreItem.itemName} for only ${selectedStoreItem.itemPrice}
-        </h1>
-        {selectedStoreItem.itemDescription}
-      </div>            
+          <div className="m-auto w-[60%] md:w-[25%]">      
+            <img
+              className="flex m-auto w-[100%] rounded-t"
+              src={url.resolve(serverAddress, selectedStoreItem.imagePath)}
+            />
+            <div className="bg-BACKGROUND m-auto text-center w-full rounded-b border-t border-BLACK">
+              <h1 className="text-bold font-serif border-b border-WHITE w-[80%] m-auto">
+                The {selectedStoreItem.itemName} for only ${selectedStoreItem.itemPrice}
+              </h1>
+              <div className="w-[90%] m-auto">
+                {selectedStoreItem.itemDescription}
+              </div>
+            </div>   
+          </div>
       </div>
       ) : null}
     </div>
