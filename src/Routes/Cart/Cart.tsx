@@ -38,11 +38,9 @@ function Cart() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
 
-  function removeFromCart(id: number, deleteIndex: number) {
+  function removeFromCart(id: number) {
     setCart((prevItems) =>
-      prevItems.filter(
-        (item, index) => item.itemID !== id || index !== deleteIndex
-      )
+      prevItems.filter((item) => item.itemID !== id)
     );
   }
 
@@ -104,18 +102,18 @@ function Cart() {
     }
   };
   // decrement and increment the specified item's amount
-  const increment = (index: number) => {
+  const increment = (id: number) => {
     setCart((prevItems) =>
       prevItems.map((item, i) =>
-        i === index ? { ...item, itemCount: item.itemCount + 1 } : item
+        item.itemID === id ? { ...item, itemCount: item.itemCount + 1 } : item
       )
     );
   };
 
-  const decrement = (index: number) => {
+  const decrement = (id: number) => {
     setCart((prevItems) =>
       prevItems.map((item, i) =>
-        i === index
+        item.itemID === id
           ? { ...item, itemCount: Math.max(1, item.itemCount - 1) }
           : item
       )
@@ -125,18 +123,19 @@ function Cart() {
   const [confirmationMessages, setConfirmationMessages] = useState<{ index: number; id: number, type: string }[]>([]);
 
 ///////////////////////////////////////////////////////////////////////
-  useEffect(() => {
-    setTotalCost(0);
-    cart.forEach((item) =>
-      setTotalCost(
-        (prevTotal) => prevTotal + parseFloat(item.itemPrice) * item.itemCount
-      )
-    );
-    setItemCount(0);
-    cart.forEach((item) =>
-      setItemCount((prevTotal) => prevTotal + item.itemCount)
-    );
-  }, [cart]);
+useEffect(() => {
+  let totalCost = 0;
+  let itemCount = 0;
+
+  cart.forEach((item) => {
+    totalCost += parseFloat(item.itemPrice) * item.itemCount;
+    itemCount += item.itemCount;
+  });
+  setCurrentPage(currentPage)
+  setTotalCost(totalCost);
+  setItemCount(itemCount);
+}, [cart]);
+  
   ///////////////////////////////////////////////////////////////////
   return (
     <div className="w-[90vw] h-full m-auto mb-20">
@@ -187,7 +186,7 @@ function Cart() {
              <div className="flex items-center justify-center text-center text-BACKGROUND bg-BACKGROUND flex-grow text-[0.6em] md:text-[0.7em] w-[90%] m-auto relative">
               <button
                 onClick={() => {
-                  removeFromCart(item.itemID, index);
+                  removeFromCart(item.itemID);
                   setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: 'Removed' }]);
                   setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
                 }}
@@ -197,7 +196,7 @@ function Cart() {
               </button>
               <button
                 onClick={() => {
-                  increment(index);
+                  increment(item.itemID);
                   setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '++' }]);
                   setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
                 }}
@@ -207,7 +206,7 @@ function Cart() {
               </button>
               <button
                 onClick={() => {
-                  decrement(index);
+                  decrement(item.itemID);
                   setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '--' }]);
                   setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
                 }}
