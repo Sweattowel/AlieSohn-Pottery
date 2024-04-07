@@ -151,12 +151,19 @@ app.post("/api/login", async (req, res) => {
 });
 // REGULAR USER ACCOUNT REMOVAL
 
-app.post("/api/deleteAccount", (req, res) => {
+app.post("/api/deleteAccount", async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token){
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  const isValid = await CheckToken(token)
+
+  if (!isValid){
+    return res.status(401).json({ error: "Unauthorized" });
+  }     
   try {
-    if (!CheckToken){
-      res.status(500).json({ error: "Internal server error" });
-      return
-    }
     const { userID, userName } = req.body;
 
     // Check if both userID and userName are provided
@@ -205,6 +212,17 @@ app.post("/api/deleteAccount", (req, res) => {
 // SUPERUSER REGISTRATION DETAILS
 // SUPERUSER CREATION
 app.post("/api/adminRegistration", async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token){
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  const isValid = await CheckToken(token)
+
+  if (!isValid){
+    return res.status(401).json({ error: "Unauthorized" });
+  }  
   try {
     const { userName, passWord } = req.body;
     const hashedPassword = await bcrypt.hash(passWord, 10);
@@ -250,9 +268,15 @@ app.post("/api/adminLogin", async (req, res) => {
           if (passwordMatch) {
             console.log("Admin login success");
             const adminID = admin.adminID;
-            res
-              .status(200)
-              .json({ message: "Successfully logged in", adminID });
+            jwt.sign({adminID}, 'privatekey', {expiresIn: '1h'}, (err, token) => {
+              if (err){
+                res.status(500).json({ error: "Internal Server Error" });
+              } else {
+                res
+                .status(200)
+                .json({ message: "Successfully logged in", adminID, token });
+              }
+            })
           } else {
             console.log("Invalid admin username or password");
             res
@@ -336,12 +360,12 @@ app.post("/api/createOrder", async (req, res) => {
   if (!token){
     return res.status(401).json({ error: "Unauthorized" });
   }
-  
+  const isValid = await CheckToken(token)
+  if (!isValid){
+    return res.status(401).json({ error: "Unauthorized" });
+  }     
   try {
-    const isValid = await CheckToken(token)
-    if (!isValid){
-      return res.status(401).json({ error: "Unauthorized" });
-    }    
+ 
     console.log("orders received");
     const {userID, userName, itemIDs} = req.body;
     const orderDate = new Date()
@@ -353,12 +377,10 @@ app.post("/api/createOrder", async (req, res) => {
       await db.execute(sql, [userName, userID, itemID, formattedDate], (err, results) => {
         if (err){
           res.status(500).json({ error: "Internal Server Error" });
-        } else {
-          res.status(200).json({ message: "orders successfully placed" });
         }
       });
     }
-
+    res.status(200).json({ message: "orders successfully placed" });
 
   } catch (error) {
     console.log(error);
@@ -369,12 +391,16 @@ app.post("/api/createOrder", async (req, res) => {
 // ORDER COLLECTION
 
 app.post("/api/getOrders", async (req, res) => {
-  const token = req.token
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
+  if (!token){
+    return res.status(401).json({ error: "Unauthorized" });
+  }
   const isValid = await CheckToken(token)
   if (!isValid){
     return res.status(401).json({ error: "Unauthorized" });
-  }
+  }     
   
   try {
     const userID = req.body.userID;
@@ -396,6 +422,17 @@ app.post("/api/getOrders", async (req, res) => {
 });
 ///////////////////////////////////////////////////////// USER COLLECTION
 app.post("/api/getUsers", async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token){
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  const isValid = await CheckToken(token)
+
+  if (!isValid){
+    return res.status(401).json({ error: "Unauthorized" });
+  }  
   try {
     const sql = "SELECT userID, userName FROM userData";
 
@@ -416,6 +453,17 @@ app.post("/api/getUsers", async (req, res) => {
 // STORE ITEM CREATION
 
 app.post("/api/CreateItem", upload.single("picture"), async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token){
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  const isValid = await CheckToken(token)
+
+  if (!isValid){
+    return res.status(401).json({ error: "Unauthorized" });
+  }  
   try {
     console.log("Received Admin storeRequest");
     if (!req.file) {
@@ -450,6 +498,17 @@ import { rejects } from "assert";
 // STORE ITEM REMOVAL
 
 app.post("/api/removeItem", async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token){
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  const isValid = await CheckToken(token)
+
+  if (!isValid){
+    return res.status(401).json({ error: "Unauthorized" });
+  }  
   try {
     const itemID = req.body.storeItemID;
     const sql1 = "SELECT imagePath FROM storeItems WHERE itemID = ?";
@@ -490,6 +549,17 @@ app.post("/api/removeItem", async (req, res) => {
 });
 // ADMIN ORDER COMPLETION
 app.post("/api/completeOrder", async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token){
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  const isValid = await CheckToken(token)
+
+  if (!isValid){
+    return res.status(401).json({ error: "Unauthorized" });
+  }  
   try {
     const sql =
       "UPDATE orders SET completed = ? WHERE orderID = ? AND userID = ?";
