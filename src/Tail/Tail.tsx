@@ -80,6 +80,7 @@ function Tail() {
         setSuperAuthenticated(true);
         setUserID(-ResponseSir.data.adminID);
         setWantLogin(false);
+        localStorage.setItem('sutoken', ResponseSir.data.token)
         setUserNameAttempt("");
         setPassWordAttempt("");
         console.log("Logged in successfully Sir");
@@ -100,6 +101,8 @@ function Tail() {
     setUserNameAttempt("");
     setPassWordAttempt("");
     setCaste("waiting");
+    localStorage.setItem('token', 'Null')
+    localStorage.setItem('sutoken', 'Null')
   };
   const register = async () => {
     if (userNameAttempt == "" || passWordAttempt == "") {

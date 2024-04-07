@@ -7,7 +7,7 @@ import multer from "multer";
 import path, { resolve } from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { jwt } from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -50,14 +50,14 @@ const upload = multer({ storage: storage });
 
 ///////////////////////////////////////////////////////// AUTHENTICATION AND REGISTRATION SECTION
 // Token check, to be reused in multiple functions
-const CheckToken = (token) => {
-  return new Promise((resolve, rejects) => {
-    jwt.verify(token, (err, result) => {
+const CheckToken = async (token) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, 'privatekey', (err, result) => {
       if (err){
-        resolve(false)
+        reject(err)
       }
       if (result){
-        resolve(true)
+        resolve(result)
       }
     })    
   })

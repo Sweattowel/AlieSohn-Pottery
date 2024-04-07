@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+TODO LIST:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+FALSE credit card authentication COMPLETE
+User self account deletion COMPLETE
+Test user data encryption COMPLETE
+Test mobile responsivness and update accordingly COMPLETE
+Have images self delete or move to backup directory COMPLETE
+formatt COMPLETE DO DAILY
+Have Storefront images be clickable to show description COMPLETE
+Update sql to handle following date and times
+Add date and time to orders COMPLETE
+Add date ordering to order view menu COMPLETE
+Add item grouping to order menu COMPLETE
+test new theme for storeItems, use a two contrasting colours, use one for the box and one for the text, in any buttons reverse this theme COMPLETE
+Add floating button responses, i.e. if add to cart is clicked float +1 next to COMPLETE
+Limit admin create to prevent overflow of suusers with the same username
+TODO List:
 
-## Available Scripts
+Implement Responsive Design: Optimize design for various screen sizes and devices.
 
-In the project directory, you can run:
+Retain State After Component Unmount: Explore using LocalStorage, Cookies, or unique user ID-based cookie storage to retain state after users leave the webpage.
 
-### `npm start`
+Implement Route Protection: Use JWT or session-based authentication for protecting routes on the backend. COMPLETE
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Check Database Connection Limits: Investigate if the database has a maximum amount of concurrent connections and consider implementing a connection pool if necessary.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Ensure API Security: Validate request bodies to prevent SQL Injection vulnerabilities.
 
-### `npm test`
+Consider Learning C# or Golang: Expand development skills by exploring languages like C# or Golang, commonly used in the industry.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Explore UI Enhancement: Experiment with color theory, UI beautification using tools like React Spring, and ensuring consistency in font sizes and weights.
 
-### `npm run build`
+Optimize Frontend Code: Continuously strive for clean and efficient frontend code.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Optional: Further UI Development: If interested, delve deeper into UI development, considering resources like AWS for full-stack solutions.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Explore Color Theory: Learn about the 60-30-10 rule for color coordination and proper color selection.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Enhance UI Beautification: Experiment with hover effects, box shadows, and other visual enhancements using libraries like React Spring.
 
-### `npm run eject`
+Maintain Consistency in Design: Ensure consistency in font sizes, weights, and other attributes for a polished UI.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Continue Learning and Experimenting: Keep exploring and experimenting with UI development to improve skills and knowledge in the area.

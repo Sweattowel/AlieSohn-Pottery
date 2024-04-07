@@ -55,17 +55,30 @@ export default function CreateNewAdmin() {
     }
   };
   const createAdmin = async () => {
+    const storedToken = localStorage.getItem('sutoken');
+    if (!storedToken){
+      console.log('No authorization found');
+      return;
+    }
     if (userName == "" || passWord == "") {
       return;
     }
     try {
       const response = await axios.post(
         `${serverAddress}/api/adminRegistration`,
-        { userName: userName, passWord: passWord }
+        { userName: userName, passWord: passWord },
+        {
+          headers: {
+            authorization: `Bearer ${storedToken}`
+          }
+        }
       );
 
       if (response.status == 200) {
         console.log("Created admin");
+        setUserNameAttempt('')
+        setNewPassWordName('')
+        setCheck(false)
       } else {
         console.log("Failed to create admin");
       }

@@ -68,9 +68,19 @@ function Removeitem() {
     if (locked) {
       return;
     }
+    const storedToken = localStorage.getItem('sutoken');
+    if (!storedToken){
+      console.log('No authorization found');
+      return;
+    }
     try {
       const response = await axios.post(`${serverAddress}/api/removeItem`, {
-        storeItemID,
+        storeItemID, 
+      }, 
+      {
+        headers: {
+          authorization: `Bearer ${storedToken}`
+        }
       });
       if (response.status === 200) {
         console.log("Item successfully removed");
@@ -90,7 +100,8 @@ function Removeitem() {
   ///////////////////////////////////////////////////////////////////
   return (
     <div>
-      {superAuthenticated ? (<div className="w-[40vw] h-[60vh] bg-WHITE text-WHITE">
+      {superAuthenticated ? (
+      <div className="w-[40vw] h-[60vh] bg-WHITE text-WHITE">
       <div className="h-full mb-20">
         <h1 className="bg-BACKGROUND rounded text-WHITE text-center w-[100%] m-auto mb-2 h-[30px]">
           Remove store Item
@@ -125,7 +136,7 @@ function Removeitem() {
           }
         >
           {currentItems.map((item: storeItem, index: number) => (
-            <div className="bg-BACKGROUND m-auto flex items-center mb-1 text-[0.7rem] text-WHITE rounded border-b-2 border-BLACK hover:text-BLACK">
+            <div key={index} className="bg-BACKGROUND m-auto flex items-center mb-1 text-[0.7rem] text-WHITE rounded border-b-2 border-BLACK hover:text-BLACK">
               <div className=" rounded justify-center flex w-[20%] h-full align-middle ">
                 ID: {item.itemID}
               </div>

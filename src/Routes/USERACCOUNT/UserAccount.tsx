@@ -33,12 +33,22 @@ export default function UserAccount() {
   };
 
   const getOrders = async () => {
+    const storedToken = localStorage.getItem('token');
+    if (!storedToken){
+      console.log('No authorization found');
+      return;
+    }
     if (!authenticated) {
       return;
     }
     try {
       const response = await axios.post(`${serverAddress}/api/getOrders`, {
         userID: userID,
+      }, 
+      {
+        headers: {
+          authorization: `Bearer ${storedToken}`
+        }
       });
       if (response.status === 200) {
         let data = response.data;

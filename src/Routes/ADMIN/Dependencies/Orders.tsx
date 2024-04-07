@@ -21,16 +21,22 @@ function Orders() {
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
 
   const getOrders = async () => {
-    const storedToken = localStorage.getItem('token')
+    const storedToken = localStorage.getItem('sutoken');
     if (!storedToken){
-      console.log('No authorization found')
-      return
+      console.log('No authorization found');
+      return;
     }
+  
     try {
       setOrders([]);
-      const response = await axios.post(`${serverAddress}/api/getOrders`, {
+      const response = await axios.post(`${serverAddress}/api/getOrders`, 
+      {
         userID: selectedCustomer,
-        token: storedToken
+      },         
+      {
+        headers: {
+          authorization: `Bearer ${storedToken}`
+        }
       });
       if (response.status === 200) {
         let data = response.data;
@@ -44,8 +50,18 @@ function Orders() {
   };
 
   const getUsers = async () => {
+    const storedToken = localStorage.getItem('sutoken');
+    if (!storedToken){
+      console.log('No authorization found');
+      return;
+    }
     try {
-      const response = await axios.post(`${serverAddress}/api/getUsers`);
+      const response = await axios.post(`${serverAddress}/api/getUsers`, {},        
+      {
+        headers: {
+          authorization: `Bearer ${storedToken}`
+        }
+      });
       if (response.status === 200) {
         setUsers(response.data.data);
       } else {
@@ -139,6 +155,7 @@ function Orders() {
                 )
                 .map((user: any, index: number) => (
                   <button
+                    key={index}
                     className="bg-BACKGROUND rounded mb-2 w-[80%] flex justify-center m-auto hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"
                     onClick={() => setSelectedCustomer(user.userID)}
                   >

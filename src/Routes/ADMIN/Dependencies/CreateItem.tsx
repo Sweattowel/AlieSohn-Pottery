@@ -46,6 +46,12 @@ function CreateItem() {
       console.log("Incomplete StoreItem");
       return;
     }
+    const storedToken = localStorage.getItem('sutoken');
+    if (!storedToken){
+      console.log('No authorization found');
+      return;
+    }
+      
     const formData = new FormData();
     formData.append("title", item.title);
     formData.append("description", item.description);
@@ -55,7 +61,12 @@ function CreateItem() {
     try {
       const response = await axios.post(
         `${serverAddress}/api/createItem`,
-        formData
+        formData,       
+        {
+          headers: {
+            authorization: `Bearer ${storedToken}`
+          }
+        }
       );
       if (response.status === 200) {
         console.log("Successfully added to store");
