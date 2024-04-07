@@ -47,14 +47,14 @@ function Tail() {
         setAuthenticated(true);
         setSuperAuthenticated(false);
         setUserID(response.data.userID);
-        console.log(response.data.token)
+        localStorage.setItem('token', response.data.token)
         setUserName(userNameAttempt);
         setWantLogin(false);
         setUserNameAttempt("");
         setPassWordAttempt("");
         console.log("Logged in successfully");
       } else {
-        console.log("Failed to log in");
+        setError("Failed to log in");
       }
     } catch (error) {
       setAttempts((prevAttempts) => Math.max(prevAttempts - 1, 0));

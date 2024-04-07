@@ -330,11 +330,18 @@ app.post("/api/getBrochure", async (req, res) => {
 ///////////////////////////////////////////////////////// ORDER HANDLING
 // ORDER CREATION
 app.post("/api/createOrder", async (req, res) => {
-  if (!CheckToken){
-    res.status(500).json({ error: "Internal server error" });
-    return
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token){
+    return res.status(401).json({ error: "Unauthorized" });
   }
+  
   try {
+    const isValid = await CheckToken(token)
+    if (!isValid){
+      return res.status(401).json({ error: "Unauthorized" });
+    }    
     console.log("orders received");
     const {userID, userName, itemIDs} = req.body;
     const orderDate = new Date()
@@ -362,10 +369,13 @@ app.post("/api/createOrder", async (req, res) => {
 // ORDER COLLECTION
 
 app.post("/api/getOrders", async (req, res) => {
-  if (!CheckToken){
-    res.status(500).json({ error: "Internal server error" });
-    return
+  const token = req.token
+
+  const isValid = await CheckToken(token)
+  if (!isValid){
+    return res.status(401).json({ error: "Unauthorized" });
   }
+  
   try {
     const userID = req.body.userID;
     const sql = `SELECT storeItems.itemName, orders.itemID, orders.orderID, completed FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = ?`;

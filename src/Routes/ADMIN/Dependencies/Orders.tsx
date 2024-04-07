@@ -21,10 +21,16 @@ function Orders() {
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
 
   const getOrders = async () => {
+    const storedToken = localStorage.getItem('token')
+    if (!storedToken){
+      console.log('No authorization found')
+      return
+    }
     try {
       setOrders([]);
       const response = await axios.post(`${serverAddress}/api/getOrders`, {
         userID: selectedCustomer,
+        token: storedToken
       });
       if (response.status === 200) {
         let data = response.data;

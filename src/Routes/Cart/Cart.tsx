@@ -74,33 +74,46 @@ function Cart() {
     createOrder(); // Proceed with creating the order
   };
   const createOrder = async () => {
-    console.log(cart);
+    const storedToken = localStorage.getItem('token');
+    if (!storedToken){
+      console.log('No authorization found');
+      return;
+    }
+  
     try {
-      //const itemIDs = cart.map(item => item.itemID);
       const itemIDs = [];
       for (let i = 0; i < cart.length; i++) {
         for (let j = 0; j < cart[i].itemCount; j++) {
           itemIDs.push(cart[i].itemID);
         }
       }
-      const orderDate = new Date()
-      const response = await axios.post(`${serverAddress}/api/createOrder`, {
-        userID,
-        userName,
-        itemIDs,
-        orderDate
-      });
-
+      const orderDate = new Date();
+      const response = await axios.post(
+        `${serverAddress}/api/createOrder`,
+        {
+          userID,
+          userName,
+          itemIDs,
+          orderDate
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${storedToken}`
+          }
+        }
+      );
+  
       if (response.status === 200) {
-        console.log("successful made order");
+        console.log("Successfully made order");
         setCart([]);
       } else {
         console.log("Failed to make order");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
+  
   // decrement and increment the specified item's amount
   const increment = (id: number) => {
     setCart((prevItems) =>
