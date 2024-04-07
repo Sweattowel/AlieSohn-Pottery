@@ -47,6 +47,7 @@ function Tail() {
         setAuthenticated(true);
         setSuperAuthenticated(false);
         setUserID(response.data.userID);
+        console.log(response.data.token)
         setUserName(userNameAttempt);
         setWantLogin(false);
         setUserNameAttempt("");

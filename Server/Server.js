@@ -4,9 +4,11 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { createRequire } from "module";
 import multer from "multer";
-import path from "path";
+import path, { resolve } from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { jwt } from 'jsonwebtoken'
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -47,6 +49,20 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 ///////////////////////////////////////////////////////// AUTHENTICATION AND REGISTRATION SECTION
+// Token check, to be reused in multiple functions
+const CheckToken = (token) => {
+  return new Promise((resolve, rejects) => {
+    jwt.verify(token, (err, result) => {
+      if (err){
+        resolve(false)
+      }
+      if (result){
+        resolve(true)
+      }
+    })    
+  })
+}
+// Registration
 const bcrypt = require("bcrypt");
 
 app.post("/api/register", async (req, res) => {
@@ -110,9 +126,14 @@ app.post("/api/login", async (req, res) => {
             console.log("Login success");
             const userID = user.userID;
             const userName = user.userName;
-            res
-              .status(200)
-              .json({ message: "Successfully logged in", userID, userName });
+            jwt.sign({ userID, userName }, 'privatekey', {expiresIn: '1h'}, (err, token) => {
+              if (err){
+                console.log(err)
+                res.status(500).json({ error: "Internal Server Error" });
+              } else {
+                res.status(200).json({ message: 'Successfully logged in', token, userID, userName})
+              }
+            })
           } else {
             console.log("Invalid username or password");
             res.status(401).json({ error: "Invalid username or password" });
@@ -132,6 +153,10 @@ app.post("/api/login", async (req, res) => {
 
 app.post("/api/deleteAccount", (req, res) => {
   try {
+    if (!CheckToken){
+      res.status(500).json({ error: "Internal server error" });
+      return
+    }
     const { userID, userName } = req.body;
 
     // Check if both userID and userName are provided
@@ -305,6 +330,10 @@ app.post("/api/getBrochure", async (req, res) => {
 ///////////////////////////////////////////////////////// ORDER HANDLING
 // ORDER CREATION
 app.post("/api/createOrder", async (req, res) => {
+  if (!CheckToken){
+    res.status(500).json({ error: "Internal server error" });
+    return
+  }
   try {
     console.log("orders received");
     const {userID, userName, itemIDs} = req.body;
@@ -333,6 +362,10 @@ app.post("/api/createOrder", async (req, res) => {
 // ORDER COLLECTION
 
 app.post("/api/getOrders", async (req, res) => {
+  if (!CheckToken){
+    res.status(500).json({ error: "Internal server error" });
+    return
+  }
   try {
     const userID = req.body.userID;
     const sql = `SELECT storeItems.itemName, orders.itemID, orders.orderID, completed FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = ?`;
@@ -402,6 +435,7 @@ app.post("/api/CreateItem", upload.single("picture"), async (req, res) => {
   }
 });
 import fs from "fs";
+import { rejects } from "assert";
 
 // STORE ITEM REMOVAL
 
