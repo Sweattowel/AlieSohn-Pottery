@@ -14,7 +14,7 @@ module.exports = {
       'WHITE': '#ffffff',
       'TEXT': '#8ca9d3',
       'BACKGROUND': '#dc2626',
-      'SELECTED': '#dc2626'
+      'SELECTED': '#dc2626',
     },
     extend: {},
   },

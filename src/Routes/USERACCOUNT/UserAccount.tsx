@@ -115,24 +115,34 @@ export default function UserAccount() {
           <div className="bg-BACKGROUND rounded-t">
             User: {userName || "N/a"} History
           </div>
-          <div className="bg-BACKGROUND rounded-b">
-            SORT BY
-            <Select
-              style={{
-                width: "200px",
-                height: "2rem",
-                display: "flex",
-                margin: "auto",
-                backgroundColor: "white",
-              }}
-            >
-              <MenuItem onClick={() => sortDate(1)} value={1} >DATE DESC</MenuItem>
-              <MenuItem onClick={() => sortDate(2)} value={2}>DATE ASCE</MenuItem>
-              <MenuItem onClick={() => sortDate(3)} value={3}>GROUP BY</MenuItem>
-            </Select>
-          </div>
         </h1>
-
+        <div className="rounded-b w-[50%] m-auto text-BLACK mt-1 mb-1">
+          <Select
+            label="SORT BY"
+            style={{
+              width: "200px",
+              height: "2rem",
+              display: "flex",
+              margin: "auto",
+              backgroundColor: "beige",
+            }}
+          >
+            <MenuItem onClick={() => sortDate(1)} value={1}>DATE DESC</MenuItem>
+            <MenuItem onClick={() => sortDate(2)} value={2}>DATE ASC</MenuItem>
+            <MenuItem onClick={() => sortDate(3)} value={3}>GROUP BY</MenuItem>
+          </Select>
+        </div>
+        <Pagination
+          style={{
+            justifyContent: "center",
+            display: "flex",
+            alignContent: "center",
+          }}
+          count={Math.ceil(orderCount / ordersPerPage)}
+          page={currentOrdersPage}
+          onChange={handleChangeOrdersPage}
+          variant="outlined"
+        />
         {authenticated && !superAuthenticated
           ? orders
               .slice(
@@ -173,17 +183,6 @@ export default function UserAccount() {
               ))
           : null}
       </div>
-      <Pagination
-        style={{
-          justifyContent: "center",
-          display: "flex",
-          alignContent: "center",
-        }}
-        count={Math.ceil(orderCount / ordersPerPage)}
-        page={currentOrdersPage}
-        onChange={handleChangeOrdersPage}
-        variant="outlined"
-      />
     </div>
   );
 }

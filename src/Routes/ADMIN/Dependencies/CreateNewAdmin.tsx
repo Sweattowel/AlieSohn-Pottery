@@ -55,6 +55,10 @@ export default function CreateNewAdmin() {
     }
   };
   const createAdmin = async () => {
+    if (userNameAttempt === "" || passWordAttempt === "") {
+      setError('please enter details')
+      return
+    }
     const storedToken = localStorage.getItem('sutoken');
     if (!storedToken){
       console.log('No authorization found');
@@ -79,11 +83,11 @@ export default function CreateNewAdmin() {
         setUserNameAttempt('')
         setNewPassWordName('')
         setCheck(false)
-      } else {
-        console.log("Failed to create admin");
+      } else if (response.status === 400){
+        setError('Bad input, please adjust')
       }
     } catch (error) {
-      console.log("Failed to create admin");
+      setError("Failed to create admin");
     }
   };
 
@@ -150,11 +154,9 @@ export default function CreateNewAdmin() {
                         ADMIN LOGIN
                     </button>
                     <div className="w-[60%] m-auto text-center rounded bg-BACKGROUND h-[12vh]">
-                        test
-                        <br />
                         {adminAttempts}
                         <br />
-                        {error}
+                        {error || <div>Please enter details</div>}
                     </div>
                 </div>
             )

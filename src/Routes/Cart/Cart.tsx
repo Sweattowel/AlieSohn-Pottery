@@ -153,19 +153,19 @@ useEffect(() => {
   return (
     <div className="w-[90vw] h-full m-auto mb-20">
       <div className="flex rounded-b h-[10vh] bg-BACKGROUND">
-        <h1 className="flex m-auto rounded w-[40%] text-center justify-center items-center bg-BACKGROUND">
+        <h1 className="flex m-auto rounded w-[40%] text-center text-WHITE justify-center items-center bg-BACKGROUND">
           Total cost: ${totalCost.toFixed(2)} Item count: {itemCount} items
           <br />
         </h1>
         {authenticated ? (
           <button
-            className="border-BLACK border w-[20vw] bg-WHITE rounded m-auto justify-center text-center text-BACKGROUND items-center flex hover:opacity-90 hover:border-BLACK"
+            className="text-WHITE border-BLACK border w-[20vw] bg-WHITE rounded m-auto justify-center text-center text-BACKGROUND items-center flex hover:opacity-90 hover:border-BLACK hover:shadow-lg"
             onClick={() => sendOrder()}
           >
             Create Order
           </button>
         ) : (
-          <div className="mt-[auto] mb-[auto] ml-[1em] h-[50px] w-[40vw] text-center flex justify-center items-center rounded-lg bg-BACKGROUND text-[0.8em]">
+          <div className="text-WHITE mt-[auto] mb-[auto] ml-[1em] h-[50px] w-[40vw] text-center flex justify-center items-center rounded-lg bg-BACKGROUND text-[0.8em]">
             Please Create an account and log in to create an order
           </div>
         )}
@@ -175,7 +175,7 @@ useEffect(() => {
           currentItems.map((item: CartItem, index: number) => (
             <div
               key={index}
-              className="border-WHITE border text-BLACK w-[20vw] h-[40vh] md:h-[60vh] min-w-40 mt-1 ml-1 bg-BACKGROUND rounded flex flex-col mb-14"
+              className="border-WHITE border text-BLACK w-[20vw] h-[40vh] md:h-[60vh] min-w-40 mt-1 ml-1 bg-BACKGROUND rounded flex flex-col mb-14 hover:shadow-2xl"
             >
             <div className="flex items-center font-serif text-[1em] bg-BACKGROUND rounded-t text-WHITE h-[13%] md:h-[5%]">
               <span className="relative left-2 hover:opacity-90">
@@ -210,7 +210,7 @@ useEffect(() => {
               <button
                 onClick={() => {
                   increment(item.itemID);
-                  setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '++' }]);
+                  setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '+' }]);
                   setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
                 }}
                 className="border rounded hover:opacity-70 flex-grow bg-WHITE mr-1 shadow-lg"
@@ -220,18 +220,21 @@ useEffect(() => {
               <button
                 onClick={() => {
                   decrement(item.itemID);
-                  setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '--' }]);
+                  setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '-' }]);
                   setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
                 }}
                 className="border rounded hover:opacity-70 flex-grow bg-WHITE shadow-lg"
               >
                 --
               </button>
-              {confirmationMessages.map((msg, i) => msg.index === index && (
-                <div key={msg.id} className="absolute top-0 right-0 mt-1 bg-white text-WHITE p-1 rounded animate-floatAway">
-                  {msg.type}
-                </div>
-              ))}
+              {confirmationMessages.map((msg, i) => {
+                const itemCount = cart.find(item => item.itemID === currentItems[msg.index].itemID)?.itemCount;
+                return msg.index === index && (
+                  <div key={msg.id} className="absolute top-0 right-0 text-WHITE p-1 rounded animate-floatAway">
+                    {msg.type}{msg.type !== 'Removed' && itemCount} 
+                  </div>
+                );
+              })}
             </div>
             </div>
           ))

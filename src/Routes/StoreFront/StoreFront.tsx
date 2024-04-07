@@ -148,7 +148,7 @@ function StoreFront() {
         currentItems.map((item: storeItem, index: number) => (
           <div
             key={index}
-            className="border-WHITE border text-BLACK w-[20vw] h-[40vh] md:h-[60vh] min-w-40 mt-1 ml-1 bg-BACKGROUND rounded"
+            className=" text-BLACK w-[20vw] h-[40vh] md:h-[60vh] min-w-40 mt-1 ml-1 bg-BACKGROUND rounded hover:shadow-2xl"
           >
             <div className="flex items-center font-serif text-[1em] bg-BACKGROUND rounded text-WHITE h-[13%] md:h-[5%]">
               <span className="relative left-2 hover:opacity-90">
@@ -169,13 +169,13 @@ function StoreFront() {
                 console.error(`Image not found: ${item.imagePath}`)
               }
             />
-            <div className="mb-2 text-center text-WHITE border-b w-[30%] m-auto">Price: ${item.itemPrice}</div>
+            <div className="mb-2 text-center text-WHITE border-b w-[80%] m-auto">Price: ${item.itemPrice}</div>
              <div className="relative">
               <button
                 className={
                   clickedItemIndex === index
-                    ? "shadow-lg text-BACKGROUND flex m-auto bg-WHITE mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70 border-b-2 border-l-2 border border-BLACK"
-                    : "shadow-lg text-BACKGROUND flex m-auto bg-WHITE mt-2 justify-center text-center w-[80%] rounded hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"
+                    ? "shadow-lg text-BACKGROUND flex m-auto bg-WHITE mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70 border-b-2 border-l-2 border border-BLACK hover:shadow-lg"
+                    : "shadow-lg text-BACKGROUND flex m-auto bg-WHITE mt-2 justify-center text-center w-[80%] rounded hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK hover:shadow-lg"
                 }
                 onClick={() => {
                   addToCart(
@@ -197,11 +197,14 @@ function StoreFront() {
               >
                 Add to cart
               </button>
-              {confirmationMessages.map((msg, i) => msg.index === index && (
-                <div key={msg.id} className="absolute top-0 right-0 text-WHITE p-1 rounded animate-floatAway">
-                  +1
-                </div>
-              ))}
+              {confirmationMessages.map((msg, i) => {
+                const itemCount = cart.find(item => item.itemID === currentItems[msg.index].itemID)?.itemCount;
+                return msg.index === index && (
+                  <div key={msg.id} className="absolute top-0 right-0 text-WHITE p-1 rounded animate-floatAway">
+                    +{itemCount} 
+                  </div>
+                );
+              })}
             </div>
           </div>
         ))
@@ -250,7 +253,7 @@ function StoreFront() {
               className="flex m-auto w-[100%] rounded-t"
               src={url.resolve(serverAddress, selectedStoreItem.imagePath)}
             />
-            <div className="bg-BACKGROUND m-auto text-center w-full rounded-b border-t border-BLACK">
+            <div className="bg-BACKGROUND m-auto text-center w-full rounded-b border-t border-BLACK text-WHITE">
               <h1 className="text-bold font-serif border-b border-WHITE w-[80%] m-auto">
                 The {selectedStoreItem.itemName} for only ${selectedStoreItem.itemPrice}
               </h1>
