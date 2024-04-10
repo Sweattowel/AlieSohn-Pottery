@@ -125,7 +125,7 @@ export default function CreateNewAdmin() {
                 </div>
             ) : (
                 <div className="w-full text-WHITE justify-center items-center border rounded mb-10 ">
-                    <h1 className="m-auto flex text-center justify-center bg-BACKGROUND mb-1 rounded opacity-60">
+                    <h1 className="m-auto flex text-center justify-center bg-BACKGROUND mb-1 rounded">
                         CREATE NEW ADMIN
                         <br />
                         you must log in first to create any admins

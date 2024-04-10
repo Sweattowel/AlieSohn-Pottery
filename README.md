@@ -14,7 +14,7 @@ COMPLETE Add item grouping to order menu
 COMPLETE test new theme for storeItems, use a two contrasting colours, use one for the box and one for the text, in any buttons reverse this theme 
 COMPLETE Add floating button responses, i.e. if add to cart is clicked float +1 next to 
 COMPLETE Limit admin create to prevent overflow of suusers with the same username
-
+COMPLETE Add motion framer to increase responsivness in design, at least test to see if you actually want it in the design 
 Feedback TODO List:
 
 UNCOMPLETE Implement Responsive Design: Optimize design for various screen sizes and devices.
@@ -30,8 +30,8 @@ UNCOMPLETE Consider Learning C# or Golang: Expand development skills by explorin
 UNCOMPLETE Explore UI Enhancement: Experiment with color theory, UI beautification using tools like React Spring, and ensuring consistency in font sizes and weights.
 UNCOMPLETE Optimize Frontend Code: Continuously strive for clean and efficient frontend code.
 UNCOMPLETE Optional: Further UI Development: If interested, delve deeper into UI development, considering resources like AWS for full-stack solutions.
-UNCOMPLETE Explore Color Theory: Learn about the 60-30-10 rule for color coordination and proper color selection.
-UNCOMPLETE Enhance UI Beautification: Experiment with hover effects, box shadows, and other visual enhancements using libraries like React Spring.
+COMPLETE Explore Color Theory: Learn about the 60-30-10 rule for color coordination and proper color selection.
+COMPLETE Enhance UI Beautification: Experiment with hover effects, box shadows, and other visual enhancements using libraries like React Spring.
     Addit: 
         Added box shadows for storeItem cards, looks nice so far, too much?
 UNCOMPLETE Maintain Consistency in Design: Ensure consistency in font sizes, weights, and other attributes for a polished UI.

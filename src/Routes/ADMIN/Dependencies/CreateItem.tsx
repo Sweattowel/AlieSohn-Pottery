@@ -120,7 +120,7 @@ function CreateItem() {
                     <Input type="file" onChange={handleFileChange} />
                     <br />
                     <button
-                        className="border-b-2 border-l-2 border border-BLACK bg-BACKGROUND w-[60%] rounded mt-4 hover:text-BLACK hover:opacity-90"
+                        className="border-b-2 border-l-2 border border-BLACK bg-WHITE text-BACKGROUND w-[60%] rounded mt-4 hover:opacity-60 shadow-lg"
                         onClick={createStoreItem}
                     >
                         Create Item

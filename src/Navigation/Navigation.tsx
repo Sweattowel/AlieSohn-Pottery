@@ -22,7 +22,7 @@ function Navigation() {
     <nav className="m-auto h-[11vh] flex border-BLACK border-b-2 w-[90vw] bg-60">
       <div className="flex  w-full mb-2">
         <div className="w-[50%] m-auto   text-2xl">
-          <h1 className="font-serif h-[8vh] md:h-[5vh] rounded w-[25vw] mr-2 text-center flex items-center justify-center text-[2rem] md:text-[3rem] text-BACKGROUND ">
+          <h1 className="font-serif h-[8vh] md:h-[5vh] rounded w-[25vw] mr-3 text-center flex items-center justify-center text-[2rem] md:text-[3rem] text-BACKGROUND ">
             AlieSohn
           </h1>
         </div>
@@ -33,8 +33,8 @@ function Navigation() {
                 <button
                   className={
                     page === 5
-                    ? "font-bold text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw]"
-                    : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] rounded md:w-[13vw] w-[15vw] md:h-[5vh]"
+                    ? "text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-2xl"
+                    : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-2xl"
                   }
                   onClick={() => {
                     setPage(5);
@@ -51,8 +51,8 @@ function Navigation() {
                 <button
                   className={
                     page === 4
-                    ? "font-bold text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw]"
-                    : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] rounded md:w-[13vw] w-[15vw] md:h-[5vh]"
+                    ? "text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-2xl"
+                    : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-2xl"
                   }
                   onClick={() => {
                     setPage(4);
@@ -68,8 +68,8 @@ function Navigation() {
               <button
                 className={
                   page === 1
-                  ? "font-bold text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw]"
-                  : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] rounded md:w-[13vw] w-[15vw] md:h-[5vh]"
+                  ? "text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[16vw] text-base md:text-2xl"
+                  : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] md:w-[13vw] w-[16vw] md:h-[5vh] text-base md:text-2xl"
                 }
                 onClick={() => {
                   setPage(1);
@@ -84,14 +84,14 @@ function Navigation() {
               <button
                 className={
                   page === 2
-                  ? "font-bold text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw]"
-                  : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] rounded md:w-[13vw] w-[15vw] md:h-[5vh]"
+                  ? "text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-2xl"
+                  : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-2xl"
                 }
                 onClick={() => {
                   setPage(2);
                 }}
               >
-                StoreFront
+                Store Front
               </button>
             </Link>
           </li>
@@ -100,8 +100,8 @@ function Navigation() {
               <button
                 className={
                   page === 3
-                  ? "font-bold text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw]"
-                  : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] rounded md:w-[13vw] w-[15vw] md:h-[5vh]"
+                  ? "text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base text-md md:text-2xl"
+                  : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-2xl"
                 }
                 onClick={() => {
                   setPage(3);

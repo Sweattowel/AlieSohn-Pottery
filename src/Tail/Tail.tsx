@@ -190,7 +190,7 @@ function Tail() {
         </div>
       ) : null}
 
-      <div className="w-[100vw] text-center text-[0.7rem] justify-center mt-2 fixed bottom-0 text-BLACK border-t-2 border-BLACK bg-WHITE">
+      <div className="w-[100vw] text-center text-[0.7rem] justify-center mt-2 fixed bottom-0 text-BLACK border-t-2 border-BLACK bg-WHITE z-10">
         <div className="flex justify-center m-auto w-[80%]">
           Unoffical private web app for educational purposes, i do not own any
           of the content used
@@ -199,14 +199,14 @@ function Tail() {
           {authenticated || superAuthenticated ? (
             <button
               onClick={() => logOut()}
-              className="bg-BACKGROUND w-[15%] rounded text-WHITE hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK mb-2"
+              className="bg-WHITE font-bold border border-BLACK w-[15%] rounded text-BACKGROUND hover:opacity-70 shadow-lg"
             >
               Log out
             </button>
           ) : (
             <button
               onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
-              className="bg-BACKGROUND w-[15%] rounded text-WHITE hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"
+              className="bg-WHITE font-bold border border-BLACK w-[15%] rounded text-BACKGROUND hover:opacity-70 shadow-lg"
             >
               Login
             </button>

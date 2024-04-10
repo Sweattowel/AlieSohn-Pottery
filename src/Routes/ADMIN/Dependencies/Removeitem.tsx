@@ -106,28 +106,12 @@ function Removeitem() {
         <h1 className="bg-BACKGROUND rounded text-WHITE text-center w-[100%] m-auto mb-2 h-[30px]">
           Remove store Item
         </h1>
-        <Button
-          style={
-            locked
-              ? {
-                  color: "black",
-                  backgroundColor: "#ef4444",
-                  width: "100%",
-                  border: "1px solid black",
-                }
-              : {
-                  color: "white",
-                  backgroundColor: "#dc2626",
-                  width: "80%",
-                  margin: "auto",
-                  display: "flex",
-                  borderBottom: "2px solid black",
-                }
-          }
+        <button
+          className={locked ? 'w-full text-BACKGROUND bg-BLACK border-BLACK border' : 'w-full text-BACKGROUND bg-WHITE border-BLACK border shadow-lg rounded'}
           onClick={() => setLocked(!locked)}
         >
           {locked ? "LOCKED" : "UNLOCKED"}
-        </Button>
+        </button>
         <div
           className={
             !locked
@@ -142,10 +126,12 @@ function Removeitem() {
               </div>
               <div className="w-[50%]">{item.itemName}</div>
               {locked ? (
-                <button>Unlock to remove</button>
+                <button className="border border-BLACK hover:text-BLACK hover:opacity-60 bg-WHITE shadow-lg text-BACKGROUND w-full rounded-r">
+                  Unlock to remove
+                </button>
               ) : (
                 <button
-                  className="border-l border-BLACK hover:text-BLACK hover:opacity-60"
+                  className="border border-BLACK hover:text-BLACK hover:opacity-60 bg-WHITE shadow-lg text-BACKGROUND w-full rounded-r"
                   onClick={() => removeStoreItems({ storeItemID: item.itemID })}
                 >
                   Remove Item from store

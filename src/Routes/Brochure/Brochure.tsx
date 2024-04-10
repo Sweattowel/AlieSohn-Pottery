@@ -5,6 +5,7 @@ import url from "url";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import {motion} from 'framer-motion'
 
 interface StoreItem {
   itemID: number;
@@ -85,26 +86,21 @@ function Brochure() {
       </h1>
       <Slider {...settings}>
         {brochure.map((item: StoreItem, index: number) => (
-          <div key={index} className="border-BLACK text-center m-auto flex">
+          <motion.div key={index} className="border-BLACK text-center m-auto flex mt-5 p-10 pt-20 pb-20" whileHover={{scale: 1.2}}>
             <img
               key={item.itemID}
               src={url.resolve(serverAddress, item.imagePath)}
               alt={item.itemName}
-              style={{
-                height: "45vh",
-                maxHeight: "500px",
-                width: "80%",
-                margin: "auto",
-              }}
+              className="h-[45vh] max-h-[500px] w-[90%] md:w-[80%] m-auto"
             />
-            <div className="text-BLACK w-[80%] m-auto">
+            <div className="text-BLACK w-[90%] md:w-[80%] m-auto">
               <h1 className="text-[1.5em] text-WHITE h-[8vh] font-serif bg-BACKGROUND rounded-b-lg justify-center items-center flex">
                 {item.itemName}
               </h1>
               <div>${item.itemPrice} </div>
               <div className="text-sm">Happy customers {item.order_count}</div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </Slider>
     </div>

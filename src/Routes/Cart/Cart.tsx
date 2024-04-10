@@ -6,6 +6,7 @@ import axios from "axios";
 import CardHandle from "./Dependencies/CardHandle";
 import InfoIcon from '@mui/icons-material/Info';
 import './Dependencies/Cart.css'
+import { AnimatePresence, motion } from "framer-motion";
 
 interface CartItem {
   itemID: number;
@@ -159,7 +160,7 @@ useEffect(() => {
         </h1>
         {authenticated ? (
           <button
-            className="text-WHITE border-BLACK border w-[20vw] bg-WHITE rounded m-auto justify-center text-center text-BACKGROUND items-center flex hover:opacity-90 hover:border-BLACK hover:shadow-lg"
+            className="text-BLACK border-BLACK border w-[20vw] bg-WHITE rounded m-auto justify-center text-center text-BACKGROUND items-center flex hover:opacity-90 hover:border-BLACK hover:shadow-lg"
             onClick={() => sendOrder()}
           >
             Create Order
@@ -203,7 +204,7 @@ useEffect(() => {
                   setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: 'Removed' }]);
                   setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
                 }}
-                className="border rounded bg-WHITE mr-1 hover:opacity-90 flex-grow shadow-lg"
+                className="border rounded bg-WHITE mr-1 hover:opacity-90 flex-grow shadow-lg border border-BLACK"
               >
                 Remove from cart
               </button>
@@ -213,7 +214,7 @@ useEffect(() => {
                   setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '+' }]);
                   setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
                 }}
-                className="border rounded hover:opacity-70 flex-grow bg-WHITE mr-1 shadow-lg"
+                className="border rounded hover:opacity-70 flex-grow bg-WHITE mr-1 shadow-lg border border-BLACK"
               >
                 ++
               </button>
@@ -223,7 +224,7 @@ useEffect(() => {
                   setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '-' }]);
                   setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
                 }}
-                className="border rounded hover:opacity-70 flex-grow bg-WHITE shadow-lg"
+                className="border rounded hover:opacity-70 flex-grow bg-WHITE shadow-lg border border-BLACK"
               >
                 --
               </button>
@@ -267,37 +268,47 @@ useEffect(() => {
           variant="outlined"
         />
       </div>
-      {selectedStoreItem.itemID !== -1 ? (
-        <div
-          className="fixed top-0 left-0 flex w-full h-full bg-WHITE items-center"
-          style={{ backgroundColor: "rgba(255,255,255,0.9)" }}
-          onClick={() =>
-            setSelectedStoreItem({
-              itemID: -1,
-              itemName: "",
-              itemPrice: 0,
-              imagePath: "",
-              itemDescription: "",
-            })
-          }
-        >
-          <div className="m-auto w-[60%] md:w-[25%]">      
-            <img
-              className="flex m-auto w-[100%] rounded-t"
-              src={url.resolve(serverAddress, selectedStoreItem.imagePath)}
-            />
-            <div className="bg-BACKGROUND m-auto text-center w-full rounded-b border-t border-BLACK">
-              <h1 className="text-bold font-serif border-b border-WHITE w-[80%] m-auto">
-                The {selectedStoreItem.itemName} for only ${selectedStoreItem.itemPrice}
-              </h1>
-              <div className="w-[90%] m-auto">
+      <AnimatePresence>
+        {selectedStoreItem.itemID != -1 && (
+          <motion.div 
+            className="fixed top-0 left-[10%] w-[80%] h-full m-auto justify-center flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.div 
+              className="bg-BACKGROUND p-4 rounded shadow-lg text-WHITE"
+              initial={{ scale: 0.5 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.5 }}
+              transition={{ duration: 0.3 }}
+            >        
+              <img className="w-full border-BLACK border  h-[60vh] md:h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
+              <motion.h2 className="justify-center w-[80%] m-auto flex items-center text-2xl border-b border-BLACK">
+                {selectedStoreItem.itemName}
+              </motion.h2>
+              <motion.h5 className="justify-center w-[80%] m-auto flex items-center">
                 {selectedStoreItem.itemDescription}
-              </div>
-              
-            </div>   
-          </div>
-      </div>
-      ) : null}
+              </motion.h5>
+
+              <motion.button 
+                className="flex rounded bg-WHITE text-BACKGROUND justify-center m-auto w-[20%] hover:opacity-90 border border-BLACK" 
+                onClick={() => setSelectedStoreItem({
+                  itemID: -1,
+                  itemName: "",
+                  itemPrice: 0,
+                  imagePath: "",
+                  itemDescription: "",
+                })}
+              >
+                Close
+              </motion.button>            
+
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

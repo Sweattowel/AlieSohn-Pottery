@@ -5,6 +5,7 @@ import axios from "axios";
 import url from "url";
 import InfoIcon from '@mui/icons-material/Info';
 import './Dependencies/StoreFront.css'
+import { AnimatePresence, motion } from 'framer-motion'
 
 interface storeItem {
   itemID: number;
@@ -124,7 +125,7 @@ function StoreFront() {
     setTotalPrice(totalPrice);
   }, [cart]);
 
-  useEffect(() => {
+ useEffect(() => {
     const handleScroll = () => {
       setSelectedStoreItem({
         itemID: -1,
@@ -141,80 +142,107 @@ function StoreFront() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  ///////////////////////////////////////////
-  return (
-    <div className="w-[90%] m-auto text-white flex flex-wrap justify-center mb-20">
-      {currentItems.length > 0 ? (
-        currentItems.map((item: storeItem, index: number) => (
-          <div
-            key={index}
-            className=" text-BLACK w-[20vw] h-[40vh] md:h-[60vh] min-w-40 mt-1 ml-1 bg-BACKGROUND rounded hover:shadow-2xl"
-          >
-            <div className="flex items-center font-serif text-[1em] bg-BACKGROUND rounded text-WHITE h-[13%] md:h-[5%]">
-              <span className="relative left-2 hover:opacity-90">
-                <InfoIcon               
-                  onClick={() => setSelectedStoreItem(item)}
-                />
-              </span>            
-              <div className="flex-grow text-center justify-center items-center flex">
-                {item.itemName}
-              </div>
-            </div>
 
-            <img
-              className="w-full border-BLACK border-b border-t h-[60%] md:h-[80%] bg-WHITE"
-              src={url.resolve(serverAddress, item.imagePath)}
-              alt={item.itemName}
-              onError={() =>
-                console.error(`Image not found: ${item.imagePath}`)
-              }
-            />
-            <div className="mb-2 text-center text-WHITE border-b w-[80%] m-auto">Price: ${item.itemPrice}</div>
-             <div className="relative">
-              <button
-                className={
-                  clickedItemIndex === index
-                    ? "shadow-lg text-BACKGROUND flex m-auto bg-WHITE mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70 border-b-2 border-l-2 border border-BLACK hover:shadow-lg"
-                    : "shadow-lg text-BACKGROUND flex m-auto bg-WHITE mt-2 justify-center text-center w-[80%] rounded hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK hover:shadow-lg"
+  ///////////////////////////////////////////
+
+  const container = {
+    hidden: { opacity: 1, scale: 0 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        delayChildren: 0.3,
+        staggerChildren: 0.2
+      }
+    }
+  };
+  
+  const itemded = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1
+    }
+  };
+
+  return (
+    <div className="m-auto text-white flex flex-wrap justify-center mb-20">
+      
+      <motion.ul 
+        className="container w-full flex flex-wrap justify-center"
+        variants={container}
+        initial="hidden"
+        animate="visible"
+      >
+        {currentItems.length > 0 ? (
+          currentItems.map((item: storeItem, index: number) => (
+            <motion.li key={index} className="item text-BLACK w-[19vw] h-[40vh] md:h-[60vh] min-w-40 m-2 bg-BACKGROUND rounded hover:shadow-2xl" variants={itemded} whileHover={{ scale: 1.1, zIndex: 10 }} >
+              <div className="flex items-center font-serif text-[1em] bg-BACKGROUND rounded text-WHITE h-[13%] md:h-[5%]">
+                <span className="relative left-2 hover:opacity-90">
+                  <InfoIcon               
+                    onClick={() => setSelectedStoreItem(item)}
+                  />
+                </span>            
+                <div className="flex-grow text-center justify-center items-center flex">
+                  {item.itemName}
+                </div>
+              </div>
+
+              <img
+                className="w-full border-BLACK border-b border-t h-[60%] md:h-[80%] bg-WHITE"
+                src={url.resolve(serverAddress, item.imagePath)}
+                alt={item.itemName}
+                onError={() =>
+                  console.error(`Image not found: ${item.imagePath}`)
                 }
-                onClick={() => {
-                  addToCart(
-                    item.itemID,
-                    item.itemName,
-                    item.itemPrice,
-                    item.imagePath,
-                    item.itemDescription
+              />
+              <div className="mb-2 text-center text-WHITE border-b w-[80%] m-auto">Price: ${item.itemPrice}</div>
+              <div className="relative">
+                <button
+                  className={
+                    clickedItemIndex === index
+                      ? "shadow-lg text-BACKGROUND flex m-auto bg-WHITE mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70 border-b-2 border-l-2 border border-BLACK hover:shadow-lg"
+                      : "shadow-lg text-BACKGROUND flex m-auto bg-WHITE mt-2 justify-center text-center w-[80%] rounded hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK hover:shadow-lg"
+                  }
+                  onClick={() => {
+                    addToCart(
+                      item.itemID,
+                      item.itemName,
+                      item.itemPrice,
+                      item.imagePath,
+                      item.itemDescription
+                    );
+                    setClickedItemIndex(index);
+                    setConfirmationMessages(prev => [...prev, { index, id: Date.now() }]);
+                    setTimeout(() => {
+                      setConfirmationMessages(prev => {
+                        const filteredMessages = prev.filter(msg => msg.id !== prev[0]?.id);
+                        return filteredMessages;
+                      });
+                    }, 2000);
+                  }}
+                >
+                  Add to cart
+                </button>
+                {confirmationMessages.map((msg, i) => {
+                  const itemCount = cart.find(item => item.itemID === currentItems[msg.index].itemID)?.itemCount;
+                  return msg.index === index && (
+                    <div key={msg.id} className="absolute top-0 right-0 text-WHITE p-1 rounded animate-floatAway">
+                      +{itemCount} 
+                    </div>
                   );
-                  setClickedItemIndex(index);
-                  setConfirmationMessages(prev => [...prev, { index, id: Date.now() }]);
-                  setTimeout(() => {
-                    setConfirmationMessages(prev => {
-                      const filteredMessages = prev.filter(msg => msg.id !== prev[0]?.id);
-                      return filteredMessages;
-                    });
-                  }, 2000);
-                }}
-              >
-                Add to cart
-              </button>
-              {confirmationMessages.map((msg, i) => {
-                const itemCount = cart.find(item => item.itemID === currentItems[msg.index].itemID)?.itemCount;
-                return msg.index === index && (
-                  <div key={msg.id} className="absolute top-0 right-0 text-WHITE p-1 rounded animate-floatAway">
-                    +{itemCount} 
-                  </div>
-                );
-              })}
+                })}
+              </div>
+            </motion.li>
+          ))
+        ) : (
+          <h1 className="mt-5 mb-5 bg-blue-800 rounded w-[100vw] h-[80%] flex justify-center text-center">
+            <div className="mt-[15%]">
+              Store offline // experiencing difficulties please try again later
             </div>
-          </div>
-        ))
-      ) : (
-        <h1 className="mt-5 mb-5 bg-blue-800 rounded w-[100%] h-[80%] flex justify-center text-center">
-          <div className="mt-[15%]">
-            Store offline // experiencing difficulties please try again later
-          </div>
-        </h1>
-      )}
+          </h1>
+        )}
+      </motion.ul>
       <div className="flex  m-auto mt-10 w-[60vw] h-[6vh]  text-center rounded  text-WHITE text-[0.7em] justify-center items-center">
         <div className="bg-BACKGROUND rounded w-[20vw]">
           Current Items in cart:
@@ -234,36 +262,49 @@ function StoreFront() {
           variant="outlined"
         />
       </div>
-      {selectedStoreItem.itemID !== -1 ? (
-        <div
-          className="fixed top-0 left-0 flex w-full h-full bg-WHITE items-center"
-          style={{ backgroundColor: "rgba(255,255,255,0.9)" }}
-          onClick={() =>
-            setSelectedStoreItem({
-              itemID: -1,
-              itemName: "",
-              itemPrice: 0,
-              imagePath: "",
-              itemDescription: "",
-            })
-          }
-        >
-          <div className="m-auto w-[60%] md:w-[25%]">      
-            <img
-              className="flex m-auto w-[100%] rounded-t"
-              src={url.resolve(serverAddress, selectedStoreItem.imagePath)}
-            />
-            <div className="bg-BACKGROUND m-auto text-center w-full rounded-b border-t border-BLACK text-WHITE">
-              <h1 className="text-bold font-serif border-b border-WHITE w-[80%] m-auto">
-                The {selectedStoreItem.itemName} for only ${selectedStoreItem.itemPrice}
-              </h1>
-              <div className="w-[90%] m-auto">
+
+      <AnimatePresence>
+        {selectedStoreItem.itemID != -1 && (
+          <motion.div 
+            className="fixed top-0 left-[10%] w-[80%] h-full m-auto justify-center flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.div 
+              className="bg-BACKGROUND p-4 rounded shadow-lg text-WHITE"
+              initial={{ scale: 0.5 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.5 }}
+              transition={{ duration: 0.3 }}
+            >        
+              <img className="w-full border-BLACK border  h-[60vh] md:h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
+              <motion.h2 className="justify-center w-[80%] m-auto flex items-center text-2xl border-b border-BLACK">
+                {selectedStoreItem.itemName}
+              </motion.h2>
+              <motion.h5 className="justify-center w-[80%] m-auto flex items-center">
                 {selectedStoreItem.itemDescription}
-              </div>
-            </div>   
-          </div>
-      </div>
-      ) : null}
+              </motion.h5>
+
+              <motion.button 
+                className="flex rounded bg-WHITE text-BACKGROUND border border-BLACK shadow-lg justify-center m-auto w-[20%] hover:opacity-90" 
+                onClick={() => setSelectedStoreItem({
+                  itemID: -1,
+                  itemName: "",
+                  itemPrice: 0,
+                  imagePath: "",
+                  itemDescription: "",
+                })}
+              >
+                Close
+              </motion.button>            
+
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 }

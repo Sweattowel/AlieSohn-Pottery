@@ -97,6 +97,11 @@ function Orders() {
   };
   //////////////////////////////////////
   const completeOrder = async (orderID: number, decision: boolean) => {
+    const storedToken = localStorage.getItem('sutoken');
+    if (!storedToken){
+      console.log('No authorization found');
+      return;
+    }
     try {
       if (!selectedCustomer) {
         return;
@@ -105,6 +110,11 @@ function Orders() {
         selectedCustomer,
         orderID,
         decision,
+      },       
+      {
+        headers: {
+          authorization: `Bearer ${storedToken}`
+        }
       });
       if (response.status === 200) {
         decision
@@ -156,7 +166,7 @@ function Orders() {
                 .map((user: any, index: number) => (
                   <button
                     key={index}
-                    className="bg-BACKGROUND rounded mb-2 w-[80%] flex justify-center m-auto hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"
+                    className="bg-WHITE text-BACKGROUND shadow-lg rounded mb-2 w-[80%] flex justify-center m-auto hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK"
                     onClick={() => setSelectedCustomer(user.userID)}
                   >
                     {user.userName}
@@ -165,7 +175,7 @@ function Orders() {
             </div>
           ) : (
             <button
-              className="border flex border-BLACK text-WHITE bg-BACKGROUND w-[80%] m-auto justify-center mb-2 hover:opacity-90 hover:text-BLACK"
+              className="border flex border-BLACK text-BACKGROUND bg-WHITE shadow-lg rounded w-[80%] m-auto justify-center mb-2 hover:opacity-60"
               onClick={() => setSelectedCustomer(-1)}
             >
               BACK
@@ -212,8 +222,8 @@ function Orders() {
                     key={index}
                     className={
                       !order.completed
-                        ? "m-2 flex bg-SELECTED text-WHITE justify-center text-center hover:text-BLACK hover:opacity-90 w-[40vw] text-[0.5rem] items-center"
-                        : "opacity-60 m-2 flex bg-BACKGROUND text-BLACK justify-center text-center items-center w-[40vw] text-[0.5rem]"
+                        ? "m-2 flex bg-SELECTED text-WHITE justify-center text-center hover:text-BLACK hover:opacity-90 w-[40vw] text-[0.5rem] md:text-base items-center"
+                        : "opacity-60 m-2 flex bg-BACKGROUND text-BLACK justify-center text-center items-center w-[40vw] text-[0.5rem] md:text-base"
                     }
                   >
                     <h1 className="w-[20%]">
@@ -223,17 +233,19 @@ function Orders() {
                     </h1>
                     <h1 className="w-[20%]">{order.itemName} </h1>
                     <h1 className="w-[20%]">{order.completed ? "SUCC" : "NOT"} </h1>
-                    <Button
+                    <button
                       onClick={() => {
                         completeOrder(
                           order.orderID,
                           !order.completed ? true : false
                         );
                       }}
-                      style={{ width: "25%", borderLeft: "1px solid black" }}
+                      className="w-[25%] bg-WHITE text-BACKGROUND border border-BLACK h-full w-[25%] shadow-lg hover:opacity-60"
                     >
-                      {order.completed ? <CheckIcon /> : <ClearIcon />}
-                    </Button>
+                      {order.completed ? 
+                      <CheckIcon /> : 
+                      <ClearIcon />}
+                    </button>
                   </div>
                 ))
             : null}
