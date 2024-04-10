@@ -25,12 +25,25 @@ export default function UserDelete() {
     if (!userID || !userName) {
       return;
     }
-
+    const storedToken = localStorage.getItem('token');
+    if (!storedToken){
+      console.log('No authorization found');
+      return;
+    }
+    if (!authenticated) {
+      return;
+    }
     try {
       const response = await axios.post(`${serverAddress}/api/deleteAccount`, {
         userID: userID,
         userName: userName,
-      });
+      }, 
+      {
+        headers: {
+          authorization: `Bearer ${storedToken}`
+        }
+      }
+      );
 
       if (response.status == 200) {
         console.log("Account deleted");
@@ -41,7 +54,7 @@ export default function UserDelete() {
         setUserName("");
       }
     } catch (error) {
-      console.log(error);
+      console.log('Failed to delete account');
     }
   }
 
@@ -66,16 +79,16 @@ export default function UserDelete() {
         {locked ? (
           <button
             onClick={() => setLocked(!locked)}
-            className="bg-BACKGROUND w-[80%] m-auto flex text-center justify-center rounded border border-BLACK"
+            className="bg-WHITE text-BACKGROUND shadow-lg w-[80%] m-auto flex text-center justify-center rounded border border-BLACK"
           >
-            UNLOCK
+            LOCKED
           </button>
         ) : (
           <button
             onClick={() => setLocked(!locked)}
-            className="bg-BACKGROUND w-[100%] m-auto flex text-center justify-center rounded border border-BLACK"
+            className="bg-BLACK text-BACKGROUND shadow-lg w-[100%] m-auto flex text-center justify-center rounded border border-BLACK"
           >
-            LOCK
+            UNLOCKED
           </button>
         )}
       </div>

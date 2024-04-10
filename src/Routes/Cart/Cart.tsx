@@ -38,6 +38,7 @@ function Cart() {
   const [itemCount, setItemCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
+  const [error, setError] = useState('')
 
   function removeFromCart(id: number) {
     setCart((prevItems) =>
@@ -104,14 +105,17 @@ function Cart() {
         }
       );
   
-      if (response.status === 200) {
+      if( response.status === 401 ){
+        console.log('Unauthorized, please log in')
+        setError('Unauthorized, please log in')
+      } else if (response.status === 200) {
         console.log("Successfully made order");
         setCart([]);
       } else {
         console.log("Failed to make order");
       }
     } catch (error) {
-      console.error(error);
+      setError('Unauthorized, please relog')
     }
   };
   
@@ -157,6 +161,7 @@ useEffect(() => {
         <h1 className="flex m-auto rounded w-[40%] text-center text-WHITE justify-center items-center bg-BACKGROUND">
           Total cost: ${totalCost.toFixed(2)} Item count: {itemCount} items
           <br />
+          {error}
         </h1>
         {authenticated ? (
           <button

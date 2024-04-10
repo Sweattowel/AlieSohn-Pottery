@@ -34,7 +34,7 @@ export default function UserAccount() {
 
   const getOrders = async () => {
     const storedToken = localStorage.getItem('token');
-    if (!storedToken){
+    if (!storedToken || storedToken == null){
       console.log('No authorization found');
       return;
     }
@@ -57,6 +57,8 @@ export default function UserAccount() {
         setOrderCount(data.length);
       } else if (response.status === 404) {
         console.log("No orders to collect");
+      } else {
+        console.log('Unauthorized')
       }
     } catch (error) {
       console.log(error);
@@ -127,9 +129,9 @@ export default function UserAccount() {
               backgroundColor: "beige",
             }}
           >
-            <MenuItem onClick={() => sortDate(1)} value={1}>DATE DESC</MenuItem>
-            <MenuItem onClick={() => sortDate(2)} value={2}>DATE ASC</MenuItem>
-            <MenuItem onClick={() => sortDate(3)} value={3}>GROUP BY</MenuItem>
+            <MenuItem onClick={() => sortDate(1)} >DATE DESC</MenuItem>
+            <MenuItem onClick={() => sortDate(2)} >DATE ASC</MenuItem>
+            <MenuItem onClick={() => sortDate(3)} >GROUP BY</MenuItem>
           </Select>
         </div>
         <Pagination
@@ -169,7 +171,7 @@ export default function UserAccount() {
                   </h1>
                   {order.orderDate ? (
                     <h1 className="bg-BACKGROUND  w-[25%]">
-                      Date : {order.orderDate}
+                      Date : {order.orderDate.split('T')[0]}
                     </h1>
                   ) : (
                     <div className="bg-BACKGROUND w-[25%]"></div>

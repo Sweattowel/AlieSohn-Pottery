@@ -40,7 +40,7 @@ function Navigation() {
                     setPage(5);
                   }}
                 >
-                  MyAccount
+                  My Account
                 </button>
               </Link>
             </li>
