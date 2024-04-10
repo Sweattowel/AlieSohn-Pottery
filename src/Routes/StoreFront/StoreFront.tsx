@@ -176,7 +176,7 @@ function StoreFront() {
       >
         {currentItems.length > 0 ? (
           currentItems.map((item: storeItem, index: number) => (
-            <motion.li key={index} className="item text-BLACK w-[19vw] h-[40vh] md:h-[60vh] min-w-40 m-2 bg-BACKGROUND rounded hover:shadow-2xl" variants={itemded} whileHover={{ scale: 1.1, zIndex: 10 }} >
+            <motion.div key={index} layoutId={`${item.itemID}`} className="item text-BLACK w-[19vw] h-[40vh] md:h-[60vh] min-w-40 m-2 bg-BACKGROUND rounded hover:shadow-2xl" variants={itemded} whileHover={{ scale: 1.1, zIndex: 10 }} >
               <div className="flex items-center font-serif text-[1em] bg-BACKGROUND rounded text-WHITE h-[13%] md:h-[5%]">
                 <span className="relative left-2 hover:opacity-90">
                   <InfoIcon               
@@ -233,7 +233,7 @@ function StoreFront() {
                   );
                 })}
               </div>
-            </motion.li>
+            </motion.div>
           ))
         ) : (
           <h1 className="mt-5 mb-5 bg-blue-800 rounded w-[100vw] h-[80%] flex justify-center text-center">
@@ -266,20 +266,28 @@ function StoreFront() {
       <AnimatePresence>
         {selectedStoreItem.itemID != -1 && (
           <motion.div 
-            className="fixed top-0 left-[10%] w-[80%] h-full m-auto justify-center flex items-center justify-center z-50"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            layoutId={`${selectedStoreItem.itemID}`}
+            className="w-full h-full fixed top-0 left-0 bg-WHITE bg-opacity-60"
+            onClick={(e) => {
+              if (e.target == e.currentTarget) {
+                setSelectedStoreItem({
+                  itemID: -1,
+                  itemName: "",
+                  itemPrice: 0,
+                  imagePath: "",
+                  itemDescription: "",
+                })                
+              }
+
+            }}
           >
             <motion.div 
-              className="bg-BACKGROUND p-4 rounded shadow-lg text-WHITE"
-              initial={{ scale: 0.5 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.5 }}
-              transition={{ duration: 0.3 }}
+              className="bg-BACKGROUND p-4 rounded shadow-lg text-WHITE fixed top-10 left-[20%] w-[60%] z-50"
+              style={{
+                opacity: '100'
+              }}
             >        
-              <img className="w-full border-BLACK border  h-[60vh] md:h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
+              <img className="md:w-[80%] m-auto border-BLACK border  max-h-[60vh] md:h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
               <motion.h2 className="justify-center w-[80%] m-auto flex items-center text-2xl border-b border-BLACK">
                 {selectedStoreItem.itemName}
               </motion.h2>
