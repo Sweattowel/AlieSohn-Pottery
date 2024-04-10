@@ -51,16 +51,14 @@ const upload = multer({ storage: storage });
 ///////////////////////////////////////////////////////// AUTHENTICATION AND REGISTRATION SECTION
 // Token check, to be reused in multiple functions
 const CheckToken = async (token) => {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, 'privatekey', (err, result) => {
-      if (err){
-        reject(err)
-      }
-      if (result){
-        resolve(result)
-      }
-    })    
-  })
+  try {
+    const decoded = jwt.verify(token, 'privatekey')
+    return true
+  } catch (error) {
+    console.log(error) 
+    return false
+  }
+  
 }
 // Registration
 const bcrypt = require("bcrypt");
@@ -154,15 +152,12 @@ app.post("/api/login", async (req, res) => {
 app.post("/api/deleteAccount", async (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token){
-    return res.status(401).json({ error: "Unauthorized" });
-  }
   const isValid = await CheckToken(token)
-
-  if (!isValid){
-    return res.status(401).json({ error: "Unauthorized" });
-  }     
+  if (!isValid || !token){
+    console.log('Failed to validate')
+    res.status(401).json({ error: "Unauthorized" });
+    return
+  }       
   try {
     const { userID, userName } = req.body;
 
@@ -185,7 +180,7 @@ app.post("/api/deleteAccount", async (req, res) => {
       }
 
       const deleteOrdersSql =
-        "DELETE FROM orders WHERE userID = ? AND completed = FALSE";
+        "DELETE FROM orders WHERE userID = ?";
       db.execute(deleteOrdersSql, [userID], (err, orderDeleteResult) => {
         if (err) {
           console.log(err);
@@ -214,29 +209,35 @@ app.post("/api/deleteAccount", async (req, res) => {
 app.post("/api/adminRegistration", async (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token){
-    return res.status(401).json({ error: "Unauthorized" });
-  }
   const isValid = await CheckToken(token)
-
-  if (!isValid){
-    return res.status(401).json({ error: "Unauthorized" });
-  }  
+  if (!isValid || !token){
+    console.log('Failed to validate')
+    res.status(401).json({ error: "Unauthorized" });
+    return
+  }    
   try {
     const { userName, passWord } = req.body;
-    const hashedPassword = await bcrypt.hash(passWord, 10);
-
-    const sql = "INSERT INTO admins (userName, passWord) VALUES (? , ?)";
-
-    db.execute(sql, [userName, hashedPassword], (err, results) => {
-      if (err) {
-        console.log(err);
-        res.status(500).json({ error: "Internal Server Error" });
+    const searchSQL = 'SELECT * FROM admins WHERE userName = ?'
+    db.execute(searchSQL, [userName], async (err, results) => {
+      if (results.length > 0){
+        res.status(400).json({ error: 'Incorrect'})
       } else {
-        res.status(200).json({ message: "ADMIN SUCCESSFULLY MADE" });
+        const hashedPassword = await bcrypt.hash(passWord, 10);
+
+        const sql = "INSERT INTO admins (userName, passWord) VALUES (? , ?)";
+    
+        db.execute(sql, [userName, hashedPassword], (err, results) => {
+          if (err) {
+            console.log(err);
+            res.status(500).json({ error: "Internal Server Error" });
+          } else {
+            res.status(200).json({ message: "ADMIN SUCCESSFULLY MADE" });
+          }
+        });
       }
-    });
+    })
+  
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -356,14 +357,13 @@ app.post("/api/getBrochure", async (req, res) => {
 app.post("/api/createOrder", async (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token){
-    return res.status(401).json({ error: "Unauthorized" });
-  }
   const isValid = await CheckToken(token)
-  if (!isValid){
-    return res.status(401).json({ error: "Unauthorized" });
-  }     
+  if (!isValid || !token){
+    console.log('Failed to validate')
+    res.status(401).json({ error: "Unauthorized" });
+    return
+  }    
+
   try {
  
     console.log("orders received");
@@ -393,18 +393,16 @@ app.post("/api/createOrder", async (req, res) => {
 app.post("/api/getOrders", async (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token){
-    return res.status(401).json({ error: "Unauthorized" });
-  }
   const isValid = await CheckToken(token)
-  if (!isValid){
-    return res.status(401).json({ error: "Unauthorized" });
+  if (!isValid || !token){
+    console.log('Failed to validate')
+    res.status(401).json({ error: "Unauthorized" });
+    return
   }     
   
   try {
     const userID = req.body.userID;
-    const sql = `SELECT storeItems.itemName, orders.itemID, orders.orderID, completed FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = ?`;
+    const sql = `SELECT storeItems.itemName, orders.itemID, orders.orderID, orders.orderDate, completed FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = ?`;
 
     db.execute(sql, [userID], (err, results) => {
       if (err) {
@@ -426,12 +424,14 @@ app.post("/api/getUsers", async (req, res) => {
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token){
-    return res.status(401).json({ error: "Unauthorized" });
+    res.status(401).json({ error: "Unauthorized" });
+    return
   }
   const isValid = await CheckToken(token)
 
   if (!isValid){
-    return res.status(401).json({ error: "Unauthorized" });
+    res.status(401).json({ error: "Unauthorized" });
+    return
   }  
   try {
     const sql = "SELECT userID, userName FROM userData";
@@ -455,15 +455,12 @@ app.post("/api/getUsers", async (req, res) => {
 app.post("/api/CreateItem", upload.single("picture"), async (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token){
-    return res.status(401).json({ error: "Unauthorized" });
-  }
   const isValid = await CheckToken(token)
-
-  if (!isValid){
-    return res.status(401).json({ error: "Unauthorized" });
-  }  
+  if (!isValid || !token){
+    console.log('Failed to validate')
+    res.status(401).json({ error: "Unauthorized" });
+    return
+  }    
   try {
     console.log("Received Admin storeRequest");
     if (!req.file) {
@@ -500,15 +497,12 @@ import { rejects } from "assert";
 app.post("/api/removeItem", async (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token){
-    return res.status(401).json({ error: "Unauthorized" });
-  }
   const isValid = await CheckToken(token)
-
-  if (!isValid){
-    return res.status(401).json({ error: "Unauthorized" });
-  }  
+  if (!isValid || !token){
+    console.log('Failed to validate')
+    res.status(401).json({ error: "Unauthorized" });
+    return
+  }    
   try {
     const itemID = req.body.storeItemID;
     const sql1 = "SELECT imagePath FROM storeItems WHERE itemID = ?";
@@ -551,15 +545,12 @@ app.post("/api/removeItem", async (req, res) => {
 app.post("/api/completeOrder", async (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token){
-    return res.status(401).json({ error: "Unauthorized" });
-  }
   const isValid = await CheckToken(token)
-
-  if (!isValid){
-    return res.status(401).json({ error: "Unauthorized" });
-  }  
+  if (!isValid || !token){
+    console.log('Failed to validate')
+    res.status(401).json({ error: "Unauthorized" });
+    return
+  }    
   try {
     const sql =
       "UPDATE orders SET completed = ? WHERE orderID = ? AND userID = ?";
