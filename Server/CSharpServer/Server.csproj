@@ -7,7 +7,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.App" Version="6.0.0" />
-        <Compile Include="Server.cs" />
+        <Compile Update="Server.cs" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
 </Project>
