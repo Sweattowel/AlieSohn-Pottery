@@ -19,6 +19,8 @@ Feedback TODO List:
 
 UNCOMPLETE Implement Responsive Design: Optimize design for various screen sizes and devices.
 UNCOMPLETE Retain State After Component Unmount: Explore using LocalStorage, Cookies, or unique user ID-based cookie storage to retain state after users leave the webpage.
+    Addit: 
+        Its like saving progress, i.e. if you visit this spot on say google maps and you register it as seen, store that in local memory 
 COMPLETE Implement Route Protection: Use JWT or session-based authentication for protecting routes on the backend.
     Addit: 
         More research into how i did it and whether it is secure or not is required 
@@ -36,3 +38,7 @@ COMPLETE Enhance UI Beautification: Experiment with hover effects, box shadows, 
         Added box shadows for storeItem cards, looks nice so far, too much?
 UNCOMPLETE Maintain Consistency in Design: Ensure consistency in font sizes, weights, and other attributes for a polished UI.
 UNCOMPLETE Continue Learning and Experimenting: Keep exploring and experimenting with UI development to improve skills and knowledge in the area.
+UNCOMPLETE Refurbish JWT to use cookies or an interceptor which will update the token silently when it is near expirery 
+UNCOMPLETE port server to C# as recommended/suggested by Chris
+UNCOMPLETE Improve mobile design by using hamburger Setup for the navigation over the tab option
+UNCOMPLETE implement additional SQL checks to ensure sanitation 
