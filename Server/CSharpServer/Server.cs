@@ -17,13 +17,14 @@ namespace Server
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) => 
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
+
     public class Startup
     {
         public IConfiguration Configuration { get; }
@@ -41,16 +42,9 @@ namespace Server
                 options.AddPolicy("AllowAll",
                     builder =>
                     {
-                        builder.WithOrigins(
-                            "http://localhost:3000",
-                            "http://localhost:3000/MyAccount/*",
-                            "http://localhost:3000/",
-                            "http://localhost:3000/StoreFront",
-                            "http://localhost:3000/Cart"
-                        )
-                        .AllowAnyMethod()
-                        .WithHeaders("Authorization")
-                        .AllowCredentials();
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
                     });
             });
         }
@@ -85,7 +79,7 @@ namespace Server
             [HttpGet]
             public ActionResult<IEnumerable<StoreItem>> GetStoreItems()
             {
-                Console.WriteLine('Received Request for storeItems')
+                Console.WriteLine("Received Request for storeItems");
                 string connectionString = GetConnectionString();
                 string queryStatement = "SELECT * FROM storeItems";
                 List<StoreItem> storeItems = new List<StoreItem>();
