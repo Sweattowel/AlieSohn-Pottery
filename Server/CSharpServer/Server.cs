@@ -85,6 +85,7 @@ namespace Server
             [HttpGet]
             public ActionResult<IEnumerable<StoreItem>> GetStoreItems()
             {
+                Console.WriteLine('Received Request for storeItems')
                 string connectionString = GetConnectionString();
                 string queryStatement = "SELECT * FROM storeItems";
                 List<StoreItem> storeItems = new List<StoreItem>();

@@ -56,7 +56,12 @@ function StoreFront() {
   const collectStoreItems = async () => {
     try {
       const response = await axios.post<storeItem[]>(
-        `${serverAddress}/api/storeItems`
+        `${serverAddress}/api/storeItems`,{},        
+        {
+          headers: {
+            Authorization: `Test`
+          }
+        }
       );
 
       if (response.status === 200) {
