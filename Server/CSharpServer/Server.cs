@@ -64,16 +64,13 @@ namespace Server
             string passStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_PASSWORD");
             string hostStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_HOST");
             string dataBaseStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_DATABASE");
-            return $"Server={hostStr};Database={dataBaseStr};User Id={userStr};Password={passStr};";
+            return $"Server={hostStr};Database={dataBaseStr};Uid={userStr};Pwd={passStr};";
         }
     }
 
     public static class DatabaseUtilities
     {
         ////////////////// BROCHURE HANDLE    
-        // BROCHURE DEFINITION 
-
-
         // BROCHURE CREATE
         public static void CreateBrochure()
         {
