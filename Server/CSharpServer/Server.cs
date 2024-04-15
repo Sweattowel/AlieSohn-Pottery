@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Threading
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,18 @@ namespace Server
                     webBuilder.UseStartup<Startup>()
                             .UseUrls("http://0.0.0.0:5000");
                 });
+        public static void UpdateBrochure(object state)
+        {
+            try
+            {
+                Console.WriteLine("Updating Brochure");
+                DatabaseUtilities.CreateBrochure();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating brochure: {ex.Message}");
+            }
+        }
     }
     // DATABASE UTILITIES
     public static class DatabaseUtilities
@@ -40,32 +53,19 @@ namespace Server
             return $"Server={hostStr};Database={dataBaseStr};User Id={userStr};Password={passStr};";
         }
 
-            ////////////////// BROCHURE HANDLE    
-    // BROCHURE DEFINTION 
-    public static class BrochureStorage
-    {
-        public static List<BrochureItem> Brochure { get; set; }
-    }
-    public class BrochureItem
-    {
-        public int ItemID { get; set; }
-        public string ItemName { get; set; }
-        public decimal ItemPrice { get; set; }
-        public string ImagePath { get; set; }
-        public int OrderCount { get; set; }
-    }
-        // BROCHURE UPDATE CALL
-        private static void UpdateBrochure(object state)
+        ////////////////// BROCHURE HANDLE    
+        // BROCHURE DEFINITION 
+        public static class BrochureStorage
         {
-            try
-            {
-                Console.WriteLine("Updating Brochure");
-                CreateBrochure();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error updating brochure: {ex.Message}");
-            }
+            public static List<BrochureItem> Brochure { get; set; }
+        }
+        public class BrochureItem
+        {
+            public int ItemID { get; set; }
+            public string ItemName { get; set; }
+            public decimal ItemPrice { get; set; }
+            public string ImagePath { get; set; }
+            public int OrderCount { get; set; }
         }
         // BROCHURE CREATE
         private static void CreateBrochure()
@@ -100,9 +100,13 @@ namespace Server
                 }
                 BrochureStorage.Brochure = brochure;
             }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"Database Error: {ex.Message}");
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error creating brochure: {ex.Message}");
+                Console.WriteLine($"Error: {ex.Message}");
             }
         }
     }
