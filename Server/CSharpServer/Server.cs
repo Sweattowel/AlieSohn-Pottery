@@ -140,18 +140,11 @@ namespace Server
                 options.AddPolicy("AllowAll",
                     builder =>
                     {
-                        builder.WithOrigins(
-                            "http://localhost:3000", 
-                            "http://localhost:3000/StoreFront",
-                            "http://localhost:3000/Cart",
-                            "http://localhost:3000/MyAccount",
-                            "http://localhost:3000/ADMIN",
-                            "http://localhost:3000/api/*",
-                            "http://192.168.0.254:3000",
-                            "http://192.168.0.254:3000/api/*"
-                        )
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
+                builder.WithOrigins(
+                    "http://localhost:3000",
+                    "http://192.168.0.254:3000")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
                     });
             });
         }
@@ -159,7 +152,7 @@ namespace Server
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseRouting();
-            app.UseCors("AllowedOrigins");
+            app.UseCors("AllowAll");
             app.UseStaticFiles();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
