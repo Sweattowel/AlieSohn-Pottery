@@ -50,7 +50,7 @@ namespace Server
         public string ImagePath { get; set; }
         public int OrderCount { get; set; }
     }
-    public static class DatabaseUtilities
+    public class ConnectionString
     {
         public static string GetConnectionString()
         {
@@ -60,7 +60,10 @@ namespace Server
             string dataBaseStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_DATABASE");
             return $"Server={hostStr};Database={dataBaseStr};User Id={userStr};Password={passStr};";
         }
+    }
 
+    public static class DatabaseUtilities
+    {
         ////////////////// BROCHURE HANDLE    
         // BROCHURE DEFINITION 
         public static class BrochureStorage
@@ -74,7 +77,7 @@ namespace Server
             try
             {
                 List<BrochureItem> brochure = new List<BrochureItem>();
-                string connectionString = GetConnectionString();
+                string connectionString = ConnectionString.GetConnectionString();
                 string queryStatement = "SELECT storeItems.itemID, storeItems.itemName, storeItems.imagePath, storeItems.itemPrice, COUNT(orders.orderID) AS order_count FROM storeItems JOIN orders ON storeItems.itemID = orders.itemID GROUP BY storeItems.itemID, storeItems.itemName ORDER BY order_count DESC LIMIT 3;";
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
@@ -169,7 +172,7 @@ namespace Server.Controllers
         public ActionResult<IEnumerable<StoreItem>> GetStoreItems()
         {
             Console.WriteLine("Received Request for storeItems");
-            string connectionString = GetConnectionString();
+            string connectionString = ConnectionString.GetConnectionString();
             string queryStatement = "SELECT * FROM storeItems";
             List<StoreItem> storeItems = new List<StoreItem>();
 
@@ -219,7 +222,7 @@ namespace Server.Controllers
         public  ActionResult<IEnumerable<BrochureItem>> GetBrochure()
         {
             Console.WriteLine("Received Request for Brochure");
-            string connectionString = GetConnectionString();
+            string connectionString = ConnectionString.GetConnectionString();
             try
             {
                 return Ok(BrochureStorage.Brochure);
