@@ -3,10 +3,11 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <ContainerUser>root</ContainerUser>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="DotNetEnv" Version="3.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.App" Version="6.0.0" />
         <Compile Update="Server.cs" CopyToOutputDirectory="PreserveNewest" />
         <PackageReference Include="MySql.Data" Version="8.0.28" />
