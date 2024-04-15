@@ -28,52 +28,20 @@ namespace Server
                             .UseUrls("http://0.0.0.0:5000");
                 });
     }
-    // method for getting database variables
-    private static string GetConnectionString()
+    // DATABASE UTILITIES
+    public static class DatabaseUtilities
     {
-        string userStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_USER");
-        string passStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_PASSWORD");
-        string hostStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_HOST");
-        string dataBaseStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_DATABASE");
-        return $"Server={hostStr};Database={dataBaseStr};User Id={userStr};Password={passStr};";
-    }
-    public class Startup
-    {
-        public IConfiguration Configuration { get; }
-
-        public Startup(IConfiguration configuration)
+        public static string GetConnectionString()
         {
-            Configuration = configuration;
+            string userStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_USER");
+            string passStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_PASSWORD");
+            string hostStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_HOST");
+            string dataBaseStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_DATABASE");
+            return $"Server={hostStr};Database={dataBaseStr};User Id={userStr};Password={passStr};";
         }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll",
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                               .AllowAnyMethod()
-                               .AllowAnyHeader();
-                    });
-            });
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.UseRouting();
-            app.UseCors("AllowAll");
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
-    }
-        ////////////////// BROCHURE HANDLE    
-        // BROCHURE DEFINTION 
+            ////////////////// BROCHURE HANDLE    
+    // BROCHURE DEFINTION 
     public static class BrochureStorage
     {
         public static List<BrochureItem> Brochure { get; set; }
@@ -137,6 +105,44 @@ namespace Server
                 Console.WriteLine($"Error creating brochure: {ex.Message}");
             }
         }
+    }
+    // method for getting database variables
+
+    public class Startup
+    {
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+            });
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            app.UseRouting();
+            app.UseCors("AllowAll");
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
+    }
 }
 namespace Server.Controllers
 {
