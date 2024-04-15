@@ -50,6 +50,10 @@ namespace Server
         public string ImagePath { get; set; }
         public int OrderCount { get; set; }
     }
+    public static class BrochureStorage
+    {
+        public static List<BrochureItem> Brochure { get; set; }
+    }
     public class ConnectionString
     {
         public static string GetConnectionString()
@@ -66,13 +70,10 @@ namespace Server
     {
         ////////////////// BROCHURE HANDLE    
         // BROCHURE DEFINITION 
-        public static class BrochureStorage
-        {
-            public static List<BrochureItem> Brochure { get; set; }
-        }
+
 
         // BROCHURE CREATE
-        private static void CreateBrochure()
+        public static void CreateBrochure()
         {
             try
             {
