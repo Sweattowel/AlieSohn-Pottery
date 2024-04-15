@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using MySql.Data.MySqlClient
 using System.Threading;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,7 +27,7 @@ namespace Server
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>()
-                            .UseUrls("http://0.0.0.0:5000");
+                            .UseUrls("http://192.168.0.254");
                 });
         public static void UpdateBrochure(object state)
         {
@@ -81,12 +82,12 @@ namespace Server
                 string connectionString = ConnectionString.GetConnectionString();
                 string queryStatement = "SELECT storeItems.itemID, storeItems.itemName, storeItems.imagePath, storeItems.itemPrice, COUNT(orders.orderID) AS order_count FROM storeItems JOIN orders ON storeItems.itemID = orders.itemID GROUP BY storeItems.itemID, storeItems.itemName ORDER BY order_count DESC LIMIT 3;";
 
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand(queryStatement, connection))
+                    using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
                     {
                         connection.Open();
-                        SqlDataReader reader = command.ExecuteReader();
+                        MySqlDataReader reader = command.ExecuteReader();
 
                         while (reader.Read())
                         {
@@ -105,7 +106,7 @@ namespace Server
                 }
                 BrochureStorage.Brochure = brochure;
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
                 Console.WriteLine($"Database Error: {ex.Message}");
             }
@@ -179,12 +180,12 @@ namespace Server.Controllers
 
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
-                    using (SqlCommand command = new SqlCommand(queryStatement, connection))
+                    using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
                     {
                         connection.Open();
-                        SqlDataReader reader = command.ExecuteReader();
+                        MySqlDataReader reader = command.ExecuteReader();
                     
                         while (reader.Read())
                         {
@@ -203,7 +204,7 @@ namespace Server.Controllers
                 }
                 return Ok(storeItems);
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
                 return StatusCode(500, $"Database Error: {ex.Message}");
             }
@@ -228,7 +229,7 @@ namespace Server.Controllers
             {
                 return Ok(BrochureStorage.Brochure);
             }
-            catch (SqlException ex)
+            catch (MySqlException ex)
             {
                 return StatusCode(500, $"Database Error: {ex.Message}");
             }
