@@ -64,7 +64,7 @@ namespace Server
             string passStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_PASSWORD");
             string hostStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_HOST");
             string dataBaseStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_DATABASE");
-            return $"Server={hostStr};Database={dataBaseStr};UserID={userStr};Password={passStr};";
+            return $"server={hostStr};user={userStr};database={dataBaseStr};port=3306;password={passStr};";
         }
     }
 
