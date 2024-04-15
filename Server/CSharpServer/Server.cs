@@ -175,7 +175,8 @@ namespace Server.Controllers
             public string ImagePath { get; set; }
             public string ItemDescription { get; set; }
         }
-    [HttpGet]
+        [HttpGet]
+        [HttpPost]
         public ActionResult<IEnumerable<StoreItem>> GetStoreItems()
         {
             Console.WriteLine("Received Request for storeItems");
@@ -226,6 +227,7 @@ namespace Server.Controllers
     public class GetBrochureController:  ControllerBase 
     {
         [HttpGet]
+        [HttpPost]
         public  ActionResult<IEnumerable<BrochureItem>> GetBrochure()
         {
             Console.WriteLine("Received Request for Brochure");
