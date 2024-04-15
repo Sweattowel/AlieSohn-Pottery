@@ -113,9 +113,13 @@ namespace Server
 
                     return Ok(storeItems);
                 }
+                catch (SqlException ex)
+                {
+                    return StatusCode(500, $"Database Error: {ex.Message}");
+                }
                 catch (Exception ex)
                 {
-                    return BadRequest("Error: " + ex.Message);
+                    return BadRequest($"Error: {ex.Message}");
                 }
             }
 
@@ -129,4 +133,69 @@ namespace Server
             }
         }
     }
+        [Route("/api/getBrochure")]
+        [ApiController]
+        public class GetBrochureController:  ControllerBase 
+        {
+            public class BrochureItem
+            {
+                public int ItemID { get; set; };
+                public string itemName { get; set; };
+                public string imagePath { get; set; };
+                public decimal itemPrice { get; set; };
+                public int order_count { get; set; };
+            }
+            [HttpGet]
+            public  ActionResult<IEnumerable<BrochureItem>> GetBrochure()
+            {
+                Console.WriteLine("Received Request for Brochure");
+                string connectionString = GetConnectionString();
+                string queryStatement = "SELECT storeItems.itemID, storeItems.itemName, storeItems.imagePath, storeItems.itemPrice, COUNT(orders.orderID) AS order_count FROM storeItems JOIN orders ON storeItems.itemID = orders.itemID GROUP BY storeItems.itemID, storeItems.itemName ORDER BY order_count DESC LIMIT 3;";
+                
+                List<BrochureItem> brochure = new List<BrochureItem>();
+
+                try
+                {
+                    using (SqlConnection connect = new SqlConnection(connectionString))
+                    {
+                        using (SqlCommand command = new SqlCommand(queryStatement, connection))
+                        {
+                            connection.Open();
+                            SqlDataReader reader = command.ExecuteReader();
+
+                            while (reader.Read())
+                            {
+                                BrochureItem item = new BrochureItem
+                                {
+                                        ItemID = reader.GetInt32(reader.GetOrdinal("itemID")),
+                                        ItemName = reader.GetString(reader.GetOrdinal("itemName")),
+                                        ItemPrice = reader.GetDecimal(reader.GetOrdinal("itemPrice")),
+                                        ImagePath = reader.GetString(reader.GetOrdinal("imagePath")),
+                                        order_count = reader.GetInt32(reader.GetOrdinal("order_count")) 
+                                }
+                                brochure.Add(item)
+                            }
+                            reader.Close()
+                        }
+                    }
+                    return Ok(brochure)
+                }
+                catch (SqlException ex)
+                {
+                    return StatusCode(500, $"Database Error: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest($"Error: {ex.Message}");
+                }
+            }
+            private string GetConnectionString()
+                {
+                    string userStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_USER");
+                    string passStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_PASSWORD");
+                    string hostStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_HOST");
+                    string dataBaseStr = Environment.GetEnvironmentVariable("REACT_APP_DATABASE_DATABASE");
+                    return $"Server={hostStr};Database={dataBaseStr};User Id={userStr};Password={passStr};";
+                }
+        }
 }
