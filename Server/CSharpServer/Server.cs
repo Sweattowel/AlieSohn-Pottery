@@ -146,7 +146,7 @@ namespace Server
                             "http://localhost:3000/Cart",
                             "http://localhost:3000/MyAccount",
                             "http://localhost:3000/ADMIN",
-                            "http://localhost:3000/api/*",
+                            "http://localhost:3000/api/*"
                         )
                         .AllowAnyMethod()
                         .AllowAnyHeader();
