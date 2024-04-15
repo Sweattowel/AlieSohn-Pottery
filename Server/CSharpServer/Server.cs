@@ -34,7 +34,7 @@ namespace Server
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>()
-                            .UseUrls(Environment.GetEnvironmentVariable("REACT_APP_SERVER_ADDRESS");
+                            .UseUrls(Environment.GetEnvironmentVariable("REACT_APP_SERVER_ADDRESS"));
                 });
         public static void UpdateBrochure(object state)
         {
