@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using MySql.Data.MySqlClient
+using MySql.Data.MySqlClient;
 using System.Threading;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
