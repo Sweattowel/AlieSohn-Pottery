@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc;
-
+using DotNetEnv;
 namespace Server
 {
     public class Program
@@ -17,6 +17,7 @@ namespace Server
         // ONSTARTUP CALLS
         public static void Main(string[] args)
         {
+            DotNetEnv.Env.Load();
             Timer timer = new Timer(UpdateBrochure, null, TimeSpan.Zero, TimeSpan.FromMinutes(30));
             CreateHostBuilder(args).Build().Run();
             
