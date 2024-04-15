@@ -42,6 +42,14 @@ namespace Server
         }
     }
     // DATABASE UTILITIES
+    public class BrochureItem
+    {
+        public int ItemID { get; set; }
+        public string ItemName { get; set; }
+        public decimal ItemPrice { get; set; }
+        public string ImagePath { get; set; }
+        public int OrderCount { get; set; }
+    }
     public static class DatabaseUtilities
     {
         public static string GetConnectionString()
@@ -59,14 +67,7 @@ namespace Server
         {
             public static List<BrochureItem> Brochure { get; set; }
         }
-        public class BrochureItem
-        {
-            public int ItemID { get; set; }
-            public string ItemName { get; set; }
-            public decimal ItemPrice { get; set; }
-            public string ImagePath { get; set; }
-            public int OrderCount { get; set; }
-        }
+
         // BROCHURE CREATE
         private static void CreateBrochure()
         {
