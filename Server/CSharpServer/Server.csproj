@@ -8,7 +8,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.App" Version="6.0.0" />
         <Compile Update="Server.cs" CopyToOutputDirectory="PreserveNewest" />
-        <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+        <PackageReference Include="MySql.Data" Version="8.0.28" />
     </ItemGroup>
 
 </Project>
