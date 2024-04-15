@@ -151,9 +151,9 @@ namespace Server
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseCors("AllowAll");
-            app.UseStaticFiles();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
