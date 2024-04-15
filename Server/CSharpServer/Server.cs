@@ -151,7 +151,10 @@ namespace Server
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseStaticFiles();
+            app.UseStaticFiles( new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider("/var/www/filepath/Server/CSharpServer/StoreImages")
+            });
             app.UseRouting();
             app.UseCors("AllowAll");
             app.UseAuthorization();
