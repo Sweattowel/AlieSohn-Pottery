@@ -50,6 +50,47 @@ namespace Server
             }
         }
     }
+    public class Startup
+    {
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                builder.WithOrigins(
+                    "http://localhost:3000",
+                    "http://192.168.0.254:3000")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                    });
+            });
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            app.UseStaticFiles( new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider("/var/www/AlieSohn/Server/CSharpServer/StoreImages")
+            });
+            app.UseRouting();
+            app.UseCors("AllowAll");
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
+    }
     // DATABASE UTILITIES
     public class BrochureItem
     {
@@ -63,6 +104,7 @@ namespace Server
     {
         public static List<BrochureItem> Brochure { get; set; }
     }
+    // method for getting database variables
     public class ConnectionString
     {
         public static string GetConnectionString()
@@ -122,49 +164,9 @@ namespace Server
             }
         }
     }
-    // method for getting database variables
+    
 
-    public class Startup
-    {
-        public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll",
-                    builder =>
-                    {
-                builder.WithOrigins(
-                    "http://localhost:3000",
-                    "http://192.168.0.254:3000")
-                    .AllowAnyMethod()
-                    .AllowAnyHeader();
-                    });
-            });
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.UseStaticFiles( new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider("/var/www/filepath/Server/CSharpServer/StoreImages")
-            });
-            app.UseRouting();
-            app.UseCors("AllowAll");
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
-    }
 }
 namespace Server.Controllers
 {
