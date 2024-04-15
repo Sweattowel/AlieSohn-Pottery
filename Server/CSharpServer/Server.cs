@@ -80,6 +80,7 @@ namespace Server
             {
                 List<BrochureItem> brochure = new List<BrochureItem>();
                 string connectionString = ConnectionString.GetConnectionString();
+                Console.WriteLine(connectionString);
                 string queryStatement = "SELECT storeItems.itemID, storeItems.itemName, storeItems.imagePath, storeItems.itemPrice, COUNT(orders.orderID) AS order_count FROM storeItems JOIN orders ON storeItems.itemID = orders.itemID GROUP BY storeItems.itemID, storeItems.itemName ORDER BY order_count DESC LIMIT 3;";
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
