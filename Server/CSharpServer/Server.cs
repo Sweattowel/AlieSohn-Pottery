@@ -211,13 +211,13 @@ namespace Server.Controllers
             string connectionString = GetConnectionString();
             try
             {
-                return Ok(BrochureStorage.Brochure)
+                return Ok(BrochureStorage.Brochure);
             }
             catch (SqlException ex)
             {
                 return StatusCode(500, $"Database Error: {ex.Message}");
             }
-                catch (Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest($"Error: {ex.Message}");
             }
