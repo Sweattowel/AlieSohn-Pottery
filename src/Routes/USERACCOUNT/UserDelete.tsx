@@ -34,7 +34,7 @@ export default function UserDelete() {
       return;
     }
     try {
-      const response = await axios.post(`${serverAddress}/api/deleteAccount`, {
+      const response = await axios.post(`${serverAddress}/api/deleteAccount/${userID}`, {
         userID: userID,
         userName: userName,
       }, 

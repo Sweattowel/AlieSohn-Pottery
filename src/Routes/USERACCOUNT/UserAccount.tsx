@@ -35,35 +35,30 @@ export default function UserAccount() {
   const getOrders = async () => {
     const storedToken = localStorage.getItem('token');
     if (!storedToken || storedToken == null){
-      console.log('No authorization found');
-      return;
+        console.log('No authorization found');
+        return;
     }
-    if (!authenticated) {
-      return;
-    }
+
     try {
-      const response = await axios.post(`${serverAddress}/api/getOrders`, {
-        userID: userID,
-      }, 
-      {
-        headers: {
-          authorization: `Bearer ${storedToken}`
+        const response = await axios.get(`${serverAddress}/api/orders/${userID}`, {
+            headers: {
+                Authorization: `Bearer ${storedToken}`
+            }
+        });
+        if (response.status === 200) {
+            const data = response.data;
+            setOrders(data);
+            setOriginalOrders(data); 
+            setOrderCount(data.length);
+        } else if (response.status === 404) {
+            console.log("No orders to collect");
+        } else if (response.status === 401) {
+            console.log('Unauthorized')
         }
-      });
-      if (response.status === 200) {
-        let data = response.data;
-        setOrders(data);
-        setOriginalOrders(data); // Store the original orders data
-        setOrderCount(data.length);
-      } else if (response.status === 404) {
-        console.log("No orders to collect");
-      } else {
-        console.log('Unauthorized')
-      }
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
-  };
+};
 
   const sortDate = (choice: any) => {
     let sortedOrders = [...originalOrders]; // Use the original orders data for sorting/grouping

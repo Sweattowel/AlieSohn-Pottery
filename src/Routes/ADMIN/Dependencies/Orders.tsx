@@ -23,31 +23,26 @@ function Orders() {
   const getOrders = async () => {
     const storedToken = localStorage.getItem('sutoken');
     if (!storedToken){
-      console.log('No authorization found');
-      return;
+        console.log('No authorization found');
+        return;
     }
-  
+
     try {
-      setOrders([]);
-      const response = await axios.post(`${serverAddress}/api/getOrders`, 
-      {
-        userID: selectedCustomer,
-      },         
-      {
-        headers: {
-          authorization: `Bearer ${storedToken}`
+        const response = await axios.get(`${serverAddress}/api/orders/${selectedCustomer}`, {
+            headers: {
+                Authorization: `Bearer ${storedToken}`
+            }
+        });
+        if (response.status === 200) {
+            const data = response.data;
+            setOrders(data);
+        } else if (response.status === 404) {
+            console.log("No orders to collect");
         }
-      });
-      if (response.status === 200) {
-        let data = response.data;
-        setOrders(data);
-      } else if (response.status === 404) {
-        console.log("No orders to collect");
-      }
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
-  };
+};
 
   const getUsers = async () => {
     const storedToken = localStorage.getItem('sutoken');

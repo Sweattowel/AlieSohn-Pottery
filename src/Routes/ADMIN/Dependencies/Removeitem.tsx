@@ -74,14 +74,14 @@ function Removeitem() {
       return;
     }
     try {
-      const response = await axios.post(`${serverAddress}/api/removeItem`, {
-        storeItemID, 
-      }, 
-      {
-        headers: {
-          authorization: `Bearer ${storedToken}`
+      const response = await axios.delete(
+        `${serverAddress}/api/removeItem/${storeItemID}`, // Pass itemID in the URL path
+        {
+          headers: {
+            authorization: `Bearer ${storedToken}`
+          }
         }
-      });
+      );
       if (response.status === 200) {
         console.log("Item successfully removed");
         collectStoreItems();
@@ -94,6 +94,7 @@ function Removeitem() {
       console.log(error);
     }
   };
+
   useEffect(() => {
     collectStoreItems();
   }, []);
