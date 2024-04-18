@@ -11,11 +11,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using DotNetEnv;
 using BCrypt;
 using Server.Controllers;
 using Server;
-using IdentityModel;
+
 
 namespace Server
 {
@@ -281,7 +282,7 @@ namespace Server.Controllers
     {
         private const string Secret = Environment.GetEnvironmentVariable("REACT_APP_TOKEN_SECRET");
         // TOKEN CREATION
-        public static string CreateToken(int UserID, string UserName)
+        public static const CreateToken(int UserID, string UserName)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Secret);
@@ -338,7 +339,7 @@ namespace Server.Controllers
     public class UserLogInController: ControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult<IEnumerable>> HandleLogin([FromBody] UserCredentials credentials)
+        public async Task<ActionResult<IEnumerable<T>>> HandleLogin([FromBody] UserCredentials credentials)
         {
             Console.WriteLine("Received login normal request");
             string queryStatement = "SELECT userID, userName, passWord FROM userData WHERE userName = @UserName AND passWord = @Password LIMIT 1";
@@ -560,7 +561,7 @@ namespace Server.Controllers
     // LOGIN SUPER
     [Route("/api/adminLogin")]
     [ApiController]
-    public class UserLogInController : ControllerBase
+    public class UserSuperLogInController : ControllerBase
     {
         [HttpPost]
         public async Task<ActionResult> HandleSuperLogin([FromBody] UserCredentials credentials)
