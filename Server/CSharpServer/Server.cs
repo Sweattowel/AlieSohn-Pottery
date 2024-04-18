@@ -541,7 +541,7 @@ namespace Server.Controllers
                         using (MySqlCommand deleteData = new MySqlCommand(queryStatementUserData, connection))
                         {
                             deleteData.Parameters.AddWithValue("@UserID", userID);
-                            int rowsAffected = deleteData.ExecuteNonQueryAsync();
+                            int rowsAffected = await deleteData.ExecuteNonQueryAsync();
 
                             if (rowsAffected > 0){
                                 return Ok();
@@ -653,7 +653,7 @@ namespace Server.Controllers
 
                     using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
                     {
-                        string hashedPassword = await BcryptEncryption.Encrypt(credentials.Password);
+                        string hashedPassword = BcryptEncryption.Encrypt(credentials.Password);
                         command.Parameters.AddWithValue("@UserName", credentials.UserName);
                         command.Parameters.AddWithValue("@Password", hashedPassword);
 
@@ -727,11 +727,12 @@ namespace Server.Controllers
                         int rowsAffected = await command.ExecuteNonQueryAsync();
                         if (rowsAffected > 0)
                         {
-                            // Save the uploaded image file to the generated image path
-                            using (var stream = new FileStream(fullPath, FileMode.Create))
-                            {
-                                await storeItem.Image.CopyToAsync(stream);
-                            }
+                        using (var stream = new FileStream(fullPath, FileMode.Create))
+                        {
+                            // Retrieve the image data from the specified path and write it to the FileStream
+                            byte[] imageData = await System.IO.File.ReadAllBytesAsync(storeItem.ImagePath);
+                            await stream.WriteAsync(imageData);
+                        }
 
                             return Ok("Item successfully entered");
                         }
