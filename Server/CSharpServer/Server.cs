@@ -311,10 +311,10 @@ namespace Server.Controllers
                 if(timeUntilExpiration <= TimeSpan.FromMinutes(5))
                 {
                     string newToken = TokenHandler.CreateToken();
-                    return Ok(newToken)
+                    return Ok(newToken);
                 }                
                 else {
-                    return Ok(token)
+                    return Ok(token);
                 }
             }
             catch (Exception ex)
