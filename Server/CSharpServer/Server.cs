@@ -325,7 +325,7 @@ namespace Server.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine($"Token refresh failed: {ex.Message}");
-                return StatusCode(500, "Failed to refresh")
+                return StatusCode(500, "Failed to refresh");
             }
         }   
         private DateTime ValidateAndExtractExpirationTime(string token)
