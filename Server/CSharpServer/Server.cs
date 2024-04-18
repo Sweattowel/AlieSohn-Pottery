@@ -835,15 +835,15 @@ namespace Server.Controllers
             }
         }
     }
-    ////// ORDER HANDLING
+    // ORDER HANDLING
     public class Order
     {
         public string UserName { get; set; }        
         public int UserID { get; set; }        
         public List<int> ItemIDs { get; set; }       
-        public string OrderDate { get; set; }      
-        public bool completed { get; set; }
+        public DateTime OrderDate { get; set; }  // Change type to DateTime     
     }
+
     // ORDER CREATION
     [Route("/api/createOrder")]
     [ApiController]
@@ -889,7 +889,7 @@ namespace Server.Controllers
                             command.Parameters.AddWithValue("@UserName", order.UserName);
                             command.Parameters.AddWithValue("@UserID", order.UserID);
                             command.Parameters.AddWithValue("@ItemID", itemID);
-                            command.Parameters.AddWithValue("@OrderDate", order.OrderDate);
+                            command.Parameters.AddWithValue("@OrderDate", order.OrderDate.ToString("yyyy-MM-dd HH:mm:ss")); // Format date properly
 
                             await command.ExecuteNonQueryAsync();
                         }
