@@ -15,10 +15,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.JsonWebTokens
+using Microsoft.IdentityModel.Logging
+using Microsoft.IdentityModel.Protocols
+using Microsoft.IdentityModel.Protocols.OpenIdConnect
+using Microsoft.IdentityModel.Tokens
 using DotNetEnv;
 using BCrypt;
 using Server.Controllers;
