@@ -691,17 +691,18 @@ namespace Server.Controllers
         {
             return Path.GetExtension(fileName).TrimStart('.');
         }
+        private class CreateItemRequest
+        {
+            public string ItemName { get; set; }
+            public string ItemDescription { get; set; }
+            public decimal ItemPrice { get; set; }
+            public IFormFile Picture { get; set; }
+        }        
         
         [HttpPost]
         public async Task<ActionResult> CreateItem([FromForm] CreateItemRequest createItemRequest)
         {
-            private class CreateItemRequest
-            {
-                public string ItemName { get; set; }
-                public string ItemDescription { get; set; }
-                public decimal ItemPrice { get; set; }
-                public IFormFile Picture { get; set; }
-            }
+
             try
             {
                 Console.WriteLine("Received createItem request, verifying token");
