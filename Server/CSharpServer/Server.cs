@@ -691,7 +691,7 @@ namespace Server.Controllers
         {
             return Path.GetExtension(fileName).TrimStart('.');
         }
-        private class CreateItemRequest
+        public class CreateItemRequest
         {
             public string ItemName { get; set; }
             public string ItemDescription { get; set; }
