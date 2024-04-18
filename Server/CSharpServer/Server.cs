@@ -320,28 +320,37 @@ namespace Server.Controllers
             return tokenString;
         }
         // VERIFY TOKEN
-        public static bool VerifyToken(string Token)
+        public static bool VerifyToken(string token)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Secret);
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false
-            };
-
             try
             {
-                var principal = tokenHandler.ValidateToken(Token, tokenValidationParameters, out _);
-                return true;
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(Secret);
+                
+                var tokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+
+                SecurityToken validatedToken;
+                var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out validatedToken);
+                
+                // Token is valid
+                return true; 
+            }
+            catch (SecurityTokenException ex)
+            {
+                Console.WriteLine($"Security token exception: {ex.Message}");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Token validation failed: {ex.Message}");
-                return false;
             }
+            // Token validation failed
+            return false; 
         }
     }
     ////// ACCOUNT HANDLE NORMAL
