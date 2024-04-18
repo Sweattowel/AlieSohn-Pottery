@@ -292,7 +292,7 @@ namespace Server.Controllers
         // TOKEN CREATION
         public static string CreateToken(int UserID, string UserName)
         {
-            Console.WriteLine(Secret)
+            Console.WriteLine(Secret);
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -315,7 +315,7 @@ namespace Server.Controllers
         {
             try
             {
-                Console.WriteLine(Secret)
+                Console.WriteLine(Secret);
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(Secret);
                 
