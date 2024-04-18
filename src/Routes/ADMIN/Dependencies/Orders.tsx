@@ -137,11 +137,19 @@ function Orders() {
   }, []);
 
   useEffect(() => {
-    setOrderCount(orders.length);
+    console.log("Orders:", orders);
+    if (orders) {
+      console.log("Orders length:", orders.length);
+      setOrderCount(orders.length);
+    }
   }, [orders, currentOrdersPage]);
-
+  
   useEffect(() => {
-    setUserCount(users.length);
+    console.log("Users:", users);
+    if (users) {
+      console.log("Users length:", users.length);
+      setUserCount(users.length);
+    }
   }, [users]);
   /////////////////////////////////////
   return (
@@ -151,7 +159,7 @@ function Orders() {
           <h1 className="bg-BACKGROUND text-center rounded mb-2 text-white h-[30px]">
             Orders
           </h1>
-          {selectedCustomer === -1 ? (
+          {selectedCustomer === -1 && orders.length > 0 ? (
             <div className="mt-2">
               {users
                 .slice(

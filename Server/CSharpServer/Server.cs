@@ -450,61 +450,51 @@ namespace Server.Controllers
         }
     }
     // GET USERS
-    [Route("/api/getUsers")]
-    [ApiController]
-    public class GetUserController : ControllerBase
+    public async Task<ActionResult<List<User>>> GetUsers()
     {
-        public class User
-        {
-            public int UserID { get; set; }
-            public string UserName { get; set; }
-        }
-        public async Task<ActionResult<List<User>>> GetUsers()
-        {
-            try
-            {      
-                Console.WriteLine("Received GetUsers request, verifying token");
-                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
-                if (string.IsNullOrEmpty(authorizationHeader))
-                {
-                    Console.WriteLine("Failed to verify");
-                    return StatusCode(401, "Unauthorized");
-                }
-                var token = authorizationHeader.ToString().Replace("Bearer ", "");
+        try
+        {      
+            Console.WriteLine("Received GetUsers request, verifying token");
+            var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+            if (string.IsNullOrEmpty(authorizationHeader))
+            {
+                Console.WriteLine("Failed to verify");
+                return StatusCode(401, "Unauthorized");
+            }
+            var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!TokenHandler.VerifyToken(token))
+            if (!TokenHandler.VerifyToken(token))
+            {
+                Console.WriteLine("Failed to verify");
+                return StatusCode(401, "Unauthorized");
+            }
+            
+            string queryStatement = "SELECT userID, userName FROM userData";
+            string connectionString = ConnectionString.GetConnectionString();
+            List<User> users = new List<User>();
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+                using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
+                using (DbDataReader reader = await command.ExecuteReaderAsync())
                 {
-                    Console.WriteLine("Failed to verify");
-                    return StatusCode(401, "Unauthorized");
-                }
-                
-                string queryStatement = "SELECT userID, userName FROM userData";
-                string connectionString = ConnectionString.GetConnectionString();
-                List<User> users = new List<User>();
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
-                {
-                    await connection.OpenAsync();
-                    using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
-                    using (DbDataReader reader = await command.ExecuteReaderAsync())
+                    while (await reader.ReadAsync())
                     {
-                        while (await reader.ReadAsync())
+                        User user = new User
                         {
-                            User user = new User
-                            {
-                                UserID = reader.GetInt32(reader.GetOrdinal("userID")),
-                                UserName = reader.GetString(reader.GetOrdinal("userName")),
-                            };
-                            users.Add(user);
-                        }
+                            UserID = reader.GetInt32(reader.GetOrdinal("userID")),
+                            UserName = reader.GetString(reader.GetOrdinal("userName")),
+                        };
+                        users.Add(user);
                     }
                 }
-                return Ok(users);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred during user retrieval: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
-            }
+            return users; // Return the list of users directly
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred during user retrieval: {ex.Message}");
+            return StatusCode(500, "Internal Server Error");
         }
     }
     // DELETE ACCOUNT
