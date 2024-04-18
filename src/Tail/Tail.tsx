@@ -40,8 +40,8 @@ function Tail() {
     }
     try {
       const response = await axios.post(`${serverAddress}/api/login`, {
-        userName: userNameAttempt,
-        passWord: passWordAttempt,
+        UserName: userNameAttempt,
+        PassWord: passWordAttempt,
       });
       if (response.status === 200) {
         setAuthenticated(true);
@@ -72,8 +72,8 @@ function Tail() {
     }
     try {
       const ResponseSir = await axios.post(`${serverAddress}/api/adminLogin`, {
-        userName: userNameAttempt,
-        passWord: passWordAttempt,
+        UserName: userNameAttempt,
+        PassWord: passWordAttempt,
       });
       if (ResponseSir.status === 200) {
         setAuthenticated(true);
@@ -111,8 +111,8 @@ function Tail() {
     }
     try {
       const response = await axios.post(`${serverAddress}/api/register`, {
-        userName: userNameAttempt,
-        passWord: passWordAttempt,
+        UserName: userNameAttempt,
+        PassWord: passWordAttempt,
       });
       if (response.status === 200) {
         console.log("Registered successfully");
