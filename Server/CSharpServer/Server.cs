@@ -505,7 +505,7 @@ namespace Server.Controllers
         {
             try
             {
-                Console.WriteLine("Received account delete, verifying token")
+                Console.WriteLine("Received account delete, verifying token");
                 var authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
                 {
@@ -529,12 +529,12 @@ namespace Server.Controllers
                     await connection.OpenAsync();
                     using (MySqlCommand deleteOrders = new MySqlCommand(queryStatementUserOrder, connection))
                     {
-                        deleteOrders.Parameters.AddWithValue("@UserID", userID)
+                        deleteOrders.Parameters.AddWithValue("@UserID", userID);
                         await deleteOrders.ExecuteNonQueryAsync();
 
                         using (MySqlCommand deleteData = new MySqlCommand(queryStatementUserData, connection))
                         {
-                            deleteData.Parameters.AddWithValue("@UserID", userID)
+                            deleteData.Parameters.AddWithValue("@UserID", userID);
                             int rowsAffected = deleteData.ExecuteNonQueryAsync();
 
                             if (rowsAffected > 0){
@@ -876,12 +876,12 @@ namespace Server.Controllers
 
                     return Ok();
                 }
+            }        
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred during item deletion: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
             }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An error occurred during item deletion: {ex.Message}");
-            return StatusCode(500, "Internal Server Error");
         }
     }        
     // GET ORDERS
@@ -909,7 +909,7 @@ namespace Server.Controllers
                     return StatusCode(401, "Unauthorized");
                 }
 
-                string queryStatement = "SELECT storeItems.itemName, orders.itemID, orders.orderID, orders.orderDate, completed FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = @UserID"
+                string queryStatement = "SELECT storeItems.itemName, orders.itemID, orders.orderID, orders.orderDate, completed FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = @UserID";
                 string connectionString = ConnectionString.GetConnectionString();
                 List<Order> Orders = new List<Order>();
 
@@ -937,7 +937,7 @@ namespace Server.Controllers
                         }
                     }
                 }
-                return Ok(Orders)
+                return Ok(Orders);
             }
             catch (Exception ex)
             {
