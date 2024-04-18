@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Data.Common;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using System.Threading;
@@ -286,7 +287,17 @@ namespace Server.Controllers
     // TOKEN HANDLER
     public class tokenHandle 
     {
-        private static readonly string Secret = Environment.GetEnvironmentVariable("REACT_APP_TOKEN_SECRET");
+        private static readonly string Secret = GenerateRandomSecret();
+
+        private static string GenerateRandomSecret()
+        {
+            byte[] keyBytes = new byte[32]; // 256 bits
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(keyBytes);
+            }
+            return Convert.ToBase64String(keyBytes);
+        }
 
         // TOKEN CREATION
         public static string CreateToken(int UserID, string UserName)
