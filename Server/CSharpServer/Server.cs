@@ -12,7 +12,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Mvc;
 using DotNetEnv;
-using System.IdentityModel.Tokens.Jwt;
 using BCrypt;
 using Server.Controllers;
 using Server;

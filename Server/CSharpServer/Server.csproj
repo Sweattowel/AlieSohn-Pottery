@@ -11,6 +11,8 @@
         <PackageReference Include="Microsoft.AspNetCore.App" Version="6.0.0" />
         <Compile Update="Server.cs" CopyToOutputDirectory="PreserveNewest" />
         <PackageReference Include="MySql.Data" Version="8.0.28" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.15.0" />
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
     </ItemGroup>
 
     <ItemGroup>
