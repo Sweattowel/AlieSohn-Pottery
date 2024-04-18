@@ -605,7 +605,7 @@ namespace Server.Controllers
                                 var adminID = Convert.ToInt32(reader["adminID"]);
                                 var UserName = reader["userName"].ToString();
 
-                                var tokenString = TokenHandler.CreateToken(UserID, UserName);
+                                var tokenString = TokenHandler.CreateToken(adminID, UserName);
 
                                 return Ok(new { token = tokenString, adminID = adminID, userName = UserName });
                             }
