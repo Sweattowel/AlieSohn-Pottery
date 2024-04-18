@@ -287,14 +287,14 @@ namespace Server.Controllers
     }
 
     // TOKEN HANDLER
-    public class TokenHandle
+    public class TokenHandler
     {
         private static readonly string Secret = Environment.GetEnvironmentVariable("REACT_APP_TOKEN_SECRET");
 
         public static string CreateToken(int userID, string userName)
         {
             Console.WriteLine(Secret);
-            var tokenHandler = new JwtSecurityTokenHandler();
+            var TokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -306,8 +306,8 @@ namespace Server.Controllers
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+            var token = TokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = TokenHandler.WriteToken(token);
 
             return tokenString;
         }
@@ -317,7 +317,7 @@ namespace Server.Controllers
             try
             {
                 Console.WriteLine(Secret);
-                var tokenHandler = new JwtSecurityTokenHandler();
+                var TokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(Secret);
 
                 var tokenValidationParameters = new TokenValidationParameters
@@ -331,7 +331,7 @@ namespace Server.Controllers
                 };
 
                 SecurityToken validatedToken;
-                var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out validatedToken);
+                var principal = TokenHandler.ValidateToken(token, tokenValidationParameters, out validatedToken);
 
                 // Token is valid
                 return true;
@@ -383,7 +383,7 @@ namespace Server.Controllers
                                 {
                                     var userID = Convert.ToInt32(reader["userID"]);
                                     var userName = reader["userName"].ToString();
-                                    var tokenString = tokenHandle.CreateToken(userID, userName);
+                                    var tokenString = TokenHandler.CreateToken(userID, userName);
                                     return Ok(new { token = tokenString, userID = userID, userName = userName });
                                 }
                             }
@@ -472,7 +472,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!tokenHandle.VerifyToken(token))
+                if (!TokenHandler.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
@@ -525,7 +525,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!tokenHandle.VerifyToken(token))
+                if (!TokenHandler.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
@@ -605,7 +605,7 @@ namespace Server.Controllers
                                 var UserID = Convert.ToInt32(reader["userID"]);
                                 var UserName = reader["userName"].ToString();
 
-                                var tokenString = tokenHandle.CreateToken(UserID, UserName);
+                                var tokenString = TokenHandler.CreateToken(UserID, UserName);
 
                                 return Ok(new { token = tokenString, userID = UserID, userName = UserName });
                             }
@@ -643,7 +643,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!tokenHandle.VerifyToken(token))
+                if (!TokenHandler.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
@@ -706,7 +706,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!tokenHandle.VerifyToken(token))
+                if (!TokenHandler.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
@@ -775,7 +775,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!tokenHandle.VerifyToken(token))
+                if (!TokenHandler.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
@@ -863,7 +863,7 @@ namespace Server.Controllers
                 }
 
                 string token = authorizationHeader.Replace("Bearer ", "");
-                if (!tokenHandle.VerifyToken(token))
+                if (!TokenHandler.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify: Invalid token");
                     return StatusCode(401, "Unauthorized: Invalid token");
@@ -934,7 +934,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!tokenHandle.VerifyToken(token))
+                if (!TokenHandler.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
@@ -1001,7 +1001,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!tokenHandle.VerifyToken(token))
+                if (!TokenHandler.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
