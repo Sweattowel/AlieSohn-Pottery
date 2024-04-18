@@ -362,7 +362,7 @@ namespace Server.Controllers
                         await connection.OpenAsync();
                         using (var reader = await command.ExecuteReaderAsync())
                         {
-                            if (await reader.ReadAsync())
+                            if (reader.HasRows)
                             {
                                 string hashedPassword = reader.GetString(reader.GetOrdinal("passWord"));
                                 bool verify = BcryptEncryption.Decrypt(credentials.Password, hashedPassword);
