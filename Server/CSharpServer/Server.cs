@@ -171,21 +171,20 @@ namespace Server
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
-    }
-    // BROCHURE UPDATE CALL
-    public static void UpdateBrochure(object state)
-    {
-        try
+        // BROCHURE UPDATE CALL
+        public static void UpdateBrochure(object state)
         {
-            Console.WriteLine("Updating Brochure");
-            DatabaseUtilities.CreateBrochure();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error updating brochure: {ex.Message}");
-        }
+            try
+            {
+                Console.WriteLine("Updating Brochure");
+                DatabaseUtilities.CreateBrochure();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating brochure: {ex.Message}");
+            }
+        }        
     }
-
 }
 namespace Server.Controllers
 {
