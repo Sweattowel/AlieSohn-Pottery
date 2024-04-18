@@ -281,11 +281,12 @@ namespace Server.Controllers
     // TOKEN HANDLER
     public class tokenHandle 
     {
+        private const string Secret = DotNetEnv.GetEnvironmentVariable("REACT_APP_TOKEN_SECRET");
         // TOKEN CREATION
         public static CreateToken(int UserID, string UserName)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("privatekey");
+            var key = Encoding.ASCII.GetBytes(Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -299,9 +300,32 @@ namespace Server.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            return tokenString
+            return tokenString;
         }
         // VERIFY TOKEN
+        public static VerifyToken(string Token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(Secret);
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+
+            try
+            {
+                var principal = tokenHandler.ValidateToken(Token, tokenValidationParameters, out _);
+                return true
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Token validation failed: {ex.Message}");
+                return false;
+            }
+        }
     }
     ////// ACCOUNT HANDLE NORMAL
     public class UserCredentials
@@ -426,8 +450,23 @@ namespace Server.Controllers
         public async Task<ActionResult<List<User>>> GetUsers()
         {
             try
-            {
-                Console.WriteLine("Received GetUsers request");
+            {      
+                Console.WriteLine("Received GetUsers request, verifying token");
+                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+                var token = authorizationHeader.ToString().Replace("Bearer ", "");
+
+                if (!TokenHandle.VerifyToken(token))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+
+                
                 string queryStatement = "SELECT userID, userName FROM userData";
                 string connectionString = ConnectionString.GetConnectionString();
                 List<User> users = new List<User>();
@@ -467,7 +506,21 @@ namespace Server.Controllers
         {
             try
             {
-                Console.WriteLine("Received account delete")
+                Console.WriteLine("Received account delete, verifying token")
+                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+                var token = authorizationHeader.ToString().Replace("Bearer ", "");
+
+                if (!TokenHandle.VerifyToken(token))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+
                 string queryStatementUserOrder = "DELETE FROM orders WHERE userID = @UserID";
                 string queryStatementUserData = "DELETE FROM userData WHERE userID = @UserID";
                 string connectionString = ConnectionString.GetConnectionString();      
@@ -571,7 +624,21 @@ namespace Server.Controllers
         {
             try
             {
-                Console.WriteLine("Received register super request");
+                Console.WriteLine("Received register super request, verifying token");
+                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+                var token = authorizationHeader.ToString().Replace("Bearer ", "");
+
+                if (!TokenHandle.VerifyToken(token))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+
                 string queryStatement = "INSERT INTO admins (userName, passWord) SELECT @UserName, @Password WHERE NOT EXISTS (SELECT 1 FROM admins WHERE userName = @UserName)";
                 string connectionString = ConnectionString.GetConnectionString();
 
@@ -619,7 +686,20 @@ namespace Server.Controllers
         {
             try
             {
-                Console.WriteLine("Received createItem request");
+                Console.WriteLine("Received createItem request, verifying token");
+                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+                var token = authorizationHeader.ToString().Replace("Bearer ", "");
+
+                if (!TokenHandle.VerifyToken(token))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
 
                 string imagePath = $"{Guid.NewGuid()}.{GetFileExtension(storeItem.Image.FileName)}";
                 string fullPath = Path.Combine("/StoreImages", imagePath); // Path where images will be stored
@@ -674,7 +754,20 @@ namespace Server.Controllers
             int itemId = requestBody.storeItemID;
             try
             {
-                Console.WriteLine($"Received deleteItem request for item ID: {itemId}");
+                Console.WriteLine($"Received deleteItem request for item ID: {itemId}, verifying token");
+                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+                var token = authorizationHeader.ToString().Replace("Bearer ", "");
+
+                if (!TokenHandle.VerifyToken(token))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
 
                 string queryGetImagePath = "SELECT imagePath FROM storeItems WHERE itemId = @ItemId";
                 string queryDeleteItem = "DELETE FROM storeItems WHERE itemId = @ItemId";
@@ -748,7 +841,21 @@ namespace Server.Controllers
         {
             try
             {
-                Console.WriteLine("Received createOrder request");
+                Console.WriteLine("Received createOrder request, verifying token");
+                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+                var token = authorizationHeader.ToString().Replace("Bearer ", "");
+
+                if (!TokenHandle.VerifyToken(token))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+
                 string queryStatement = "INSERT INTO orders (userName, userID, itemID, orderDate) VALUES ( @UserName, @UserID, @ItemID, @OrderDate)";
                 string connectionString = ConnectionString.GetConnectionString();
 
@@ -788,7 +895,21 @@ namespace Server.Controllers
         {
             try
             {
-                Console.WriteLine("Received getOrders request")
+                Console.WriteLine("Received getOrders request, verifying token");
+                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+                var token = authorizationHeader.ToString().Replace("Bearer ", "");
+
+                if (!TokenHandle.VerifyToken(token))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+
                 string queryStatement = "SELECT storeItems.itemName, orders.itemID, orders.orderID, orders.orderDate, completed FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = @UserID"
                 string connectionString = ConnectionString.GetConnectionString();
                 List<Order> Orders = new List<Order>();
@@ -842,7 +963,20 @@ namespace Server.Controllers
         {
             try
             {
-                Console.WriteLine("Received order update request");
+                Console.WriteLine("Received order update request, verifying token");
+                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
+                var token = authorizationHeader.ToString().Replace("Bearer ", "");
+
+                if (!TokenHandle.VerifyToken(token))
+                {
+                    Console.WriteLine("Failed to verify")
+                    return StatusCode(401, "Unauthorized");
+                }
 
                 string queryStatement = "UPDATE orders SET completed = @Completed WHERE orderID = @OrderID AND userID = @UserID";
                 string connectionString = ConnectionString.GetConnectionString();
