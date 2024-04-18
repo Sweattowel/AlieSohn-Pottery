@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
@@ -588,7 +589,7 @@ namespace Server.Controllers
                             if (await reader.ReadAsync())
                             {
                                 string hashedPassword = reader.GetString(reader.GetOrdinal("passWord"));
-                                bool verify = await BcryptEncryption.Decrypt(credentials.Password, hashedPassword);
+                                bool verify = BcryptEncryption.Decrypt(credentials.Password, hashedPassword);
                                 if (!verify)
                                 {
                                     return Unauthorized();
@@ -683,6 +684,7 @@ namespace Server.Controllers
         {
             return Path.GetExtension(fileName).TrimStart('.');
         }
+        
         [HttpPost]
         public async Task<ActionResult> CreateItem([FromForm] StoreItem storeItem)
         {
@@ -853,7 +855,7 @@ namespace Server.Controllers
                 }
 
                 string token = authorizationHeader.Replace("Bearer ", "");
-                if (!TokenHandle.VerifyToken(token))
+                if (!tokenHandle.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify: Invalid token");
                     return StatusCode(401, "Unauthorized: Invalid token");
