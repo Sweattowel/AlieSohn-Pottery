@@ -505,7 +505,7 @@ namespace Server.Controllers
     // DELETE ACCOUNT
     [Route("/api/deleteAccount/{userID}")]
     [ApiController]
-    public class DeleteAccountController
+    public class DeleteAccountController : ControllerBase
     {
         public async Task<ActionResult> DeleteAccount(int userID)
         {
@@ -707,8 +707,8 @@ namespace Server.Controllers
                     return StatusCode(401, "Unauthorized");
                 }
 
-                string imagePath = $"{Guid.NewGuid()}.{GetFileExtension(storeItem.Image.FileName)}";
-                string fullPath = Path.Combine("/StoreImages", imagePath); // Path where images will be stored
+                string imagePath = $"{Guid.NewGuid()}.{GetFileExtension(storeItem.ImagePath)}";
+                string fullPath = Path.Combine("/StoreImages", imagePath);
 
                 string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath)";
                 string connectionString = ConnectionString.GetConnectionString();
