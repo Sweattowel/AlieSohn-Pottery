@@ -602,12 +602,12 @@ namespace Server.Controllers
                                     return Unauthorized();
                                 }
 
-                                var UserID = Convert.ToInt32(reader["userID"]);
+                                var adminID = Convert.ToInt32(reader["adminID"]);
                                 var UserName = reader["userName"].ToString();
 
                                 var tokenString = TokenHandler.CreateToken(UserID, UserName);
 
-                                return Ok(new { token = tokenString, userID = UserID, userName = UserName });
+                                return Ok(new { token = tokenString, adminID = adminID, userName = UserName });
                             }
                             else
                             {
@@ -835,7 +835,8 @@ namespace Server.Controllers
             }
         }
     }
-    // ORDER HANDLING
+   
+    ////// ORDER HANDLING
     public class Order
     {
         public string UserName { get; set; }        

@@ -159,7 +159,7 @@ export default function UserAccount() {
                     Item ID : {order.itemID}{" "}
                   </h1>
                   <h1 className="bg-BACKGROUND  w-[25%]">
-                    Item : {order.ItemName}{" "}
+                    Item : {order.itemName}{" "}
                   </h1>
                   <h1 className="bg-BACKGROUND  w-[25%]">
                     Completed : {order.completed ? "TRUE" : "FALSE"}{" "}
