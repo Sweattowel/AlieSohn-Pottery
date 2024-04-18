@@ -340,7 +340,7 @@ namespace Server.Controllers
     public class UserLogInController: ControllerBase
     {
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<T>>> HandleLogin([FromBody] UserCredentials credentials)
+        public async Task<ActionResult> HandleLogin([FromBody] UserCredentials credentials)
         {
             Console.WriteLine("Received login normal request");
             string queryStatement = "SELECT userID, userName, passWord FROM userData WHERE userName = @UserName AND passWord = @Password LIMIT 1";
