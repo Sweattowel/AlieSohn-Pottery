@@ -366,7 +366,7 @@ namespace Server.Controllers
                             {
                                 string hashedPassword = reader.GetString(reader.GetOrdinal("passWord"));
                                 bool verify = BcryptEncryption.Decrypt(credentials.Password, hashedPassword);
-                                Console.WriteLine(hashedPassword, verify)
+                                Console.WriteLine(hashedPassword, verify);
                                 if (!verify)
                                 {
                                     return Unauthorized();
