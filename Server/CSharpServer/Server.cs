@@ -682,77 +682,80 @@ namespace Server.Controllers
         }
     }
     ////// STORE ITEM HANDLER
-    // ITEM CREATION
-    [Route("/api/createItem")]
-    [ApiController]
-    public class CreateItemController : ControllerBase
-    {  
-        private string GetFileExtension(string fileName)
+    [HttpPost]
+    public async Task<ActionResult> CreateItem([FromForm] CreateItemRequest createItemRequest)
+    {
+        private class CreateItemRequest
         {
-            return Path.GetExtension(fileName).TrimStart('.');
+            public string ItemName { get; set; }
+            public string ItemDescription { get; set; }
+            public decimal ItemPrice { get; set; }
+            public IFormFile Picture { get; set; }
         }
-        
-        [HttpPost]
-        public async Task<ActionResult> CreateItem([FromForm] StoreItem storeItem)
+        try
         {
-            try
+            Console.WriteLine("Received createItem request, verifying token");
+            var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+            if (string.IsNullOrEmpty(authorizationHeader))
             {
-                Console.WriteLine("Received createItem request, verifying token");
-                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
-                if (string.IsNullOrEmpty(authorizationHeader))
-                {
-                    Console.WriteLine("Failed to verify");
-                    return StatusCode(401, "Unauthorized");
-                }
-                var token = authorizationHeader.ToString().Replace("Bearer ", "");
+                Console.WriteLine("Failed to verify");
+                return StatusCode(401, "Unauthorized");
+            }
 
-                if (!TokenHandler.VerifyToken(token))
-                {
-                    Console.WriteLine("Failed to verify");
-                    return StatusCode(401, "Unauthorized");
-                }
+            var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                string imagePath = $"{Guid.NewGuid()}.{GetFileExtension(storeItem.ImagePath)}";
-                string fullPath = Path.Combine("/StoreImages", imagePath);
+            if (!TokenHandler.VerifyToken(token))
+            {
+                Console.WriteLine("Failed to verify");
+                return StatusCode(401, "Unauthorized");
+            }
 
-                string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath)";
-                string connectionString = ConnectionString.GetConnectionString();
-                
-                using (MySqlConnection connection = new MySqlConnection(connectionString))
+            // Check if the request contains a file
+            if (createItemRequest.Picture == null || createItemRequest.Picture.Length == 0)
+            {
+                Console.WriteLine("No image file found in the request");
+                return BadRequest("No image file found in the request");
+            }
+
+            string imagePath = $"{Guid.NewGuid()}.{GetFileExtension(createItemRequest.Picture.FileName)}";
+            string fullPath = Path.Combine("/StoreImages", imagePath);
+
+            string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath)";
+            string connectionString = ConnectionString.GetConnectionString();
+
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
                 {
-                    await connection.OpenAsync();
-                    
-                    using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
+                    command.Parameters.AddWithValue("@ItemName", createItemRequest.ItemName);
+                    command.Parameters.AddWithValue("@ItemDescription", createItemRequest.ItemDescription);
+                    command.Parameters.AddWithValue("@ItemPrice", createItemRequest.ItemPrice);
+                    command.Parameters.AddWithValue("@ImagePath", imagePath);
+
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                    if (rowsAffected > 0)
                     {
-                        command.Parameters.AddWithValue("@ItemName", storeItem.ItemName);
-                        command.Parameters.AddWithValue("@ItemDescription", storeItem.ItemDescription);
-                        command.Parameters.AddWithValue("@ItemPrice", storeItem.ItemPrice);
-                        command.Parameters.AddWithValue("@ImagePath", imagePath);
-                        
-                        int rowsAffected = await command.ExecuteNonQueryAsync();
-                        if (rowsAffected > 0)
-                        {
                         using (var stream = new FileStream(fullPath, FileMode.Create))
                         {
-                            // Retrieve the image data from the specified path and write it to the FileStream
-                            byte[] imageData = await System.IO.File.ReadAllBytesAsync(storeItem.ImagePath);
-                            await stream.WriteAsync(imageData);
+                            await createItemRequest.Picture.CopyToAsync(stream);
                         }
 
-                            return Ok("Item successfully entered");
-                        }
-                        else
-                        {
-                            return StatusCode(500, "Internal Server Error: Failed to create item");
-                        }
+                        return Ok("Item successfully entered");
+                    }
+                    else
+                    {
+                        return StatusCode(500, "Internal Server Error: Failed to create item");
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred during item creation: {ex.Message}");
-                return StatusCode(500, "Internal Server Error");
-            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred during item creation: {ex.Message}");
+            return StatusCode(500, "Internal Server Error");
         }
     }
     // ITEM DELETION

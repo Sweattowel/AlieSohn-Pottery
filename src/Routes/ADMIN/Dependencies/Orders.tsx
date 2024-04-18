@@ -102,9 +102,9 @@ function Orders() {
         return;
       }
       const response = await axios.post(`${serverAddress}/api/completeOrder`, {
-        selectedCustomer,
-        orderID,
-        decision,
+        userID: selectedCustomer,
+        orderID: orderID,
+        completed: decision,
       },       
       {
         headers: {
