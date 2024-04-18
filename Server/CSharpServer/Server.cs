@@ -24,44 +24,7 @@ using Server;
 
 
 namespace Server
-{
-    public class Program
-    {
-        // ONSTARTUP CALLS
-        public static void Main(string[] args)
-        {
-            try
-            {
-                DotNetEnv.Env.Load();
-                Timer timer = new Timer(UpdateBrochure, null, TimeSpan.Zero, TimeSpan.FromMinutes(30));
-                CreateHostBuilder(args).Build().Run();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>()
-                            .UseUrls(Environment.GetEnvironmentVariable("REACT_APP_SERVER_ADDRESS"));
-                });
-        public static void UpdateBrochure(object state)
-        {
-            try
-            {
-                Console.WriteLine("Updating Brochure");
-                DatabaseUtilities.CreateBrochure();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error updating brochure: {ex.Message}");
-            }
-        }
-    }
+{    
     public class Startup
     {
         public IConfiguration Configuration { get; }
@@ -87,7 +50,32 @@ namespace Server
                     });
             });
         }
+    }
+    public class Program
+    {
+        // ONSTARTUP CALLS
+        public static void Main(string[] args)
+        {
+            try
+            {
+                DotNetEnv.Env.Load();
+                Timer timer = new Timer(UpdateBrochure, null, TimeSpan.Zero, TimeSpan.FromMinutes(30));
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
 
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>()
+                            .UseUrls(Environment.GetEnvironmentVariable("REACT_APP_SERVER_ADDRESS"));
+                });
+                
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseStaticFiles( new StaticFileOptions
@@ -182,6 +170,19 @@ namespace Server
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
+        }
+    }
+    // BROCHURE UPDATE CALL
+    public static void UpdateBrochure(object state)
+    {
+        try
+        {
+            Console.WriteLine("Updating Brochure");
+            DatabaseUtilities.CreateBrochure();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error updating brochure: {ex.Message}");
         }
     }
 
