@@ -16,7 +16,7 @@ using System.IdentityModel.Tokens.Jwt;
 using BCrypt;
 using Server.Controllers;
 using Server;
-
+using IdentityModel;
 
 namespace Server
 {
@@ -280,9 +280,9 @@ namespace Server.Controllers
     // TOKEN HANDLER
     public class tokenHandle 
     {
-        private const string Secret = DotNetEnv.GetEnvironmentVariable("REACT_APP_TOKEN_SECRET");
+        private const string Secret = Environment.GetEnvironmentVariable("REACT_APP_TOKEN_SECRET");
         // TOKEN CREATION
-        public static CreateToken(int UserID, string UserName)
+        public static string CreateToken(int UserID, string UserName)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Secret);
@@ -302,7 +302,7 @@ namespace Server.Controllers
             return tokenString;
         }
         // VERIFY TOKEN
-        public static VerifyToken(string Token)
+        public static bool VerifyToken(string Token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Secret);
@@ -339,7 +339,7 @@ namespace Server.Controllers
     public class UserLogInController: ControllerBase
     {
         [HttpPost]
-        public async ActionResult<IEnumerable> HandleLogin([FromBody] UserCredentials credentials)
+        public async Task<ActionResult<IEnumerable>> HandleLogin([FromBody] UserCredentials credentials)
         {
             Console.WriteLine("Received login normal request");
             string queryStatement = "SELECT userID, userName, passWord FROM userData WHERE userName = @UserName AND passWord = @Password LIMIT 1";
@@ -352,25 +352,25 @@ namespace Server.Controllers
                     {
                         command.Parameters.AddWithValue("@UserName", credentials.UserName);
                         command.Parameters.AddWithValue("@Password", credentials.Password);
-                        connection.Open();
-                        using (var reader = command.ExecuteReader())
+                        await connection.OpenAsync();
+                        using (var reader = await command.ExecuteReaderAsync())
                         {
-                            if (reader.Read())
+                            if (await reader.ReadAsync())
                             {
-                                HashedPassword = reader.GetString(reader.GetOrdinal("Password"));
-                                bool verify = await BcryptEncryption.Decrypt(credentials.Password, HashedPassword);
+                                string hashedPassword = reader.GetString(reader.GetOrdinal("passWord"));
+                                bool verify = await BcryptEncryption.Decrypt(credentials.Password, hashedPassword);
                                 if (!verify)
                                 {
                                     return Unauthorized();
                                 }
-                                var UserID = Convert.ToInt32(reader["userID"]);
-                                var UserName = reader["userName"].ToString();
+                                var userID = Convert.ToInt32(reader["userID"]);
+                                var userName = reader["userName"].ToString();
 
-                                var tokenString = tokenHandle.CreateToken(UserID, UserName);
+                                var tokenString = tokenHandle.CreateToken(userID, userName);
 
-                                return Ok( new { token = tokenString, userID = UserID, userName = UserName});
-
-                            } else
+                                return Ok(new { token = tokenString, userID = userID, userName = userName });
+                            }
+                            else
                             {
                                 return Unauthorized();
                             }
