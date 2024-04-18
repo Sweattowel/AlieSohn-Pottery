@@ -81,7 +81,7 @@ function Cart() {
       console.log('No authorization found');
       return;
     }
-  
+    
     try {
       const itemIDs = [];
       for (let i = 0; i < cart.length; i++) {
