@@ -54,11 +54,11 @@ function Orders() {
       const response = await axios.post(`${serverAddress}/api/getUsers`, {},        
       {
         headers: {
-          authorization: `Bearer ${storedToken}`
+          Authorization: `Bearer ${storedToken}`
         }
       });
       if (response.status === 200) {
-        setUsers(response.data.data);
+        setUsers(response.data);
       } else {
         console.log("Failed to get users");
         setUsers([]);
@@ -159,7 +159,7 @@ function Orders() {
           <h1 className="bg-BACKGROUND text-center rounded mb-2 text-white h-[30px]">
             Orders
           </h1>
-          {selectedCustomer === -1 && orders.length > 0 ? (
+          {selectedCustomer === -1 ? (
             <div className="mt-2">
               {users
                 .slice(

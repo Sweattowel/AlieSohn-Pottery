@@ -450,51 +450,61 @@ namespace Server.Controllers
         }
     }
     // GET USERS
-    public async Task<ActionResult<List<User>>> GetUsers()
+    [Route("/api/getUsers")]
+    [ApiController]
+    public class GetUserController : ControllerBase
     {
-        try
-        {      
-            Console.WriteLine("Received GetUsers request, verifying token");
-            var authorizationHeader = HttpContext.Request.Headers["Authorization"];
-            if (string.IsNullOrEmpty(authorizationHeader))
-            {
-                Console.WriteLine("Failed to verify");
-                return StatusCode(401, "Unauthorized");
-            }
-            var token = authorizationHeader.ToString().Replace("Bearer ", "");
-
-            if (!TokenHandler.VerifyToken(token))
-            {
-                Console.WriteLine("Failed to verify");
-                return StatusCode(401, "Unauthorized");
-            }
-            
-            string queryStatement = "SELECT userID, userName FROM userData";
-            string connectionString = ConnectionString.GetConnectionString();
-            List<User> users = new List<User>();
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                await connection.OpenAsync();
-                using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
-                using (DbDataReader reader = await command.ExecuteReaderAsync())
+        public class User
+        {
+            public int UserID { get; set; }
+            public string UserName { get; set; }
+        }
+        public async Task<ActionResult<List<User>>> GetUsers()
+        {
+            try
+            {      
+                Console.WriteLine("Received GetUsers request, verifying token");
+                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader))
                 {
-                    while (await reader.ReadAsync())
+                    Console.WriteLine("Failed to verify");
+                    return StatusCode(401, "Unauthorized");
+                }
+                var token = authorizationHeader.ToString().Replace("Bearer ", "");
+
+                if (!TokenHandler.VerifyToken(token))
+                {
+                    Console.WriteLine("Failed to verify");
+                    return StatusCode(401, "Unauthorized");
+                }
+                
+                string queryStatement = "SELECT userID, userName FROM userData";
+                string connectionString = ConnectionString.GetConnectionString();
+                List<User> users = new List<User>();
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
+                    using (DbDataReader reader = await command.ExecuteReaderAsync())
                     {
-                        User user = new User
+                        while (await reader.ReadAsync())
                         {
-                            UserID = reader.GetInt32(reader.GetOrdinal("userID")),
-                            UserName = reader.GetString(reader.GetOrdinal("userName")),
-                        };
-                        users.Add(user);
+                            User user = new User
+                            {
+                                UserID = reader.GetInt32(reader.GetOrdinal("userID")),
+                                UserName = reader.GetString(reader.GetOrdinal("userName")),
+                            };
+                            users.Add(user);
+                        }
                     }
                 }
+                return Ok(users);
             }
-            return users; // Return the list of users directly
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An error occurred during user retrieval: {ex.Message}");
-            return StatusCode(500, "Internal Server Error");
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred during user retrieval: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
         }
     }
     // DELETE ACCOUNT
@@ -980,6 +990,7 @@ namespace Server.Controllers
             public int orderID { get; set; }
             public int userID { get; set; }
         }
+        [HttpPost]
         public async Task<ActionResult> UpdateOrder([FromBody] ChosenOrder OrderDetails)
         {
             try
