@@ -451,7 +451,6 @@ namespace Server.Controllers
             public int UserID { get; set; }
             public string UserName { get; set; }
         }
-
         public async Task<ActionResult<List<User>>> GetUsers()
         {
             try
@@ -470,17 +469,15 @@ namespace Server.Controllers
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
-
                 
                 string queryStatement = "SELECT userID, userName FROM userData";
                 string connectionString = ConnectionString.GetConnectionString();
                 List<User> users = new List<User>();
-
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     await connection.OpenAsync();
                     using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
-                    using (MySqlDataReader reader = await command.ExecuteReaderAsync())
+                    using (DbDataReader reader = await command.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
                         {
