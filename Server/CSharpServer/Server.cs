@@ -280,9 +280,10 @@ namespace Server.Controllers
     // TOKEN HANDLER
     public class tokenHandle 
     {
-        private const string Secret = Environment.GetEnvironmentVariable("REACT_APP_TOKEN_SECRET");
+        private static readonly string Secret = Environment.GetEnvironmentVariable("REACT_APP_TOKEN_SECRET");
+
         // TOKEN CREATION
-        public static const CreateToken(int UserID, string UserName)
+        public static string CreateToken(int UserID, string UserName)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Secret);
