@@ -916,7 +916,7 @@ namespace Server.Controllers
             public bool Completed { get; set; }
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult<List<IndividualOrders>>> GetOrders(int userId)
         {
             try
