@@ -1,10 +1,13 @@
 using System;
 using System.IO;
+using System.Text;
+using System.Security.Claims;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -362,7 +365,7 @@ namespace Server.Controllers
                             if (await reader.ReadAsync())
                             {
                                 string hashedPassword = reader.GetString(reader.GetOrdinal("passWord"));
-                                bool verify = await BcryptEncryption.Decrypt(credentials.Password, hashedPassword);
+                                bool verify = BcryptEncryption.Decrypt(credentials.Password, hashedPassword);
                                 if (!verify)
                                 {
                                     return Unauthorized();
@@ -415,7 +418,7 @@ namespace Server.Controllers
 
                     using (MySqlCommand commandCreateUser = new MySqlCommand(queryCreateUser, connection))
                     {
-                        string hashedPassword = await BcryptEncryption.Encrypt(credentials.Password);
+                        string hashedPassword = BcryptEncryption.Encrypt(credentials.Password);
                         commandCreateUser.Parameters.AddWithValue("@UserName", credentials.UserName);
                         commandCreateUser.Parameters.AddWithValue("@Password", hashedPassword);
 
