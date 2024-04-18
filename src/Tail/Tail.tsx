@@ -154,6 +154,7 @@ function Tail() {
       return token
     } else {
       console.log('Failed to refresh please relog into site')
+      return storedToken
     }
   }
   /////////////////////////////////////

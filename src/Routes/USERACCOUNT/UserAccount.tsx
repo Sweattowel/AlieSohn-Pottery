@@ -59,23 +59,25 @@ export default function UserAccount() {
         console.log(error);
     }
 };
-
+  const [groupSettingChoice, setGroupSettingChoice] = useState(1)
   const sortDate = (choice: any) => {
     let sortedOrders = [...originalOrders]; // Use the original orders data for sorting/grouping
 
     if (choice === 1) {
+      setGroupSettingChoice(1)
       sortedOrders.sort(
         (a, b) =>
           new Date(a.orderDate).getTime() - new Date(b.orderDate).getTime()
       );
     } else if (choice === 2) {
+      setGroupSettingChoice(2)
       sortedOrders.sort(
         (a, b) =>
           new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
       );
     } else if (choice === 3) {
       const items: any = {};
-
+      setGroupSettingChoice(3)
       for (let i = 0; i < originalOrders.length; i++) {
         const currentOrder = originalOrders[i];
         if (!currentOrder) {
@@ -113,21 +115,15 @@ export default function UserAccount() {
             User: {userName || "N/a"} History
           </div>
         </h1>
-        <div className="rounded-b w-[50%] m-auto text-BLACK mt-1 mb-1">
-          <Select
-            label="SORT BY"
-            style={{
-              width: "200px",
-              height: "2rem",
-              display: "flex",
-              margin: "auto",
-              backgroundColor: "beige",
-            }}
-          >
-            <MenuItem onClick={() => sortDate(1)} >DATE DESC</MenuItem>
-            <MenuItem onClick={() => sortDate(2)} >DATE ASC</MenuItem>
-            <MenuItem onClick={() => sortDate(3)} >GROUP BY</MenuItem>
-          </Select>
+        <div className="rounded-b w-[50%] m-auto bg-BACKGROUND text-WHITE mt-1 mb-1 flex justify-center items-center">
+          Group by?
+        </div>
+        <div className="rounded-b w-[50%] m-auto text-WHITE mt-1 mb-1 flex justify-center items-center">
+          
+            <button className={ groupSettingChoice == 1 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK"} onClick={() => sortDate(1)} >DESC</button>
+            <button className={ groupSettingChoice == 2 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK"} onClick={() => sortDate(2)} >ASC</button>
+            <button className={ groupSettingChoice == 3 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK"} onClick={() => sortDate(3)} >GRP</button>
+          
         </div>
         <Pagination
           style={{
@@ -155,24 +151,24 @@ export default function UserAccount() {
                       : "opacity-60 m-2 flex  text-white justify-center text-center"
                   }
                 >
-                  <h1 className="bg-BACKGROUND  w-[25%]">
+                  <h1 className="bg-BACKGROUND  w-[25%] text-[0.7rem] md:text-lg">
                     Item ID : {order.itemID}{" "}
                   </h1>
-                  <h1 className="bg-BACKGROUND  w-[25%]">
+                  <h1 className="bg-BACKGROUND  w-[25%] text-[0.7rem] md:text-m">
                     Item : {order.itemName}{" "}
                   </h1>
-                  <h1 className="bg-BACKGROUND  w-[25%]">
+                  <h1 className="bg-BACKGROUND  w-[25%] text-[0.7rem] md:text-lg">
                     Completed : {order.completed ? "TRUE" : "FALSE"}{" "}
                   </h1>
                   {order.orderDate ? (
-                    <h1 className="bg-BACKGROUND  w-[25%]">
+                    <h1 className="bg-BACKGROUND  w-[25%] text-[0.7rem] md:text-lg">
                       Date : {order.orderDate.split('T')[0]}
                     </h1>
                   ) : (
-                    <div className="bg-BACKGROUND w-[25%]"></div>
+                    <div className="bg-BACKGROUND w-[25%] text-[0.7rem] md:text-lg"></div>
                   )}
                   {order.count && (
-                    <h1 className="bg-BACKGROUND  w-[25%]">
+                    <h1 className="bg-BACKGROUND  w-[25%] text-[0.7rem] md:text-lg">
                       COUNT : {order.count}
                     </h1>
                   )}

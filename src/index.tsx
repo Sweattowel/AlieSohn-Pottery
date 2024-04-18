@@ -11,6 +11,7 @@ import Cart from './Routes/Cart/Cart';
 import Tail from './Tail/Tail';
 import Admin from './Routes/ADMIN/Admin';
 import UserHandle from './Routes/USERACCOUNT/UserHandle';
+import MobileNavigation from './Navigation/MobileNavigation';
 
 const rootElement: HTMLElement | null = document.getElementById('root');
 
@@ -19,7 +20,7 @@ if (rootElement) {
     <React.StrictMode>
       <ContextProvider >
         <Router>
-          <Navigation />
+          {window.innerWidth > 768 ? <Navigation /> : <MobileNavigation />}
           <Routes>
             <Route path='/ADMIN' Component={Admin}/>
             <Route path='/MyAccount/:userID' Component={UserHandle}/>

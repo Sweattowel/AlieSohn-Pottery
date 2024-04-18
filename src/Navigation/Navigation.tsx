@@ -18,11 +18,17 @@ function Navigation() {
   ] = useMyContext();
 
   const [page, setPage] = useState(1);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State variable for menu open/close
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+  
   return (
-    <nav className="m-auto h-[11vh] flex border-BLACK border-b-2 w-[90vw] bg-60">
+    <nav className="m-auto h-[11vh] flex bg-BACKGROUND border-BLACK border-b-2 w-[90vw] bg-60 rounded-b">
       <div className="flex  w-full mb-2">
-        <div className="w-[50%] m-auto   text-2xl">
-          <h1 className="font-serif h-[8vh] md:h-[5vh] rounded w-[25vw] mr-3 text-center flex items-center justify-center text-[2rem] md:text-[3rem] text-BACKGROUND ">
+        <div className="w-[50%] m-auto   text-xl">
+          <h1 className="font-serif h-[8vh] md:h-[5vh] rounded w-[25vw] mr-3 text-center flex items-center justify-center text-[2rem] md:text-[3rem] text-WHITE ">
             AlieSohn
           </h1>
         </div>
@@ -33,8 +39,8 @@ function Navigation() {
                 <button
                   className={
                     page === 5
-                    ? "text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-2xl"
-                    : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-2xl"
+                    ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-xl"
+                    : "text-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-xl hover:text-BLACK"
                   }
                   onClick={() => {
                     setPage(5);
@@ -51,8 +57,8 @@ function Navigation() {
                 <button
                   className={
                     page === 4
-                    ? "text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-2xl"
-                    : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-2xl"
+                    ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-xl"
+                    : "text-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-xl hover:text-BLACK"
                   }
                   onClick={() => {
                     setPage(4);
@@ -68,8 +74,8 @@ function Navigation() {
               <button
                 className={
                   page === 1
-                  ? "text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[16vw] text-base md:text-2xl"
-                  : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] md:w-[13vw] w-[16vw] md:h-[5vh] text-base md:text-2xl"
+                  ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-xl"
+                  : "text-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-xl hover:text-BLACK"
                 }
                 onClick={() => {
                   setPage(1);
@@ -84,8 +90,8 @@ function Navigation() {
               <button
                 className={
                   page === 2
-                  ? "text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-2xl"
-                  : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-2xl"
+                  ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-xl"
+                  : "text-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-xl hover:text-BLACK"
                 }
                 onClick={() => {
                   setPage(2);
@@ -100,8 +106,8 @@ function Navigation() {
               <button
                 className={
                   page === 3
-                  ? "text-WHITE bg-BACKGROUND rounded md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base text-md md:text-2xl"
-                  : "border-b border-SELECTED text-BLACK bg-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-2xl"
+                  ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-xl"
+                  : "text-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-xl hover:text-BLACK"
                 }
                 onClick={() => {
                   setPage(3);

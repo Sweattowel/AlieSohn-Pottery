@@ -26,19 +26,19 @@ COMPLETE Implement Route Protection: Use JWT or session-based authentication for
         More research into how i did it and whether it is secure or not is required 
 UNCOMPLETE Check Database Connection Limits: Investigate if the database has a maximum amount of concurrent connections and consider implementing a connection pool if necessary.
 UNCOMPLETE Ensure API Security: Validate request bodies to prevent SQL Injection vulnerabilities.
-UNCOMPLETE Consider Learning C# or Golang: Expand development skills by exploring languages like C# or Golang, commonly used in the industry.
+COMPLETE Consider Learning C# or Golang: Expand development skills by exploring languages like C# or Golang, commonly used in the industry.
     Addit: 
         Maybe rewrite server code to use C# or Golang? potential option
-UNCOMPLETE Explore UI Enhancement: Experiment with color theory, UI beautification using tools like React Spring, and ensuring consistency in font sizes and weights.
-UNCOMPLETE Optimize Frontend Code: Continuously strive for clean and efficient frontend code.
-UNCOMPLETE Optional: Further UI Development: If interested, delve deeper into UI development, considering resources like AWS for full-stack solutions.
+COMPLETE Explore UI Enhancement: Experiment with color theory, UI beautification using tools like React Spring, and ensuring consistency in font sizes and weights.
+COMPLETE Optimize Frontend Code: Continuously strive for clean and efficient frontend code.
+COMPLETE Optional: Further UI Development: If interested, delve deeper into UI development, considering resources like AWS for full-stack solutions.
 COMPLETE Explore Color Theory: Learn about the 60-30-10 rule for color coordination and proper color selection.
 COMPLETE Enhance UI Beautification: Experiment with hover effects, box shadows, and other visual enhancements using libraries like React Spring.
     Addit: 
         Added box shadows for storeItem cards, looks nice so far, too much?
-UNCOMPLETE Maintain Consistency in Design: Ensure consistency in font sizes, weights, and other attributes for a polished UI.
-UNCOMPLETE Continue Learning and Experimenting: Keep exploring and experimenting with UI development to improve skills and knowledge in the area.
-UNCOMPLETE Refurbish JWT to use cookies or an interceptor which will update the token silently when it is near expirery 
-UNCOMPLETE port server to C# as recommended/suggested by Chris
-UNCOMPLETE Improve mobile design by using hamburger Setup for the navigation over the tab option
+COMPLETE Maintain Consistency in Design: Ensure consistency in font sizes, weights, and other attributes for a polished UI.
+COMPLETE Continue Learning and Experimenting: Keep exploring and experimenting with UI development to improve skills and knowledge in the area.
+COMPLETE Refurbish JWT to use cookies or an interceptor which will update the token silently when it is near expirery 
+COMPLETE port server to C# as recommended/suggested by Chris
+COMPLETE Improve mobile design by using hamburger Setup for the navigation over the tab option
 UNCOMPLETE implement additional SQL checks to ensure sanitation 
