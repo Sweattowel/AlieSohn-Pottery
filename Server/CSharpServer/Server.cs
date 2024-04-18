@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http;
 using DotNetEnv;
 using BCrypt;
 using Server.Controllers;
@@ -264,15 +265,16 @@ namespace Server.Controllers
     public class BcryptEncryption
     {
         // ENCRYPT PASSWORD
-        public static async Task<string> Encrypt(string passWord)
+        public static string Encrypt(string password)
         {
-            string hashedPassword = await BCrypt.Net.BCrypt.HashPasswordAsync(password, 10);
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, 10);
             return hashedPassword;
         }
+
         // DECRYPT PASSWORD
-        public static async Task<bool> Decrypt(string passWord, string HashedPassword)
+        public static bool Decrypt(string password, string hashedPassword)
         {
-            bool passwordMatches = await BCrypt.Net.BCrypt.VerifyAsync(password, hashedPassword);
+            bool passwordMatches = BCrypt.Net.BCrypt.Verify(password, hashedPassword);
             return passwordMatches;
         }
     }
@@ -543,7 +545,7 @@ namespace Server.Controllers
                             }  
                             else
                             {
-                                return NotFound("User not found");
+                                return StatusCode(404, "Not found");
                             }
                         }
                     }
@@ -811,7 +813,7 @@ namespace Server.Controllers
                         }
                         else
                         {
-                            return NotFound("Item not found");
+                            return StatusCode(404, "Not found");
                         }
                     }
                 }
@@ -951,7 +953,7 @@ namespace Server.Controllers
     // COMPLETE ORDER
     [Route("/api/completeOrder")]
     [ApiController]
-    public class UpdateOrderController
+    public class UpdateOrderController : ControllerBase
     {
         public class ChosenOrder
         {
@@ -999,7 +1001,7 @@ namespace Server.Controllers
                         }
                         else
                         {
-                            return NotFound();
+                            return StatusCode(404, "Not found");
                         }
                     }
                 }
