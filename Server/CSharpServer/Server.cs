@@ -287,17 +287,7 @@ namespace Server.Controllers
     // TOKEN HANDLER
     public class tokenHandle 
     {
-        private static readonly string Secret = GenerateRandomSecret();
-
-        private static string GenerateRandomSecret()
-        {
-            byte[] keyBytes = new byte[32]; // 256 bits
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                rng.GetBytes(keyBytes);
-            }
-            return Convert.ToBase64String(keyBytes);
-        }
+        private static readonly string Secret = Environment.GetEnvironmentVariable("REACT_APP_TOKEN_SECRET");
 
         // TOKEN CREATION
         public static string CreateToken(int UserID, string UserName)
@@ -331,8 +321,10 @@ namespace Server.Controllers
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateIssuer = false, // Modify as needed
+                    ValidateAudience = false, // Modify as needed
+                    ValidateLifetime = true, // Ensure token hasn't expired
+                    ClockSkew = TimeSpan.Zero // Set clock skew to zero so that tokens are only valid exactly at their expiration time
                 };
 
                 SecurityToken validatedToken;
