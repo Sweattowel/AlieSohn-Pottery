@@ -268,7 +268,7 @@ namespace Server.Controllers
         public static async Task<string> Encrypt(string passWord)
         {
             string hashedPassword = await BCrypt.Net.BCrypt.HashPasswordAsync(password, 10);
-            return hashedPassword
+            return hashedPassword;
         }
         // DECRYPT PASSWORD
         public static async Task<bool> Decrypt(string passWord, string HashedPassword)
@@ -318,7 +318,7 @@ namespace Server.Controllers
             try
             {
                 var principal = tokenHandler.ValidateToken(Token, tokenValidationParameters, out _);
-                return true
+                return true;
             }
             catch (Exception ex)
             {
@@ -358,8 +358,8 @@ namespace Server.Controllers
                         {
                             if (reader.Read())
                             {
-                                HashedPassword = reader.GetString(reader.GetOrdinal("Password")),
-                                bool verify = await BcryptEncryption.Decrypt(credentials.Password, HashedPassword)
+                                HashedPassword = reader.GetString(reader.GetOrdinal("Password"));
+                                bool verify = await BcryptEncryption.Decrypt(credentials.Password, HashedPassword);
                                 if (!verify)
                                 {
                                     return Unauthorized();
@@ -367,7 +367,7 @@ namespace Server.Controllers
                                 var UserID = Convert.ToInt32(reader["userID"]);
                                 var UserName = reader["userName"].ToString();
 
-                                var tokenString = tokenHandle.CreateToken(UserID, UserName)
+                                var tokenString = tokenHandle.CreateToken(UserID, UserName);
 
                                 return Ok( new { token = tokenString, userID = UserID, userName = UserName});
 
@@ -379,12 +379,11 @@ namespace Server.Controllers
                     }
                 }
             }
-        } 
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An error occurred during login: {ex.Message}");
-            return StatusCode(500);
-        }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred during registration: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
     }
     // REGISTRATION
     [Route("/api/register")]
@@ -455,14 +454,14 @@ namespace Server.Controllers
                 var authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
                 if (!TokenHandle.VerifyToken(token))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
 
@@ -510,14 +509,14 @@ namespace Server.Controllers
                 var authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
                 if (!TokenHandle.VerifyToken(token))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
 
@@ -628,14 +627,14 @@ namespace Server.Controllers
                 var authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
                 if (!TokenHandle.VerifyToken(token))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
 
@@ -690,14 +689,14 @@ namespace Server.Controllers
                 var authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
                 if (!TokenHandle.VerifyToken(token))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
 
@@ -758,14 +757,14 @@ namespace Server.Controllers
                 var authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
                 if (!TokenHandle.VerifyToken(token))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
 
@@ -845,14 +844,14 @@ namespace Server.Controllers
                 var authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
                 if (!TokenHandle.VerifyToken(token))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
 
@@ -899,14 +898,14 @@ namespace Server.Controllers
                 var authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
                 if (!TokenHandle.VerifyToken(token))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
 
@@ -967,14 +966,14 @@ namespace Server.Controllers
                 var authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
                 if (!TokenHandle.VerifyToken(token))
                 {
-                    Console.WriteLine("Failed to verify")
+                    Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
 
