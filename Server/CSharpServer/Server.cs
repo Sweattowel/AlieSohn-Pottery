@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using MySql.Data.MySqlClient;
 using System.Threading;
 using System.Threading.Tasks;
@@ -286,12 +287,11 @@ namespace Server.Controllers
     }
 
     // TOKEN HANDLER
-    public class tokenHandle 
+    public class TokenHandle
     {
         private static readonly string Secret = Environment.GetEnvironmentVariable("REACT_APP_TOKEN_SECRET");
 
-        // TOKEN CREATION
-        public static string CreateToken(int UserID, string UserName)
+        public static string CreateToken(int userID, string userName)
         {
             Console.WriteLine(Secret);
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -300,8 +300,8 @@ namespace Server.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, UserID.ToString()),
-                    new Claim(ClaimTypes.NameIdentifier, UserName)
+                    new Claim(ClaimTypes.Name, userID.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, userName)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -311,7 +311,7 @@ namespace Server.Controllers
 
             return tokenString;
         }
-        // VERIFY TOKEN
+
         public static bool VerifyToken(string token)
         {
             try
@@ -319,7 +319,7 @@ namespace Server.Controllers
                 Console.WriteLine(Secret);
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(Secret);
-                
+
                 var tokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -332,9 +332,9 @@ namespace Server.Controllers
 
                 SecurityToken validatedToken;
                 var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out validatedToken);
-                
+
                 // Token is valid
-                return true; 
+                return true;
             }
             catch (SecurityTokenException ex)
             {
@@ -345,7 +345,7 @@ namespace Server.Controllers
                 Console.WriteLine($"Token validation failed: {ex.Message}");
             }
             // Token validation failed
-            return false; 
+            return false;
         }
     }
     ////// ACCOUNT HANDLE NORMAL
