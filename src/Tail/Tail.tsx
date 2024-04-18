@@ -131,15 +131,18 @@ function Tail() {
     }
   };
 
-  const RefreshToken = async () => {
+  const GetRefreshToken = async () => {
     const storedToken = localStorage.getItem('token');
     if (!storedToken){
       console.log('No authorization found');
       return;
     }
 
-    const response = await axios.get(
-      `${serverAddress}/api/TokenRefresh`,
+    const response = await axios.post(
+      `${serverAddress}/api/TokenRefresh`,{
+        UserID: userID,
+        UserName: userName
+      },
       {
         headers: {
           Authorization: `Bearer ${storedToken}`
@@ -160,14 +163,14 @@ function Tail() {
         console.log("RefreshingToken")
         let enterToken;
         if (superAuthenticated) {
-          enterToken = await RefreshToken();
+          enterToken = await GetRefreshToken();
           if (enterToken){
             console.log("Token refreshed")
             localStorage.setItem('sutoken', enterToken);            
           }
 
         } else {
-          enterToken = await RefreshToken();
+          enterToken = await GetRefreshToken();
           if (enterToken){
             console.log("Token refreshed")
             localStorage.setItem('token', enterToken);            

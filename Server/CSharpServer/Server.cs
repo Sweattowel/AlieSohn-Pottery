@@ -285,14 +285,19 @@ namespace Server.Controllers
             return passwordMatches;
         }
     }
-
-    // TOKEN HANDLER
+    ////// TOKEN HANDLE
+    // TOKEN REFRESH
     [Route("/api/TokenRefresh")]
     [ApiController]
     public class TokenRefreshController : ControllerBase
     {
+        public class TokenRefreshRequestModel
+        {
+            public int UserID { get; set; }
+            public string UserName { get; set; }
+        }
         [HttpPost]
-        public async Task<ActionResult> TokenRefresh()
+        public async Task<ActionResult> TokenRefresh([FromBody] TokenRefreshRequestModel requestModel)
         {
             try
             {
@@ -310,7 +315,7 @@ namespace Server.Controllers
 
                 if(timeUntilExpiration <= TimeSpan.FromMinutes(5))
                 {
-                    string newToken = TokenHandler.CreateToken();
+                    string newToken = TokenHandler.CreateToken(requestModel.UserID, requestModel.UserName);
                     return Ok(newToken);
                 }                
                 else {
@@ -320,10 +325,18 @@ namespace Server.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine($"Token refresh failed: {ex.Message}");
+                return StatusCode(500, "Failed to refresh")
             }
-
         }   
-    }
+        private DateTime ValidateAndExtractExpirationTime(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var securityToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+            var expirationTime = securityToken.ValidTo.ToUniversalTime();
+            return expirationTime;
+        }
+    }    
+    // TOKEN HANDLER
     public class TokenHandler
     {
         private static readonly string Secret = Environment.GetEnvironmentVariable("REACT_APP_TOKEN_SECRET");
