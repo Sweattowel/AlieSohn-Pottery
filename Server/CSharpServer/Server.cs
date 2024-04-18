@@ -462,7 +462,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!TokenHandle.VerifyToken(token))
+                if (!tokenHandle.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
