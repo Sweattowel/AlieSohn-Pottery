@@ -9,7 +9,7 @@
     <ItemGroup>
         <PackageReference Include="DotNetEnv" Version="3.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.App" Version="6.0.0" />
-        <PackageReference Include="IdentityModel.AspNetCore" Version="5.1.0" />
+        <PackageReference Include="IdentityModel.AspNetCore" Version="4.3.0" />
         <Compile Update="Server.cs" CopyToOutputDirectory="PreserveNewest" />
         <PackageReference Include="MySql.Data" Version="8.0.28" />
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.15.0" />
