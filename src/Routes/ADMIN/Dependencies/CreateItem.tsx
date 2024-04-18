@@ -4,7 +4,7 @@ import React, { ChangeEvent, useState } from "react";
 import { useMyContext } from "../../../Context/ContextProvider";
 
 interface Item {
-  title: string;
+  ItemName: string;
   description: string;
   price: string;
   picture: File | null;
@@ -27,7 +27,7 @@ function CreateItem() {
     setUserName,
   ] = useMyContext();
   const [item, setItem] = useState<Item>({
-    title: "",
+    ItemName: "",
     description: "",
     price: "0",
     picture: null,
@@ -42,7 +42,7 @@ function CreateItem() {
   };
   ///////////////////////////////////////////////////////////////
   const createStoreItem = async () => {
-    if (!item.picture || !item.title || !item.description || !item.price) {
+    if (!item.picture || !item.ItemName || !item.description || !item.price) {
       console.log("Incomplete StoreItem");
       return;
     }
@@ -53,7 +53,7 @@ function CreateItem() {
     }
       
     const formData = new FormData();
-    formData.append("title", item.title);
+    formData.append("ItemName", item.ItemName);
     formData.append("description", item.description);
     formData.append("price", item.price);
     formData.append("picture", item.picture);
@@ -71,7 +71,7 @@ function CreateItem() {
       if (response.status === 200) {
         console.log("Successfully added to store");
         setItem({
-          title: "",
+          ItemName: "",
           description: "",
           price: "0",
           picture: null,
@@ -96,11 +96,11 @@ function CreateItem() {
                 </h1>
                 <div className=" w-[40vw] h-[80%] m-auto text-center">
                     <h1 className="bg-BACKGROUND rounded text-WHITE w-[50%] m-auto mt-2">
-                        Item title
+                        Item ItemName
                     </h1>
                     <Input
-                        value={item.title}
-                        onChange={(e) => handleInputChange("title", e.target.value)}
+                        value={item.ItemName}
+                        onChange={(e) => handleInputChange("ItemName", e.target.value)}
                     />
                     <h1 className="bg-BACKGROUND rounded text-WHITE w-[50%] m-auto mt-2">
                         Item Description

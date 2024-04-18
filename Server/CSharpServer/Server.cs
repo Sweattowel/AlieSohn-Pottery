@@ -287,6 +287,43 @@ namespace Server.Controllers
     }
 
     // TOKEN HANDLER
+    [Route("/api/TokenRefresh")]
+    [ApiController]
+    public class TokenRefreshController : ControllerBase
+    {
+        [HttpPost]
+        public async Task<ActionResult> TokenRefresh()
+        {
+            try
+            {
+                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+                if (string.IsNullOrEmpty(authorizationHeader))
+                {
+                    Console.WriteLine("Failed to verify");
+                    return StatusCode(401, "Unauthorized");
+                }
+                var token = authorizationHeader.ToString().Replace("Bearer ", "");
+
+                DateTime expirationTime = ValidateAndExtractExpirationTime(token);
+
+                TimeSpan timeUntilExpiration = expirationTime - DateTime.UtcNow;
+
+                if(timeUntilExpiration <= TimeSpan.FromMinutes(5))
+                {
+                    string newToken = TokenHandler.CreateToken();
+                    return Ok(newToken)
+                }                
+                else {
+                    return Ok(token)
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Token refresh failed: {ex.Message}");
+            }
+
+        }   
+    }
     public class TokenHandler
     {
         private static readonly string Secret = Environment.GetEnvironmentVariable("REACT_APP_TOKEN_SECRET");

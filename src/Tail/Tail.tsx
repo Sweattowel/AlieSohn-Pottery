@@ -130,7 +130,64 @@ function Tail() {
       setError(`Failed to register ${registrationAttempts}`);
     }
   };
+
+  const RefreshToken = async () => {
+    const storedToken = localStorage.getItem('token');
+    if (!storedToken){
+      console.log('No authorization found');
+      return;
+    }
+
+    const response = await axios.get(
+      `${serverAddress}/api/TokenRefresh`,
+      {
+        headers: {
+          Authorization: `Bearer ${storedToken}`
+        }
+      }
+    );
+    const token = response.data
+    if (response.status == 200){
+      return token
+    } else {
+      console.log('Failed to refresh please relog into site')
+    }
+  }
   /////////////////////////////////////
+  useEffect(() => {
+    const refreshToken = async () => {
+      try {
+        console.log("RefreshingToken")
+        let enterToken;
+        if (superAuthenticated) {
+          enterToken = await RefreshToken();
+          if (enterToken){
+            console.log("Token refreshed")
+            localStorage.setItem('sutoken', enterToken);            
+          }
+
+        } else {
+          enterToken = await RefreshToken();
+          if (enterToken){
+            console.log("Token refreshed")
+            localStorage.setItem('token', enterToken);            
+          }
+        }
+      } catch (error) {
+        console.error("Token refresh failed:", error);
+      }
+    };
+  
+    // Call refreshToken initially
+    refreshToken();
+  
+    // Refresh token every 10 minutes
+    const intervalId = setInterval(refreshToken, 5 * 60 * 1000);
+  
+    // Clean up the interval when the component unmounts or when dependencies change
+    return () => clearInterval(intervalId);
+  }, [authenticated, superAuthenticated]);
+
   useEffect(() => {
     setPassWordAttempt("");
     setUserNameAttempt("");
