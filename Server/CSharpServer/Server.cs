@@ -517,7 +517,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!TokenHandle.VerifyToken(token))
+                if (!tokenHandle.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
@@ -635,7 +635,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!TokenHandle.VerifyToken(token))
+                if (!tokenHandle.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
@@ -697,7 +697,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!TokenHandle.VerifyToken(token))
+                if (!tokenHandle.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
@@ -765,7 +765,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!TokenHandle.VerifyToken(token))
+                if (!tokenHandle.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
@@ -837,40 +837,48 @@ namespace Server.Controllers
     // ORDER CREATION
     [Route("/api/createOrder")]
     [ApiController]
-    public class CreateOrderController
+    public class CreateOrderController : ControllerBase
     {
+        [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] Order order)
         {
             try
             {
                 Console.WriteLine("Received createOrder request, verifying token");
-                var authorizationHeader = HttpContext.Request.Headers["Authorization"];
+                string authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
                 {
-                    Console.WriteLine("Failed to verify");
-                    return StatusCode(401, "Unauthorized");
+                    Console.WriteLine("Failed to verify: Authorization header is missing");
+                    return StatusCode(401, "Unauthorized: Authorization header is missing");
                 }
-                var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
+                string token = authorizationHeader.Replace("Bearer ", "");
                 if (!TokenHandle.VerifyToken(token))
                 {
-                    Console.WriteLine("Failed to verify");
-                    return StatusCode(401, "Unauthorized");
+                    Console.WriteLine("Failed to verify: Invalid token");
+                    return StatusCode(401, "Unauthorized: Invalid token");
                 }
 
-                string queryStatement = "INSERT INTO orders (userName, userID, itemID, orderDate) VALUES ( @UserName, @UserID, @ItemID, @OrderDate)";
+                if (order == null || order.ItemIDs == null || order.ItemIDs.Count == 0)
+                {
+                    Console.WriteLine("Failed to create order: Invalid input data");
+                    return BadRequest("Invalid input data");
+                }
+
+                string queryStatement = "INSERT INTO orders (userName, userID, itemID, orderDate) VALUES (@UserName, @UserID, @ItemID, @OrderDate)";
                 string connectionString = ConnectionString.GetConnectionString();
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     await connection.OpenAsync();
-                    foreach (int ItemID in order.ItemIDs)
+
+                    foreach (int itemID in order.ItemIDs)
                     {
                         using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
                         {
                             command.Parameters.AddWithValue("@UserName", order.UserName);
                             command.Parameters.AddWithValue("@UserID", order.UserID);
-                            command.Parameters.AddWithValue("@ItemID", ItemID);
+                            command.Parameters.AddWithValue("@ItemID", itemID);
                             command.Parameters.AddWithValue("@OrderDate", order.OrderDate);
 
                             await command.ExecuteNonQueryAsync();
@@ -879,21 +887,31 @@ namespace Server.Controllers
 
                     return Ok();
                 }
-            }        
+            }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred during item deletion: {ex.Message}");
+                Console.WriteLine($"An error occurred: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
         }
-    }        
+    }
+
     // GET ORDERS
     [Route("/api/orders/{userId}")]
     [ApiController]
     public class GetOrdersController : ControllerBase
     {
+        public class IndividualOrders
+        {
+            public int OrderID { get; set; }
+            public int ItemID { get; set; }
+            public string ItemName { get; set; }
+            public DateTime OrderDate { get; set; }
+            public bool Completed { get; set; }
+        }
+
         [HttpPost]
-        public async Task<ActionResult<List<Order>>> GetOrders(int userId)
+        public async Task<ActionResult<List<IndividualOrders>>> GetOrders(int userId)
         {
             try
             {
@@ -906,15 +924,15 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!TokenHandle.VerifyToken(token))
+                if (!tokenHandle.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
                 }
 
-                string queryStatement = "SELECT storeItems.itemName, orders.itemID, orders.orderID, orders.orderDate, completed FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = @UserID";
+                string queryStatement = "SELECT storeItems.itemName, orders.itemID, orders.orderID, orders.orderDate, completed FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = @UserId";
                 string connectionString = ConnectionString.GetConnectionString();
-                List<Order> Orders = new List<Order>();
+                List<IndividualOrders> orders = new List<IndividualOrders>();
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
@@ -928,7 +946,7 @@ namespace Server.Controllers
                         {
                             while (reader.Read())
                             {
-                                Order order = new Order
+                                IndividualOrders order = new IndividualOrders
                                 {
                                     ItemID = reader.GetInt32(reader.GetOrdinal("itemID")),
                                     OrderID = reader.GetInt32(reader.GetOrdinal("orderID")),
@@ -940,14 +958,13 @@ namespace Server.Controllers
                         }
                     }
                 }
-                return Ok(Orders);
+                return Ok(orders);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred during item deletion: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
-
         }
     }
     // COMPLETE ORDER
@@ -974,7 +991,7 @@ namespace Server.Controllers
                 }
                 var token = authorizationHeader.ToString().Replace("Bearer ", "");
 
-                if (!TokenHandle.VerifyToken(token))
+                if (!tokenHandle.VerifyToken(token))
                 {
                     Console.WriteLine("Failed to verify");
                     return StatusCode(401, "Unauthorized");
