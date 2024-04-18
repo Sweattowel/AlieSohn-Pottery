@@ -38,7 +38,7 @@ export default function UserAccount() {
         console.log('No authorization found');
         return;
     }
-
+    console.log(storedToken)
     try {
         const response = await axios.get(`${serverAddress}/api/orders/${userID}`, {
             headers: {
