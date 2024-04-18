@@ -384,6 +384,7 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during registration: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
+        }
     }
     // REGISTRATION
     [Route("/api/register")]
