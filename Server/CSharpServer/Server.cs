@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +16,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -26,7 +24,6 @@ using DotNetEnv;
 using BCrypt;
 using Server.Controllers;
 using Server;
-
 
 namespace Server
 {

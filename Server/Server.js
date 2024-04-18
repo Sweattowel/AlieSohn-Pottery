@@ -58,7 +58,6 @@ const CheckToken = async (token) => {
     console.log(error) 
     return false
   }
-  
 }
 // Registration
 const bcrypt = require("bcrypt");
