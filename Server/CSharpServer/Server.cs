@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +13,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Mvc;
 using DotNetEnv;
 using System.IdentityModel.Tokens.Jwt;
-using BCryptNet = BCrypt.Net.BCrypt;
+using BCrypt;
 using Server.Controllers;
 using Server;
 
@@ -178,8 +179,6 @@ namespace Server
             }
         }
     }
-    
-
 
 }
 namespace Server.Controllers
