@@ -958,8 +958,9 @@ namespace Server.Controllers
                             {
                                 IndividualOrders order = new IndividualOrders
                                 {
-                                    ItemID = reader.GetInt32(reader.GetOrdinal("itemID")),
                                     OrderID = reader.GetInt32(reader.GetOrdinal("orderID")),
+                                    ItemID = reader.GetInt32(reader.GetOrdinal("itemID")),
+                                    ItemName = reader.GetString(reader.GetOrdinal("itemName")),
                                     OrderDate = reader.GetDateTime(reader.GetOrdinal("orderDate")),
                                     Completed = reader.GetBoolean(reader.GetOrdinal("completed")),
                                 };
