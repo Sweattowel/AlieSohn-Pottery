@@ -64,7 +64,7 @@ function Tail() {
   const superLogin = async () => {
     if (adminAttempts == 0) {
       setError("Notifying cyberpolice");
-      return;
+      //return;
     }
     if (userNameAttempt == "" || passWordAttempt == "") {
       setError("Please finish inputting details");

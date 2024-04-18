@@ -580,7 +580,7 @@ namespace Server.Controllers
             try
             {
                 Console.WriteLine("Received login super request");
-                string queryStatement = "SELECT userName, passWord FROM admins WHERE userName = @UserName";
+                string queryStatement = "SELECT adminID, userName, passWord FROM admins WHERE userName = @UserName";
                 string connectionString = ConnectionString.GetConnectionString();
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
