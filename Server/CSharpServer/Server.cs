@@ -348,8 +348,7 @@ namespace Server.Controllers
         [HttpPost]
         public async Task<ActionResult> HandleLogin([FromBody] UserCredentials credentials)
         {
-            Console.WriteLine("Received login normal request");
-            string queryStatement = "SELECT userID, userName, passWord FROM userData WHERE userName = @UserName AND passWord = @Password LIMIT 1";
+            string queryStatement = "SELECT userID, userName, passWord FROM userData WHERE userName = @UserName LIMIT 1";
             string connectionString = ConnectionString.GetConnectionString();
             try
             {                
@@ -358,37 +357,29 @@ namespace Server.Controllers
                     using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
                     {
                         command.Parameters.AddWithValue("@UserName", credentials.UserName);
-                        command.Parameters.AddWithValue("@Password", credentials.Password);
                         await connection.OpenAsync();
                         using (var reader = await command.ExecuteReaderAsync())
                         {
-                            if (reader.HasRows)
+                            if (await reader.ReadAsync())
                             {
                                 string hashedPassword = reader.GetString(reader.GetOrdinal("passWord"));
                                 bool verify = BcryptEncryption.Decrypt(credentials.Password, hashedPassword);
-                                Console.WriteLine($"Hashed Password: {hashedPassword}, Verification Result: {verify}");
-                                if (!verify)
+                                if (verify)
                                 {
-                                    return Unauthorized();
+                                    var userID = Convert.ToInt32(reader["userID"]);
+                                    var userName = reader["userName"].ToString();
+                                    var tokenString = tokenHandle.CreateToken(userID, userName);
+                                    return Ok(new { token = tokenString, userID = userID, userName = userName });
                                 }
-                                var userID = Convert.ToInt32(reader["userID"]);
-                                var userName = reader["userName"].ToString();
-
-                                var tokenString = tokenHandle.CreateToken(userID, userName);
-
-                                return Ok(new { token = tokenString, userID = userID, userName = userName });
-                            }
-                            else
-                            {
-                                return Unauthorized();
                             }
                         }
                     }
                 }
+                return Unauthorized();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred during registration: {ex.Message}");
+                Console.WriteLine($"An error occurred during login: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
         }
