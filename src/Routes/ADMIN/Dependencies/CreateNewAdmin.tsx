@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../../Context/ContextProvider";
 
 export default function CreateNewAdmin() {
@@ -55,8 +55,9 @@ export default function CreateNewAdmin() {
     }
   };
   const createAdmin = async () => {
-    if (userNameAttempt === "" || passWordAttempt === "") {
+    if (userName === "" || passWord === "") {
       setError('please enter details')
+      console.log("Please finish entering details")
       return
     }
     const storedToken = localStorage.getItem('sutoken');
@@ -64,13 +65,13 @@ export default function CreateNewAdmin() {
       console.log('No authorization found');
       return;
     }
-    if (userName == "" || passWord == "") {
-      return;
-    }
     try {
       const response = await axios.post(
         `${serverAddress}/api/adminRegistration`,
-        { userName: userName, passWord: passWord },
+        { 
+          UserName: userName,
+          Password: passWord 
+        },
         {
           headers: {
             authorization: `Bearer ${storedToken}`
@@ -85,11 +86,17 @@ export default function CreateNewAdmin() {
         setCheck(false)
       } else if (response.status === 400){
         setError('Bad input, please adjust')
+        console.log('Failed to create admin')
       }
     } catch (error) {
       setError("Failed to create admin");
+      console.log(error)
     }
   };
+
+useEffect(() => {
+  console.log(userName, passWord)
+}, [userName, passWord])
 
   return (
     <div>

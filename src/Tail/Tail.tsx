@@ -160,7 +160,7 @@ function Tail() {
   /////////////////////////////////////
   useEffect(() => {
     const refreshToken = async () => {
-      if (!authenticated || !superAuthenticated){
+      if (!authenticated && !superAuthenticated){
         return
       }
       try {
