@@ -782,8 +782,8 @@ namespace Server.Controllers
                     return BadRequest("No image file found in the request");
                 }
 
-                string imagePath = $"{Guid.NewGuid()}.{GetFileExtension(createItemRequest.Picture.FileName)}";
-                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "/StoreImages", imagePath);
+                string imagePath = $"./StoreImages/{Guid.NewGuid()}.{GetFileExtension(createItemRequest.Picture.FileName)}";
+                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "StoreImages");
 
                 string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath)";
                 string connectionString = ConnectionString.GetConnectionString();
