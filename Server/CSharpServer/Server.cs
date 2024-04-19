@@ -835,9 +835,8 @@ namespace Server.Controllers
     public class DeleteItemController : ControllerBase
     {  
         [HttpDelete]
-        public async Task<ActionResult> DeleteItem([FromBody] dynamic requestBody)
+        public async Task<ActionResult> DeleteItem(int itemId)
         {
-            int itemId = requestBody.storeItemID;
             try
             {
                 Console.WriteLine($"Received deleteItem request for item ID: {itemId}, verifying token");
@@ -881,7 +880,7 @@ namespace Server.Controllers
                         {
                             if (!string.IsNullOrEmpty(imagePath))
                             {
-                                string fullPath = Path.Combine("path_to_images_folder", imagePath);
+                                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "StoreImages", imagePath);
                                 if (System.IO.File.Exists(fullPath))
                                 {
                                     System.IO.File.Delete(fullPath);
