@@ -131,8 +131,8 @@ function Tail() {
     }
   };
 
-  const GetRefreshToken = async () => {
-    const storedToken = localStorage.getItem('token');
+  const GetRefreshToken = async (tokenType: string) => {
+    const storedToken = localStorage.getItem(tokenType);
     if (!storedToken){
       console.log('No authorization found');
       return;
@@ -167,14 +167,14 @@ function Tail() {
         console.log("RefreshingToken")
         let enterToken;
         if (superAuthenticated) {
-          enterToken = await GetRefreshToken();
+          enterToken = await GetRefreshToken('sutoken');
           if (enterToken){
             console.log("Token refreshed")
             localStorage.setItem('sutoken', enterToken);            
           }
 
         } else {
-          enterToken = await GetRefreshToken();
+          enterToken = await GetRefreshToken('token');
           if (enterToken){
             console.log("Token refreshed")
             localStorage.setItem('token', enterToken);            

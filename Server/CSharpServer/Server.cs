@@ -95,7 +95,8 @@ namespace Server
         {
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "StoreImages/StoreImages"))
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "StoreImages")),
+                RequestPath = "/StoreImages"
             });
             app.UseRouting();
             app.UseCors("AllowAll");
@@ -754,7 +755,10 @@ namespace Server.Controllers
 
             try
             {
-                if (string.IsNullOrEmpty(createItemRequest.ItemName) || string.IsNullOrEmpty(createItemRequest.ItemDescription) || createItemRequest.ItemPrice == 0 || createItemRequest.Picture == null)
+                if (string.IsNullOrEmpty(createItemRequest.ItemName) || 
+                string.IsNullOrEmpty(createItemRequest.ItemDescription) || 
+                createItemRequest.ItemPrice == 0 || 
+                createItemRequest.Picture == null)
                 {
                     return StatusCode(404, "Missing parameters in item creation");
                 }
@@ -782,8 +786,14 @@ namespace Server.Controllers
                     return BadRequest("No image file found in the request");
                 }
 
-                string imagePath = $"./StoreImages/StoreImages/{Guid.NewGuid()}.{GetFileExtension(createItemRequest.Picture.FileName)}";
-                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "StoreImages/StoreImages");
+                string imageFileName = $"{Guid.NewGuid()}.{GetFileExtension(createItemRequest.Picture.FileName)}";
+                string imagePath = Path.Combine("StoreImages", imageFileName);
+
+                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "StoreImages", imageFileName);
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await createItemRequest.Picture.CopyToAsync(stream);
+                }
 
                 string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath)";
                 string connectionString = ConnectionString.GetConnectionString();
@@ -803,11 +813,6 @@ namespace Server.Controllers
 
                         if (rowsAffected > 0)
                         {
-                            using (var stream = new FileStream(fullPath, FileMode.Create))
-                            {
-                                await createItemRequest.Picture.CopyToAsync(stream);
-                            }
-
                             return Ok("Item successfully entered");
                         }
                         else
