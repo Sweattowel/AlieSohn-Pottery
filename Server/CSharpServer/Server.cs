@@ -95,7 +95,7 @@ namespace Server
         {
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "StoreImages"))
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "StoreImages/StoreImages"))
             });
             app.UseRouting();
             app.UseCors("AllowAll");
@@ -782,8 +782,8 @@ namespace Server.Controllers
                     return BadRequest("No image file found in the request");
                 }
 
-                string imagePath = $"./StoreImages/{Guid.NewGuid()}.{GetFileExtension(createItemRequest.Picture.FileName)}";
-                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "StoreImages");
+                string imagePath = $"./StoreImages/StoreImages/{Guid.NewGuid()}.{GetFileExtension(createItemRequest.Picture.FileName)}";
+                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "StoreImages/StoreImages");
 
                 string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath)";
                 string connectionString = ConnectionString.GetConnectionString();
