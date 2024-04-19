@@ -95,10 +95,7 @@ namespace Server
         {
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(env.ContentRootPath, "StoreImages")
-                ),
-                RequestPath = "/StoreImages"
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "CSharpServer/StoreImages"))
             });
             app.UseRouting();
             app.UseCors("AllowAll");
@@ -739,7 +736,6 @@ namespace Server.Controllers
     [ApiController]
     public class CreateItemController : ControllerBase
     {  
-        private readonly IHostingEnvironment _hostingEnvironment;
         private string GetFileExtension(string fileName)
         {
             return Path.GetExtension(fileName).TrimStart('.');
@@ -762,7 +758,7 @@ namespace Server.Controllers
                 {
                     return StatusCode(404, "Missing parameters in item creation");
                 }
-
+                
                 Console.WriteLine("Received createItem request, verifying token");
                 var authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
@@ -786,9 +782,8 @@ namespace Server.Controllers
                     return BadRequest("No image file found in the request");
                 }
 
-                string webRootPath = _hostingEnvironment.WebRootPath;
                 string imagePath = $"{Guid.NewGuid()}.{GetFileExtension(createItemRequest.Picture.FileName)}";
-                string fullPath = Path.Combine(webRootPath, "StoreImages", imagePath);
+                string fullPath = Path.Combine(env.ContentRootPath, "StoreImages", imagePath);
 
                 string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath)";
                 string connectionString = ConnectionString.GetConnectionString();
