@@ -95,7 +95,7 @@ namespace Server
         {
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "CSharpServer/StoreImages"))
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "/StoreImages"))
             });
             app.UseRouting();
             app.UseCors("AllowAll");
