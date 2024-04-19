@@ -739,6 +739,7 @@ namespace Server.Controllers
     [ApiController]
     public class CreateItemController : ControllerBase
     {  
+        private readonly IHostingEnvironment _hostingEnvironment;
         private string GetFileExtension(string fileName)
         {
             return Path.GetExtension(fileName).TrimStart('.');
