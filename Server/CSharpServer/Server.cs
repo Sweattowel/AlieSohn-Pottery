@@ -783,7 +783,7 @@ namespace Server.Controllers
                 }
 
                 string imagePath = $"{Guid.NewGuid()}.{GetFileExtension(createItemRequest.Picture.FileName)}";
-                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "CSharpServer/StoreImages", imagePath);
+                string fullPath = Path.Combine(Directory.GetCurrentDirectory(), "/StoreImages", imagePath);
 
                 string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath)";
                 string connectionString = ConnectionString.GetConnectionString();
