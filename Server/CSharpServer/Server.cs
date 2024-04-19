@@ -93,9 +93,12 @@ namespace Server
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseStaticFiles( new StaticFileOptions
+            app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider("/var/www/AlieSohn/Server/CSharpServer/StoreImages")
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, "StoreImages")
+                ),
+                RequestPath = "/StoreImages"
             });
             app.UseRouting();
             app.UseCors("AllowAll");
@@ -197,7 +200,6 @@ namespace Server.Controllers
     [ApiController]
     public class StoreItemsController : ControllerBase
     {
-        [HttpGet]
         [HttpPost]
         public ActionResult<IEnumerable<StoreItem>> GetStoreItems()
         {
@@ -755,6 +757,11 @@ namespace Server.Controllers
 
             try
             {
+                if (string.IsNullOrEmpty(createItemRequest.ItemName) || string.IsNullOrEmpty(createItemRequest.ItemDescription) || createItemRequest.ItemPrice == 0 || createItemRequest.Picture == null)
+                {
+                    return StatusCode(404, "Missing parameters in item creation");
+                }
+
                 Console.WriteLine("Received createItem request, verifying token");
                 var authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
@@ -778,8 +785,9 @@ namespace Server.Controllers
                     return BadRequest("No image file found in the request");
                 }
 
+                string webRootPath = _hostingEnvironment.WebRootPath;
                 string imagePath = $"{Guid.NewGuid()}.{GetFileExtension(createItemRequest.Picture.FileName)}";
-                string fullPath = Path.Combine("/StoreImages", imagePath);
+                string fullPath = Path.Combine(webRootPath, "StoreImages", imagePath);
 
                 string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath)";
                 string connectionString = ConnectionString.GetConnectionString();

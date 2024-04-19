@@ -54,9 +54,9 @@ function CreateItem() {
       
     const formData = new FormData();
     formData.append("ItemName", item.ItemName);
-    formData.append("description", item.description);
-    formData.append("price", item.price);
-    formData.append("picture", item.picture);
+    formData.append("ItemDescription", item.description);
+    formData.append("ItemPrice", item.price);
+    formData.append("Picture", item.picture);
 
     try {
       const response = await axios.post(

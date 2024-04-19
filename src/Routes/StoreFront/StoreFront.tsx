@@ -56,14 +56,9 @@ function StoreFront() {
   const collectStoreItems = async () => {
     try {
       const response = await axios.post<storeItem[]>(
-        `${serverAddress}/api/storeItems`,{},        
-        {
-          headers: {
-            Authorization: `Test`
-          }
-        }
+        `${serverAddress}/api/storeItems`
       );
-
+      
       if (response.status === 200) {
         setAllItemscart(response.data);
       } else if (response.status === 404) {

@@ -15,12 +15,15 @@ COMPLETE test new theme for storeItems, use a two contrasting colours, use one f
 COMPLETE Add floating button responses, i.e. if add to cart is clicked float +1 next to 
 COMPLETE Limit admin create to prevent overflow of suusers with the same username
 COMPLETE Add motion framer to increase responsivness in design, at least test to see if you actually want it in the design 
+
 Feedback TODO List:
 
-UNCOMPLETE Implement Responsive Design: Optimize design for various screen sizes and devices.
+COMPLETE Implement Responsive Design: Optimize design for various screen sizes and devices.
 UNCOMPLETE Retain State After Component Unmount: Explore using LocalStorage, Cookies, or unique user ID-based cookie storage to retain state after users leave the webpage.
     Addit: 
         Its like saving progress, i.e. if you visit this spot on say google maps and you register it as seen, store that in local memory 
+            Idea for implemen:
+                Save current page into memory, could be easy and painless page meaning the internal page not the page url itself as that would not need to be saved, also include an encrypted login state?
 COMPLETE Implement Route Protection: Use JWT or session-based authentication for protecting routes on the backend.
     Addit: 
         More research into how i did it and whether it is secure or not is required 
