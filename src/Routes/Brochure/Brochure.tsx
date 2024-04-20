@@ -12,7 +12,7 @@ interface StoreItem {
   itemName: string;
   itemPrice: number;
   imagePath: string;
-  order_count: number;
+  orderCount: number;
 }
 
 function Brochure() {
@@ -37,6 +37,7 @@ function Brochure() {
       );
       if (response.status === 200) {
         setBrochure(response.data);
+        console.log(response.data)
       } else if (response.status === 404) {
         console.log("No items available");
       } else {
@@ -98,7 +99,7 @@ function Brochure() {
                 {item.itemName}
               </h1>
               <div>${item.itemPrice} </div>
-              <div className="text-sm">Happy customers {item.order_count}</div>
+              <div className="text-sm">Happy customers {item.orderCount}</div>
             </div>
           </motion.div>
         ))}

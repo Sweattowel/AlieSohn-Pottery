@@ -75,7 +75,7 @@ function Removeitem() {
     }
     try {
       const response = await axios.delete(
-        `${serverAddress}/api/removeItem/${storeItemID}`, // Pass itemID in the URL path
+        `${serverAddress}/api/deleteItem/${storeItemID}`, // Pass itemID in the URL path
         {
           headers: {
             authorization: `Bearer ${storedToken}`

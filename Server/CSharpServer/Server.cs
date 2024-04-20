@@ -741,6 +741,14 @@ namespace Server.Controllers
         {
             return Path.GetExtension(fileName).TrimStart('.');
         }
+        private bool IsImageExtension(string extension)
+        {
+            return extension.Equals(".png", StringComparison.OrdinalIgnoreCase) ||
+                extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                extension.Equals(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                extension.Equals(".gif", StringComparison.OrdinalIgnoreCase) ||
+                extension.Equals(".bmp", StringComparison.OrdinalIgnoreCase);
+        }
         public class CreateItemRequest
         {
             public string ItemName { get; set; }
@@ -779,13 +787,18 @@ namespace Server.Controllers
                     return StatusCode(401, "Unauthorized");
                 }
 
-                // Check if the request contains a file
+                
                 if (createItemRequest.Picture == null || createItemRequest.Picture.Length == 0)
                 {
                     Console.WriteLine("No image file found in the request");
                     return BadRequest("No image file found in the request");
                 }
-
+                string extension = Path.GetExtension(createItemRequest.Picture.FileName);
+                
+                if (extension == null || !IsImageExtension(extension))
+                {
+                    return StatusCode(401, "Unauthorized File type");
+                }
                 string imageFileName = $"{Guid.NewGuid()}.{GetFileExtension(createItemRequest.Picture.FileName)}";
                 string imagePath = Path.Combine("StoreImages", imageFileName);
 
