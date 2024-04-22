@@ -16,6 +16,8 @@ COMPLETE Add floating button responses, i.e. if add to cart is clicked float +1 
 COMPLETE Limit admin create to prevent overflow of suusers with the same username
 COMPLETE Add motion framer to increase responsivness in design, at least test to see if you actually want it in the design 
 UNCOMPLETE Implement the same brochure system but for storeItems to further reduce server load
+UNCOMPLETE Put tokens into cookies over localStorage
+UNCOMPLETE Switch to class based programming for ease of organisation A̢͉͍͙͇͌̔̄͝ǘ̷̠̥̳̮̜͜g̸͙͓͎͍̟̟̐̉̇̍͊͆͝h̵͔͉̰̬͑͋͝u̵̹̳̜̳͕͌̃̅͊g̸͚̗͍̦̞͚͋͑̂̆̍̈́͆͜h̶̢̗̮͙̖͖̓͗̓̍̏̒̊̔̕
 Feedback TODO List:
 
 COMPLETE Implement Responsive Design: Optimize design for various screen sizes and devices.

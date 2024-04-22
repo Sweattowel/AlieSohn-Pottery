@@ -39,13 +39,6 @@ function Cart() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
   const [error, setError] = useState('')
-
-  function removeFromCart(id: number) {
-    setCart((prevItems) =>
-      prevItems.filter((item) => item.itemID !== id)
-    );
-  }
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = cart.slice(indexOfFirstItem, indexOfLastItem);
@@ -56,89 +49,124 @@ function Cart() {
     imagePath: "",
     itemDescription: "",
   });
-  const handleChangePage = (
-    event: React.ChangeEvent<unknown>,
-    newPage: number
-  ) => {
-    setCurrentPage(newPage);
-  };
-
-  const sendOrder = async () => {
-    if (cart.length == 0){
-      console.log('No items in cart')
-      return
-    }
-    setShowCardHandle(true); 
-  };
-
-  const handleCardConfirm = () => {
-    setShowCardHandle(false); // Hide card handling component on confirmation
-    createOrder(); // Proceed with creating the order
-  };
-  const createOrder = async () => {
-    const storedToken = localStorage.getItem('token');
-    if (!storedToken){
-      console.log('No authorization found');
-      return;
-    }
+  const [confirmationMessages, setConfirmationMessages] = useState<{ index: number; id: number, type: string }[]>([]);
+  // TOKEN HANDLE
+  function getToken(choice: string) 
+  {
+    if (choice == 'Null') return
     
-    try {
-      const itemIDs = [];
-      for (let i = 0; i < cart.length; i++) {
-        for (let j = 0; j < cart[i].itemCount; j++) {
-          itemIDs.push(cart[i].itemID);
-        }
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(`${choice}=`)) { // Corrected condition
+        return cookie.substring(`${choice}=`.length); // Corrected substring index
       }
-      const orderDate = new Date();
-      const response = await axios.post(
-        `${serverAddress}/api/createOrder`,
-        {
-          userID,
-          userName,
-          itemIDs,
-          orderDate
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${storedToken}`
+    }
+    return null;
+  }
+  // ORDER HANDLE
+  class OrderHandle
+  {
+    // CREATE ORDER
+    static createOrder = async () => {
+      const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+      const storedToken = getToken(choice);
+
+      if (!storedToken){
+        console.log('No authorization found');
+        return;
+      }
+      
+      try {
+        const itemIDs = [];
+        for (let i = 0; i < cart.length; i++) {
+          for (let j = 0; j < cart[i].itemCount; j++) {
+            itemIDs.push(cart[i].itemID);
           }
         }
-      );
-  
-      if( response.status === 401 ){
-        console.log('Unauthorized, please log in')
-        setError('Unauthorized, please log in')
-      } else if (response.status === 200) {
-        console.log("Successfully made order");
-        setCart([]);
-      } else {
-        console.log("Failed to make order");
+        const orderDate = new Date();
+        const response = await axios.post(
+          `${serverAddress}/api/createOrder`,
+          {
+            userID,
+            userName,
+            itemIDs,
+            orderDate
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${storedToken}`
+            }
+          }
+        );
+    
+        if( response.status === 401 ){
+          console.log('Unauthorized, please log in')
+          setError('Unauthorized, please log in')
+        } else if (response.status === 200) {
+          console.log("Successfully made order");
+          setCart([]);
+        } else {
+          console.log("Failed to make order");
+        }
+      } catch (error) {
+        setError('Unauthorized, please relog')
       }
-    } catch (error) {
-      setError('Unauthorized, please relog')
+    };
+    // BEGIN PAYMENT
+    static sendOrder = async () => {
+      if (cart.length == 0){
+        console.log('No items in cart')
+        return
+      }
+      setShowCardHandle(true); 
+    };    
+    // END PAYMENT
+    static handleCardConfirm = () => {
+      setShowCardHandle(false); // Hide card handling component on confirmation
+      OrderHandle.createOrder(); // Proceed with creating the order
+    };
+  }
+
+
+  // CART HANDLE
+  class CartHandle 
+  {
+    // INCREMENT ITEMCOUNT BY 1
+    static increment = (id: number) => {
+      setCart((prevItems) =>
+        prevItems.map((item, i) =>
+          item.itemID === id ? { ...item, itemCount: item.itemCount + 1 } : item
+        )
+      );
+    };
+    // DECREMENT ITEMCOUNT BY 1
+    static decrement = (id: number) => {
+      setCart((prevItems) =>
+        prevItems.map((item, i) =>
+          item.itemID === id
+            ? { ...item, itemCount: Math.max(1, item.itemCount - 1) }
+            : item
+        )
+      );
+    };
+    // REMOVE ITEM FROM CART IN FULL
+    static removeFromCart(id: number) {
+      setCart((prevItems) =>
+        prevItems.filter((item) => item.itemID !== id)
+      );
     }
-  };
-  
-  // decrement and increment the specified item's amount
-  const increment = (id: number) => {
-    setCart((prevItems) =>
-      prevItems.map((item, i) =>
-        item.itemID === id ? { ...item, itemCount: item.itemCount + 1 } : item
-      )
-    );
-  };
+  }
 
-  const decrement = (id: number) => {
-    setCart((prevItems) =>
-      prevItems.map((item, i) =>
-        item.itemID === id
-          ? { ...item, itemCount: Math.max(1, item.itemCount - 1) }
-          : item
-      )
-    );
-  };
-
-  const [confirmationMessages, setConfirmationMessages] = useState<{ index: number; id: number, type: string }[]>([]);
+  class HandlePage
+  {
+    static handleChangePage = (
+      event: React.ChangeEvent<unknown>,
+      newPage: number
+    ) => {
+      setCurrentPage(newPage);
+    };    
+  }
 
 ///////////////////////////////////////////////////////////////////////
 useEffect(() => {
@@ -166,7 +194,7 @@ useEffect(() => {
         {authenticated ? (
           <button
             className="text-BLACK border-BLACK border w-[20vw] bg-WHITE rounded m-auto justify-center text-center text-BACKGROUND items-center flex hover:opacity-90 hover:border-BLACK hover:shadow-lg"
-            onClick={() => sendOrder()}
+            onClick={() => OrderHandle.sendOrder()}
           >
             Create Order
           </button>
@@ -205,7 +233,7 @@ useEffect(() => {
              <div className="flex items-center justify-center text-center text-BACKGROUND bg-BACKGROUND flex-grow text-[0.6em] md:text-[0.7em] w-[90%] m-auto relative">
               <button
                 onClick={() => {
-                  removeFromCart(item.itemID);
+                  CartHandle.removeFromCart(item.itemID);
                   setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: 'Removed' }]);
                   setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
                 }}
@@ -215,7 +243,7 @@ useEffect(() => {
               </button>
               <button
                 onClick={() => {
-                  increment(item.itemID);
+                  CartHandle.increment(item.itemID);
                   setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '+' }]);
                   setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
                 }}
@@ -225,7 +253,7 @@ useEffect(() => {
               </button>
               <button
                 onClick={() => {
-                  decrement(item.itemID);
+                  CartHandle.decrement(item.itemID);
                   setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '-' }]);
                   setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
                 }}
@@ -257,7 +285,7 @@ useEffect(() => {
           </h1>
         )}
         {showCardHandle && (
-          <CardHandle onConfirm={handleCardConfirm} onCancel={() => setShowCardHandle(false)} />
+          <CardHandle onConfirm={OrderHandle.handleCardConfirm} onCancel={() => setShowCardHandle(false)} />
         )}
         
         <Pagination
@@ -269,7 +297,7 @@ useEffect(() => {
           }}
           count={Math.ceil(cart.length / itemsPerPage)}
           page={currentPage}
-          onChange={handleChangePage}
+          onChange={HandlePage.handleChangePage}
           variant="outlined"
         />
       </div>

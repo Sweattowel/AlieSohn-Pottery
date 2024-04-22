@@ -32,7 +32,7 @@ function CreateItem() {
     price: "0",
     picture: null,
   });
-
+  
   const handleInputChange = (field: keyof Item, value: string) => {
     setItem((prevItem) => ({ ...prevItem, [field]: value }));
   };
@@ -46,7 +46,10 @@ function CreateItem() {
       console.log("Incomplete StoreItem");
       return;
     }
-    const storedToken = localStorage.getItem('sutoken');
+
+    const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+    const storedToken = getToken(choice);
+
     if (!storedToken){
       console.log('No authorization found');
       return;
@@ -84,6 +87,21 @@ function CreateItem() {
       console.log(error);
     }
   };
+
+  // TOKEN HANDLE
+  function getToken(choice: string) 
+  {
+    if (choice == 'Null') return
+    
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(`${choice}=`)) { // Corrected condition
+        return cookie.substring(`${choice}=`.length); // Corrected substring index
+      }
+    }
+    return null;
+  }
 
   ///////////////////////////////////////////////////////////////
   return (

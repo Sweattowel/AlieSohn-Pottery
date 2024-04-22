@@ -19,7 +19,7 @@ function Tail() {
     setUserName,
   ] = useMyContext();
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
-
+  // STATE CONSTS
   const [wantLogin, setWantLogin] = useState<boolean>(false);
   const [userNameAttempt, setUserNameAttempt] = useState<string>("");
   const [passWordAttempt, setPassWordAttempt] = useState<string>("");
@@ -29,168 +29,192 @@ function Tail() {
   const [registrationAttempts, setRegistrationAttempts] = useState<number>(4);
   const [error, setError] = useState<string>("");
 
-  const Login = async () => {
-    if (attempts == 0) {
-      setError("Out of attempts");
-      //return
-    }
-    if (userNameAttempt == "" || passWordAttempt == "") {
-      setError("Please finish inputting details");
-      return;
-    }
-    try {
-      const response = await axios.post(`${serverAddress}/api/login`, {
-        UserName: userNameAttempt,
-        PassWord: passWordAttempt,
-      });
-      if (response.status === 200) {
-        setAuthenticated(true);
-        setSuperAuthenticated(false);
-        setUserID(response.data.userID);
-        localStorage.setItem('token', response.data.token)
-        setUserName(userNameAttempt);
-        setWantLogin(false);
-        setUserNameAttempt("");
-        setPassWordAttempt("");
-        console.log("Logged in successfully");
-      } else {
-        setError("Failed to log in");
+  class LoginHandle {
+    // REGULAR LOGIN
+    static Login = async () => {
+      if (attempts == 0) {
+        setError("Out of attempts");
+        //return
       }
-    } catch (error) {
-      setAttempts((prevAttempts) => Math.max(prevAttempts - 1, 0));
-      setError(`No account exists, ${attempts} attempts remaining`);
-    }
-  };
-  const superLogin = async () => {
-    if (adminAttempts == 0) {
-      setError("Notifying cyberpolice");
-      //return;
-    }
-    if (userNameAttempt == "" || passWordAttempt == "") {
-      setError("Please finish inputting details");
-      return;
-    }
-    try {
-      const ResponseSir = await axios.post(`${serverAddress}/api/adminLogin`, {
-        UserName: userNameAttempt,
-        PassWord: passWordAttempt,
-      });
-      if (ResponseSir.status === 200) {
-        setAuthenticated(true);
-        setSuperAuthenticated(true);
-        setUserID(-ResponseSir.data.adminID);
-        setWantLogin(false);
-        localStorage.setItem('sutoken', ResponseSir.data.token)
-        setUserNameAttempt("");
-        setPassWordAttempt("");
-        console.log("Logged in successfully Sir");
-      } else {
-        console.log("Failed to log in");
+      if (userNameAttempt == "" || passWordAttempt == "") {
+        setError("Please finish inputting details");
+        return;
       }
-    } catch (error) {
-      setAdminAttempts((prevAttempts) => Math.max(prevAttempts - 1, 0));
-      setError(`False Prophet, You are running out of time ${adminAttempts}`);
-    }
-  };
-
-  const logOut = () => {
-    setAuthenticated(false);
-    setSuperAuthenticated(false);
-    setUserID(-1);
-    setUserName("");
-    setUserNameAttempt("");
-    setPassWordAttempt("");
-    setCaste("waiting");
-    localStorage.setItem('token', 'Null')
-    localStorage.setItem('sutoken', 'Null')
-  };
-  const register = async () => {
-    if (userNameAttempt == "" || passWordAttempt == "") {
-      setError(`Please finish inputting details`);
-      return;
-    }
-    try {
-      const response = await axios.post(`${serverAddress}/api/register`, {
-        UserName: userNameAttempt,
-        PassWord: passWordAttempt,
-      });
-      if (response.status === 200) {
-        console.log("Registered successfully");
-        Login();
-        setWantLogin(false);
-      } else if (response.status === 409) {
-        console.log(
-          "Username already exists. Please choose a different username."
-        );
-      } else {
-        console.log("Failed to create account");
-      }
-    } catch (error) {
-      setRegistrationAttempts((prevAttempts) => Math.max(prevAttempts - 1, 0));
-      setError(`Failed to register ${registrationAttempts}`);
-    }
-  };
-
-  const GetRefreshToken = async (tokenType: string) => {
-    const storedToken = localStorage.getItem(tokenType);
-    if (!storedToken){
-      console.log('No authorization found');
-      return;
-    }
-
-    const response = await axios.post(
-      `${serverAddress}/api/TokenRefresh`,{
-        UserID: userID,
-        UserName: userName
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${storedToken}`
+      try {
+        const response = await axios.post(`${serverAddress}/api/login`, {
+          UserName: userNameAttempt,
+          PassWord: passWordAttempt,
+        });
+        if (response.status === 200) {
+          setAuthenticated(true);
+          setSuperAuthenticated(false);
+          setUserID(response.data.userID);
+          setUserName(userNameAttempt);
+          setWantLogin(false);
+          setUserNameAttempt("");
+          setPassWordAttempt("");
+          TokenHandle.SetToken('token',response.data.token)
+          console.log("Logged in successfully");
+        } else {
+          setError("Failed to log in");
         }
+      } catch (error) {
+        setAttempts((prevAttempts) => Math.max(prevAttempts - 1, 0));
+        setError(`No account exists, ${attempts} attempts remaining`);
       }
-    );
-    const token = response.data
-    if (response.status == 200){
-      return token
-    } else {
-      console.log('Failed to refresh please relog into site')
-      return storedToken
+    };
+    // SUPER LOGIN
+    static superLogin = async () => {
+      if (adminAttempts == 0) {
+        setError("Notifying cyberpolice");
+        //return;
+      }
+      if (userNameAttempt == "" || passWordAttempt == "") {
+        setError("Please finish inputting details");
+        return;
+      }
+      try {
+        const ResponseSir = await axios.post(
+          `${serverAddress}/api/adminLogin`,
+          {
+            UserName: userNameAttempt,
+            PassWord: passWordAttempt,
+          }
+        );
+        if (ResponseSir.status === 200) {
+          setAuthenticated(true);
+          setSuperAuthenticated(true);
+          setUserID(-ResponseSir.data.adminID);
+          setWantLogin(false);
+          setUserNameAttempt("");
+          setPassWordAttempt("");
+          TokenHandle.SetToken('sutoken', ResponseSir.data.token)
+          console.log("Logged in successfully Sir");
+        } else {
+          console.log("Failed to log in");
+        }
+      } catch (error) {
+        setAdminAttempts((prevAttempts) => Math.max(prevAttempts - 1, 0));
+        setError(`False Prophet, You are running out of time ${adminAttempts}`);
+      }
+    };
+    // LOGOUT HANDLE
+    static logOut = () => {
+      setAuthenticated(false);
+      setSuperAuthenticated(false);
+      setUserID(-1);
+      setUserName("");
+      setUserNameAttempt("");
+      setPassWordAttempt("");
+      setCaste("waiting");
+      TokenHandle.SetToken('sutoken', 'Null')
+      TokenHandle.SetToken('token', 'Null')
+    };
+  }
+
+  class RegisterHandle {
+    // REGISTER
+    static register = async () => {
+      if (userNameAttempt == "" || passWordAttempt == "") {
+        setError(`Please finish inputting details`);
+        return;
+      }
+      try {
+        const response = await axios.post(`${serverAddress}/api/register`, {
+          UserName: userNameAttempt,
+          PassWord: passWordAttempt,
+        });
+        if (response.status === 200) {
+          console.log("Registered successfully");
+          LoginHandle.Login();
+          setWantLogin(false);
+        } else if (response.status === 409) {
+          console.log(
+            "Username already exists. Please choose a different username."
+          );
+        } else {
+          console.log("Failed to create account");
+        }
+      } catch (error) {
+        setRegistrationAttempts((prevAttempts) =>
+          Math.max(prevAttempts - 1, 0)
+        );
+        setError(`Failed to register ${registrationAttempts}`);
+      }
+    };
+  }
+
+  class TokenHandle {
+    static GetRefreshToken = async (tokenType: string) => {
+      const storedToken = localStorage.getItem(tokenType);
+      if (!storedToken) {
+        console.log("No authorization found");
+        return;
+      }
+
+      const response = await axios.post(
+        `${serverAddress}/api/TokenRefresh`,
+        {
+          UserID: userID,
+          UserName: userName,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+        }
+      );
+      const token = response.data;
+      if (response.status == 200) {
+        return token;
+      } else {
+        console.log("Failed to refresh please relog into site");
+        return storedToken;
+      }
+    };
+    // COOKIE HANDLE
+    static SetToken(cookie: string, choice: string) {
+      const expirationDate = new Date();
+      // Set cookie to expire in one hour
+      expirationDate.setTime(expirationDate.getTime() + (60 * 60 * 1000)); 
+  
+      document.cookie = `${choice}=${cookie}; expires=${expirationDate.toUTCString()}; path=/`;
     }
   }
+
   /////////////////////////////////////
   useEffect(() => {
     const refreshToken = async () => {
-      if (!authenticated && !superAuthenticated){
-        return
+      if (!authenticated && !superAuthenticated) {
+        return;
       }
       try {
-        console.log("RefreshingToken")
+        console.log("RefreshingToken");
         let enterToken;
         if (superAuthenticated) {
-          enterToken = await GetRefreshToken('sutoken');
-          if (enterToken){
-            console.log("Token refreshed")
-            localStorage.setItem('sutoken', enterToken);            
+          enterToken = await TokenHandle.GetRefreshToken("sutoken");
+          if (enterToken) {
+            console.log("Token refreshed");
+            localStorage.setItem("sutoken", enterToken);
           }
-
         } else {
-          enterToken = await GetRefreshToken('token');
-          if (enterToken){
-            console.log("Token refreshed")
-            localStorage.setItem('token', enterToken);            
+          enterToken = await TokenHandle.GetRefreshToken("token");
+          if (enterToken) {
+            console.log("Token refreshed");
+            localStorage.setItem("token", enterToken);
           }
         }
       } catch (error) {
         console.error("Token refresh failed:", error);
       }
     };
-  
+
     // Call refreshToken initially
     refreshToken();
-  
+
     // Refresh token every 10 minutes
     const intervalId = setInterval(refreshToken, 5 * 60 * 1000);
-  
+
     // Clean up the interval when the component unmounts or when dependencies change
     return () => clearInterval(intervalId);
   }, [authenticated, superAuthenticated]);
@@ -221,20 +245,20 @@ function Tail() {
               onChange={(e) => setPassWordAttempt(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key == "Enter") {
-                  Login();
+                  LoginHandle.Login();
                 }
               }}
               type="password"
             />
             <br />
             <button
-              onClick={() => Login()}
+              onClick={() => LoginHandle.Login()}
               className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 mb-4 justify-center text-center text-WHITE w-[40%] rounded"
             >
               Login
             </button>
             <button
-              onClick={() => superLogin()}
+              onClick={() => LoginHandle.superLogin()}
               className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[40%] rounded"
             >
               Admin
@@ -242,7 +266,7 @@ function Tail() {
             <br />
             <br />
             <button
-              onClick={() => register()}
+              onClick={() => RegisterHandle.register()}
               className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[60%] text-2xl rounded"
             >
               Register
@@ -262,7 +286,7 @@ function Tail() {
         <div className="w-[125px] text-center mb-2 rounded justify-center w-full">
           {authenticated || superAuthenticated ? (
             <button
-              onClick={() => logOut()}
+              onClick={() => LoginHandle.logOut()}
               className="bg-WHITE font-bold border border-BLACK w-[15%] rounded text-BACKGROUND hover:opacity-70 shadow-lg"
             >
               Log out

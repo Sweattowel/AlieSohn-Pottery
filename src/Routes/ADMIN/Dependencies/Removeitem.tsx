@@ -44,59 +44,78 @@ function Removeitem() {
   ) => {
     setCurrentPage(newPage);
   };
-  //
-  const collectStoreItems = async () => {
-    try {
-      const response = await axios.post<storeItem[]>(
-        `${serverAddress}/api/storeItems`
-      );
+  // StoreItemHandle
+  class StoreItemHandle
+  {
+    static collectStoreItems = async () => {
+      try {
+        const response = await axios.post<storeItem[]>(
+          `${serverAddress}/api/storeItems`
+        );
 
-      if (response.status === 200) {
-        setStoreItems(response.data);
-        setItemCount(response.data.length);
-      } else if (response.status === 404) {
-        console.log("No items available to purchase");
-      } else {
-        console.log("Internal Server Error");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const removeStoreItems = async ({ storeItemID }: RemoveItemProps) => {
-    if (locked) {
-      return;
-    }
-    const storedToken = localStorage.getItem('sutoken');
-    if (!storedToken){
-      console.log('No authorization found');
-      return;
-    }
-    try {
-      const response = await axios.delete(
-        `${serverAddress}/api/deleteItem/${storeItemID}`, // Pass itemID in the URL path
-        {
-          headers: {
-            authorization: `Bearer ${storedToken}`
-          }
+        if (response.status === 200) {
+          setStoreItems(response.data);
+          setItemCount(response.data.length);
+        } else if (response.status === 404) {
+          console.log("No items available to purchase");
+        } else {
+          console.log("Internal Server Error");
         }
-      );
-      if (response.status === 200) {
-        console.log("Item successfully removed");
-        collectStoreItems();
-      } else if (response.status === 404) {
-        console.log("Item does not exist");
-      } else {
-        console.log("Internal Server Error");
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    };
+
+    static removeStoreItems = async ({ storeItemID }: RemoveItemProps) => {
+      if (locked) {
+        return;
+      }
+      const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+      const storedToken = getToken(choice);
+      
+      if (!storedToken){
+        console.log('No authorization found');
+        return;
+      }
+      try {
+        const response = await axios.delete(
+          `${serverAddress}/api/deleteItem/${storeItemID}`, // Pass itemID in the URL path
+          {
+            headers: {
+              authorization: `Bearer ${storedToken}`
+            }
+          }
+        );
+        if (response.status === 200) {
+          console.log("Item successfully removed");
+          StoreItemHandle.collectStoreItems();
+        } else if (response.status === 404) {
+          console.log("Item does not exist");
+        } else {
+          console.log("Internal Server Error");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };    
+  }
+  // TOKEN HANDLE
+  function getToken(choice: string) 
+  {
+    if (choice == 'Null') return
+    
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(`${choice}=`)) { // Corrected condition
+        return cookie.substring(`${choice}=`.length); // Corrected substring index
+      }
     }
-  };
+    return null;
+  }
 
   useEffect(() => {
-    collectStoreItems();
+    StoreItemHandle.collectStoreItems();
   }, []);
   ///////////////////////////////////////////////////////////////////
   return (
@@ -133,7 +152,7 @@ function Removeitem() {
               ) : (
                 <button
                   className="border border-BLACK hover:text-BLACK hover:opacity-60 bg-WHITE shadow-lg text-BACKGROUND w-full rounded-r"
-                  onClick={() => removeStoreItems({ storeItemID: item.itemID })}
+                  onClick={() => StoreItemHandle.removeStoreItems({ storeItemID: item.itemID })}
                 >
                   Remove Item from store
                 </button>

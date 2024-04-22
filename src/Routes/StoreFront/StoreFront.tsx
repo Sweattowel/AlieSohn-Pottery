@@ -53,7 +53,8 @@ function StoreFront() {
   });
   const [confirmationMessages, setConfirmationMessages] = useState<{ index: number; id: number }[]>([]);
 
-  const collectStoreItems = async () => {
+  const collectStoreItems = async () => 
+  {
     try {
       const response = await axios.get<storeItem[]>(
         `${serverAddress}/api/storeItems`
@@ -103,16 +104,19 @@ function StoreFront() {
   }
 
   ///////////////////////////////////////////
-  useEffect(() => {
+  useEffect(() => 
+  {
     if (allItems.length === 0) {
       collectStoreItems();
     }
   }, []);
-  useEffect(() => {
+  useEffect(() => 
+  {
     setItemCount(allItems.length);
   }, [allItems]);
 
-  useEffect(() => {
+  useEffect(() => 
+  {
     let totalCount = 0;
     let totalPrice = 0;
 
@@ -125,7 +129,8 @@ function StoreFront() {
     setTotalPrice(totalPrice);
   }, [cart]);
 
- useEffect(() => {
+ useEffect(() => 
+  {
     const handleScroll = () => {
       setSelectedStoreItem({
         itemID: -1,

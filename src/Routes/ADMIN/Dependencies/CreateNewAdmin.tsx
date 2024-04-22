@@ -23,7 +23,7 @@ export default function CreateNewAdmin() {
   const [adminAttempts, setAdminAttempts] = useState<number>(4);
   const [userNameAttempt, setUserNameAttempt] = useState<string>("");
   const [passWordAttempt, setPassWordAttempt] = useState<string>("");
-
+  // HANDLE LOGIN
   const superLogin = async () => {
     if (adminAttempts == 0) {
       setError("Notifying cyberpolice");
@@ -54,13 +54,16 @@ export default function CreateNewAdmin() {
       setError(`False Prophet, You are running out of time ${adminAttempts}`);
     }
   };
+  // HANDLE LOGIN
   const createAdmin = async () => {
     if (userName === "" || passWord === "") {
       setError('please enter details')
       console.log("Please finish entering details")
       return
     }
-    const storedToken = localStorage.getItem('sutoken');
+    const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+    const storedToken = getToken(choice);
+    
     if (!storedToken){
       console.log('No authorization found');
       return;
@@ -93,7 +96,21 @@ export default function CreateNewAdmin() {
       console.log(error)
     }
   };
-
+  // TOKEN HANDLE
+  function getToken(choice: string) 
+  {
+    if (choice == 'Null') return
+    
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(`${choice}=`)) { // Corrected condition
+        return cookie.substring(`${choice}=`.length); // Corrected substring index
+      }
+    }
+    return null;
+  }
+// USEEFFECT
 useEffect(() => {
   console.log(userName, passWord)
 }, [userName, passWord])

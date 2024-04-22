@@ -24,87 +24,104 @@ export default function UserAccount() {
   const ordersPerPage = 15;
   const [currentOrdersPage, setCurrentOrdersPage] = useState(1);
   const [orderCount, setOrderCount] = useState(0);
-
-  const handleChangeOrdersPage = (
-    event: React.ChangeEvent<unknown>,
-    newPage: number
-  ) => {
-    setCurrentOrdersPage(newPage);
-  };
-
-  const getOrders = async () => {
-    const storedToken = localStorage.getItem('token');
-    if (!storedToken || storedToken == null){
-        console.log('No authorization found');
-        return;
-    }
-    
-    try {
-        const response = await axios.get(`${serverAddress}/api/orders/${userID}`, {
-            headers: {
-                Authorization: `Bearer ${storedToken}`
-            }
-        });
-        if (response.status === 200) {
-            const data = response.data;
-            setOrders(data);
-            setOriginalOrders(data); 
-            setOrderCount(data.length);
-        } else if (response.status === 404) {
-            console.log("No orders to collect");
-        } else if (response.status === 401) {
-            console.log('Unauthorized')
-        }
-    } catch (error) {
-        console.log(error);
-    }
-};
   const [groupSettingChoice, setGroupSettingChoice] = useState(1)
-  const sortDate = (choice: any) => {
-    let sortedOrders = [...originalOrders]; // Use the original orders data for sorting/grouping
 
-    if (choice === 1) {
-      setGroupSettingChoice(1)
-      sortedOrders.sort(
-        (a, b) =>
-          new Date(a.orderDate).getTime() - new Date(b.orderDate).getTime()
-      );
-    } else if (choice === 2) {
-      setGroupSettingChoice(2)
-      sortedOrders.sort(
-        (a, b) =>
-          new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
-      );
-    } else if (choice === 3) {
-      const items: any = {};
-      setGroupSettingChoice(3)
-      for (let i = 0; i < originalOrders.length; i++) {
-        const currentOrder = originalOrders[i];
-        if (!currentOrder) {
-          console.error(`Invalid order at index ${i}:`, currentOrder);
-          continue; // Skip this iteration and continue to the next one
+  class OrderHandle
+  {
+    // GET ORDERS
+    static getOrders = async () => 
+      {
+        const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+        const storedToken = getToken(choice);
+        
+        try {
+            const response = await axios.get(`${serverAddress}/api/orders/${userID}`, {
+                headers: {
+                    Authorization: `Bearer ${storedToken}`
+                }
+            });
+            if (response.status === 200) {
+                const data = response.data;
+                setOrders(data);
+                setOriginalOrders(data); 
+                setOrderCount(data.length);
+            } else if (response.status === 404) {
+                console.log("No orders to collect");
+            } else if (response.status === 401) {
+                console.log('Unauthorized')
+            }
+        } catch (error) {
+            console.log(error);
         }
-        const itemID = currentOrder.itemID;
-        if (!items[itemID]) {
-          items[itemID] = {
-            itemID: itemID,
-            itemName: currentOrder.itemName,
-            count: 0,
-          };
+    }; 
+    // CHANGE ORDER ORDERING
+    static sortDate = (choice: any) => 
+      {
+      let sortedOrders = [...originalOrders]; // Use the original orders data for sorting/grouping
+
+      if (choice === 1) {
+        setGroupSettingChoice(1)
+        sortedOrders.sort(
+          (a, b) =>
+            new Date(a.orderDate).getTime() - new Date(b.orderDate).getTime()
+        );
+      } else if (choice === 2) {
+        setGroupSettingChoice(2)
+        sortedOrders.sort(
+          (a, b) =>
+            new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
+        );
+      } else if (choice === 3) {
+        const items: any = {};
+        setGroupSettingChoice(3)
+        for (let i = 0; i < originalOrders.length; i++) {
+          const currentOrder = originalOrders[i];
+          if (!currentOrder) {
+            console.error(`Invalid order at index ${i}:`, currentOrder);
+            continue; // Skip this iteration and continue to the next one
+          }
+          const itemID = currentOrder.itemID;
+          if (!items[itemID]) {
+            items[itemID] = {
+              itemID: itemID,
+              itemName: currentOrder.itemName,
+              count: 0,
+            };
+          }
+          items[itemID].count++;
         }
-        items[itemID].count++;
+
+        // Convert items object back into an array
+        sortedOrders = Object.values(items);
       }
 
-      // Convert items object back into an array
-      sortedOrders = Object.values(items);
+      setOrders(sortedOrders);
+    };       
+    // PAGINATION
+    static handleChangeOrdersPage = (
+      event: React.ChangeEvent<unknown>,
+      newPage: number
+    ) => {
+      setCurrentOrdersPage(newPage);
+    };
+  }
+
+  function getToken(choice: string) 
+  {
+    if (choice == 'Null') return
+    
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(`${choice}=`)) { // Corrected condition
+        return cookie.substring(`${choice}=`.length); // Corrected substring index
+      }
     }
-
-    setOrders(sortedOrders);
-  };
-
+    return null;
+  }
   // useEffect to fetch orders when component mounts
   useEffect(() => {
-    getOrders();
+    OrderHandle.getOrders();
   }, []);
 
   return (
@@ -120,9 +137,9 @@ export default function UserAccount() {
         </div>
         <div className="rounded-b w-[50%] m-auto text-WHITE mt-1 mb-1 flex justify-center items-center">
           
-            <button className={ groupSettingChoice == 1 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK"} onClick={() => sortDate(1)} >DESC</button>
-            <button className={ groupSettingChoice == 2 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK"} onClick={() => sortDate(2)} >ASC</button>
-            <button className={ groupSettingChoice == 3 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK"} onClick={() => sortDate(3)} >GRP</button>
+            <button className={ groupSettingChoice == 1 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK"} onClick={() => OrderHandle.sortDate(1)} >DESC</button>
+            <button className={ groupSettingChoice == 2 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK"} onClick={() => OrderHandle.sortDate(2)} >ASC</button>
+            <button className={ groupSettingChoice == 3 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK"} onClick={() => OrderHandle.sortDate(3)} >GRP</button>
           
         </div>
         <Pagination
@@ -133,7 +150,7 @@ export default function UserAccount() {
           }}
           count={Math.ceil(orderCount / ordersPerPage)}
           page={currentOrdersPage}
-          onChange={handleChangeOrdersPage}
+          onChange={OrderHandle.handleChangeOrdersPage}
           variant="outlined"
         />
         {authenticated && !superAuthenticated

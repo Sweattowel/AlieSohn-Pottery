@@ -21,18 +21,26 @@ export default function UserDelete() {
 
   const [locked, setLocked] = useState<boolean>(true);
 
-  async function deleteAccount() {
-    if (!userID || !userName) {
+  async function deleteAccount() 
+  {
+    if (!userID || !userName) 
+    {
       return;
     }
-    const storedToken = localStorage.getItem('token');
-    if (!storedToken){
+    const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+    const storedToken = getToken(choice);
+
+    if (!storedToken)
+    {
       console.log('No authorization found');
       return;
     }
-    if (!authenticated) {
+
+    if (!authenticated) 
+    {
       return;
     }
+
     try {
       const response = await axios.post(`${serverAddress}/api/deleteAccount/${userID}`, {
         userID: userID,
@@ -56,6 +64,19 @@ export default function UserDelete() {
     } catch (error) {
       console.log('Failed to delete account');
     }
+  }
+
+  function getToken(choice: string) {
+    if (choice == 'Null') return
+    
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(`${choice}=`)) { // Corrected condition
+        return cookie.substring(`${choice}=`.length); // Corrected substring index
+      }
+    }
+    return null;
   }
 
   return (

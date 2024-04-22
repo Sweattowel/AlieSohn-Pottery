@@ -19,6 +19,7 @@ function MobileNavigation(){
     ] = useMyContext();
     const [page, setPage] = useState(1);
     const [wanted, setWanted] = useState(false)
+    
     return (
         <div className="flex flex-row">
             <div className="w-[70%] text-xl bg-BACKGROUND">

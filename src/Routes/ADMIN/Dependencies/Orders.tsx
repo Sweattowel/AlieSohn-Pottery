@@ -19,32 +19,81 @@ function Orders() {
     setSuperAuthenticated,
   ] = useMyContext();
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
+  const usersPerPage = 6;
+  const [currentUsersPage, setCurrentUsersPage] = useState(1);
+  const [userCount, setUserCount] = useState(0);
+  const ordersPerPage = 8;
+  const [currentOrdersPage, setCurrentOrdersPage] = useState(1);
+  const [orderCount, setOrderCount] = useState(0);
 
-  const getOrders = async () => {
-    const storedToken = localStorage.getItem('sutoken');
-    if (!storedToken){
-        console.log('No authorization found');
-        return;
-    }
-
-    try {
-        const response = await axios.get(`${serverAddress}/api/orders/${selectedCustomer}`, {
-            headers: {
-                Authorization: `Bearer ${storedToken}`
-            }
-        });
-        if (response.status === 200) {
-            const data = response.data;
-            setOrders(data);
-        } else if (response.status === 404) {
-            console.log("No orders to collect");
+  // ORDER HANDLE 
+  class OrderHandle 
+  {
+    // GET ORDERS
+    static getOrders = async () => 
+      {
+        const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+        const storedToken = getToken(choice);
+        if (!storedToken){
+            console.log('No authorization found');
+            return;
         }
-    } catch (error) {
-        console.log(error);
-    }
-};
 
-  const getUsers = async () => {
+        try {
+            const response = await axios.get(`${serverAddress}/api/orders/${selectedCustomer}`, {
+                headers: {
+                    Authorization: `Bearer ${storedToken}`
+                }
+            });
+            if (response.status === 200) {
+                const data = response.data;
+                setOrders(data);
+            } else if (response.status === 404) {
+                console.log("No orders to collect");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+      };
+    // COMPLETE ORDER
+    static completeOrder = async (orderID: number, decision: boolean) => 
+      {
+        const storedToken = localStorage.getItem('sutoken');
+        if (!storedToken){
+          console.log('No authorization found');
+          return;
+        }
+        try {
+          if (!selectedCustomer) {
+            return;
+          }
+          const response = await axios.post(`${serverAddress}/api/completeOrder`, {
+            userID: selectedCustomer,
+            orderID: orderID,
+            completed: decision,
+          },       
+          {
+            headers: {
+              authorization: `Bearer ${storedToken}`
+            }
+          });
+          if (response.status === 200) {
+            decision
+              ? console.log("Successfully completed order")
+              : console.log("Successfully rewrote order");
+            OrderHandle.getOrders();
+          } else {
+            console.log("Failed to set post");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };    
+  }
+
+
+  const getUsers = async () => 
+  {
     const storedToken = localStorage.getItem('sutoken');
     if (!storedToken){
       console.log('No authorization found');
@@ -67,67 +116,42 @@ function Orders() {
       console.log(error);
     }
   };
+  // HANDLE PAGINATION
+  class HandlePagination 
+  {
+    static handleChangeUsersPage = (
+      event: React.ChangeEvent<unknown>,
+      newPage: number
+    ) => {
+      setCurrentUsersPage(newPage);
+    };  
 
-  //////////////////////////////////////
-  const usersPerPage = 6;
-  const [currentUsersPage, setCurrentUsersPage] = useState(1);
-  const [userCount, setUserCount] = useState(0);
-
-  const handleChangeUsersPage = (
-    event: React.ChangeEvent<unknown>,
-    newPage: number
-  ) => {
-    setCurrentUsersPage(newPage);
-  };
-  //////////////////////////////////////
-  const ordersPerPage = 8;
-  const [currentOrdersPage, setCurrentOrdersPage] = useState(1);
-  const [orderCount, setOrderCount] = useState(0);
-
-  const handleChangeOrdersPage = (
-    event: React.ChangeEvent<unknown>,
-    newPage: number
-  ) => {
-    setCurrentOrdersPage(newPage);
-  };
-  //////////////////////////////////////
-  const completeOrder = async (orderID: number, decision: boolean) => {
-    const storedToken = localStorage.getItem('sutoken');
-    if (!storedToken){
-      console.log('No authorization found');
-      return;
-    }
-    try {
-      if (!selectedCustomer) {
-        return;
+    static handleChangeOrdersPage = (
+      event: React.ChangeEvent<unknown>,
+      newPage: number
+    ) => {
+      setCurrentOrdersPage(newPage);
+    };
+  }
+  // TOKEN HANDLE
+  function getToken(choice: string) 
+  {
+    if (choice == 'Null') return
+    
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(`${choice}=`)) { // Corrected condition
+        return cookie.substring(`${choice}=`.length); // Corrected substring index
       }
-      const response = await axios.post(`${serverAddress}/api/completeOrder`, {
-        userID: selectedCustomer,
-        orderID: orderID,
-        completed: decision,
-      },       
-      {
-        headers: {
-          authorization: `Bearer ${storedToken}`
-        }
-      });
-      if (response.status === 200) {
-        decision
-          ? console.log("Successfully completed order")
-          : console.log("Successfully rewrote order");
-        getOrders();
-      } else {
-        console.log("Failed to set post");
-      }
-    } catch (error) {
-      console.log(error);
     }
-  };
+    return null;
+  }
 
   //////////////////////////////////////
   useEffect(() => {
     if (selectedCustomer !== -1) {
-      getOrders();
+      OrderHandle.getOrders();
     }
     setCurrentOrdersPage(1);
   }, [selectedCustomer]);
@@ -195,7 +219,7 @@ function Orders() {
               page={currentUsersPage}
               boundaryCount={0}
               siblingCount={1}
-              onChange={handleChangeUsersPage}
+              onChange={HandlePagination.handleChangeUsersPage}
               variant="outlined"
             />
           ) : (
@@ -209,7 +233,7 @@ function Orders() {
               page={currentOrdersPage}
               boundaryCount={0}
               siblingCount={1}
-              onChange={handleChangeOrdersPage}
+              onChange={HandlePagination.handleChangeOrdersPage}
               variant="outlined"
             />
           )}
@@ -238,7 +262,7 @@ function Orders() {
                     <h1 className="w-[20%]">{order.completed ? "SUCC" : "NOT"} </h1>
                     <button
                       onClick={() => {
-                        completeOrder(
+                        OrderHandle.completeOrder(
                           order.orderID,
                           !order.completed ? true : false
                         );
