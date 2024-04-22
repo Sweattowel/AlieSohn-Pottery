@@ -36,7 +36,7 @@ namespace Server
             try
             {
                 DotNetEnv.Env.Load();
-                Timer timer = new Timer(UpdateBrochure, null, TimeSpan.Zero, TimeSpan.FromMinutes(30));
+                Timer timer = new Timer(UpdateItems, null, TimeSpan.Zero, TimeSpan.FromMinutes(30));
                 CreateHostBuilder(args).Build().Run();
             }
             catch (Exception ex)
@@ -52,12 +52,14 @@ namespace Server
                     webBuilder.UseStartup<Startup>()
                             .UseUrls(Environment.GetEnvironmentVariable("REACT_APP_SERVER_ADDRESS"));
                 });
-        public static void UpdateBrochure(object state)
+        public static void UpdateItems(object state)
         {
             try
             {
                 Console.WriteLine("Updating Brochure");
                 DatabaseUtilities.CreateBrochure();
+                Console.WriteLine("Updating StoreItems");
+                DatabaseUtilities.CreateStoreListings();
             }
             catch (Exception ex)
             {
@@ -116,9 +118,10 @@ namespace Server
         public string ImagePath { get; set; }
         public int OrderCount { get; set; }
     }
-    public static class BrochureStorage
+    public static class PreGetStorage
     {
         public static List<BrochureItem> Brochure { get; set; }
+        public static List<StoreItem> StoreListings { get; set; }
     }
     public class StoreItem
     {
@@ -176,7 +179,7 @@ namespace Server
                         reader.Close();
                     }
                 }
-                BrochureStorage.Brochure = brochure;
+                PreGetStorage.Brochure = brochure;
             }
             catch (MySqlException ex)
             {
@@ -187,27 +190,14 @@ namespace Server
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
-    }
-
-}
-namespace Server.Controllers
-{
-    //////// ROUTES
-    // GET STOREITEMS
-    [Route("/api/storeItems")]
-    [ApiController]
-    public class StoreItemsController : ControllerBase
-    {
-        [HttpPost]
-        public ActionResult<IEnumerable<StoreItem>> GetStoreItems()
+        public static void CreateStoreListings()
         {
-            Console.WriteLine("Received Request for storeItems");
-            string connectionString = ConnectionString.GetConnectionString();
-            string queryStatement = "SELECT * FROM storeItems";
-            List<StoreItem> storeItems = new List<StoreItem>();
-
             try
             {
+                string connectionString = ConnectionString.GetConnectionString();
+                string queryStatement = "SELECT * FROM storeItems";
+                List<StoreItem> storeItems = new List<StoreItem>();
+
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
                     using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
@@ -230,7 +220,35 @@ namespace Server.Controllers
                         reader.Close();
                     }
                 }
-                return Ok(storeItems);
+                PreGetStorage.StoreListings = storeItems
+            }
+            catch (MySqlException ex)
+            {
+                return StatusCode(500, $"Database Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
+        }
+    }
+}
+namespace Server.Controllers
+{
+    //////// ROUTES
+    // GET STOREITEMS
+    [Route("/api/storeItems")]
+    [ApiController]
+    public class StoreItemsController : ControllerBase
+    {
+        [HttpGet]
+        public ActionResult<IEnumerable<StoreItem>> GetStoreItems()
+        {
+            Console.WriteLine("Received Request for StoreListings");
+            string connectionString = ConnectionString.GetConnectionString();
+            try
+            {
+                return Ok(PreGetStorage.StoreListings);
             }
             catch (MySqlException ex)
             {
@@ -256,7 +274,7 @@ namespace Server.Controllers
             string connectionString = ConnectionString.GetConnectionString();
             try
             {
-                return Ok(BrochureStorage.Brochure);
+                return Ok(PreGetStorage.Brochure);
             }
             catch (MySqlException ex)
             {
@@ -301,6 +319,16 @@ namespace Server.Controllers
         {
             try
             {
+                if (requestModel.UserID <= 0)
+                {
+                    return BadRequest("Invalid UserID.");
+                }
+
+                if (string.IsNullOrWhiteSpace(requestModel.UserName))
+                {
+                    return BadRequest("UserName cannot be empty or whitespace.");
+                }
+
                 var authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
                 {
@@ -447,6 +475,10 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during login: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
+            catch (MySqlException ex)
+            {
+                return StatusCode(500, $"Database Error: {ex.Message}");
+            }
         }
     }
     // REGISTRATION
@@ -496,6 +528,10 @@ namespace Server.Controllers
             {
                 Console.WriteLine($"An error occurred during registration: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
+            }
+            catch (MySqlException ex)
+            {
+                return StatusCode(500, $"Database Error: {ex.Message}");
             }
         }
     }
@@ -554,6 +590,10 @@ namespace Server.Controllers
             {
                 Console.WriteLine($"An error occurred during user retrieval: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
+            }
+            catch (MySqlException ex)
+            {
+                return StatusCode(500, $"Database Error: {ex.Message}");
             }
         }
     }
@@ -614,6 +654,10 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during user retrieval: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
+            catch (MySqlException ex)
+            {
+                return StatusCode(500, $"Database Error: {ex.Message}");
+            }
         }
     }
 
@@ -672,6 +716,10 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during login: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
+            catch (MySqlException ex)
+            {
+                return StatusCode(500, $"Database Error: {ex.Message}");
+            }
         }
     }
     // REGISTRATION SUPER
@@ -728,6 +776,10 @@ namespace Server.Controllers
             {
                 Console.WriteLine($"An error occurred during super user registration: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
+            }
+            catch (MySqlException ex)
+            {
+                return StatusCode(500, $"Database Error: {ex.Message}");
             }
         }
     }
@@ -840,6 +892,10 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during item creation: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
+            catch (MySqlException ex)
+            {
+                return StatusCode(500, $"Database Error: {ex.Message}");
+            }
         }
     }
     // ITEM DELETION
@@ -919,6 +975,10 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during item deletion: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
+            catch (MySqlException ex)
+            {
+                return StatusCode(500, $"Database Error: {ex.Message}");
+            }
         }
     }
    
@@ -956,7 +1016,7 @@ namespace Server.Controllers
                     return StatusCode(401, "Unauthorized: Invalid token");
                 }
 
-                if (order == null || order.ItemIDs == null || order.ItemIDs.Count == 0)
+                if (string.IsNullOrEmpty(order.UserName)|| order == null || order.ItemIDs == null || order.ItemIDs.Count == 0)
                 {
                     Console.WriteLine("Failed to create order: Invalid input data");
                     return BadRequest("Invalid input data");
@@ -990,6 +1050,10 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
+            catch (MySqlException ex)
+            {
+                return StatusCode(500, $"Database Error: {ex.Message}");
+            } 
         }
     }
 
@@ -1063,6 +1127,10 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during item deletion: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
+            catch (MySqlException ex)
+            {
+                return StatusCode(500, $"Database Error: {ex.Message}");
+            }
         }
     }
     // COMPLETE ORDER
@@ -1127,6 +1195,10 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during item deletion: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }  
+            catch (MySqlException ex)
+            {
+                return StatusCode(500, $"Database Error: {ex.Message}");
+            }
         }
     }
 }

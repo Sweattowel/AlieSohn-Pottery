@@ -15,7 +15,7 @@ COMPLETE test new theme for storeItems, use a two contrasting colours, use one f
 COMPLETE Add floating button responses, i.e. if add to cart is clicked float +1 next to 
 COMPLETE Limit admin create to prevent overflow of suusers with the same username
 COMPLETE Add motion framer to increase responsivness in design, at least test to see if you actually want it in the design 
-
+UNCOMPLETE Implement the same brochure system but for storeItems to further reduce server load
 Feedback TODO List:
 
 COMPLETE Implement Responsive Design: Optimize design for various screen sizes and devices.
@@ -28,7 +28,7 @@ COMPLETE Implement Route Protection: Use JWT or session-based authentication for
     Addit: 
         More research into how i did it and whether it is secure or not is required 
 UNCOMPLETE Check Database Connection Limits: Investigate if the database has a maximum amount of concurrent connections and consider implementing a connection pool if necessary.
-UNCOMPLETE Ensure API Security: Validate request bodies to prevent SQL Injection vulnerabilities.
+COMPLETE Ensure API Security: Validate request bodies to prevent SQL Injection vulnerabilities.
 COMPLETE Consider Learning C# or Golang: Expand development skills by exploring languages like C# or Golang, commonly used in the industry.
     Addit: 
         Maybe rewrite server code to use C# or Golang? potential option
@@ -44,4 +44,4 @@ COMPLETE Continue Learning and Experimenting: Keep exploring and experimenting w
 COMPLETE Refurbish JWT to use cookies or an interceptor which will update the token silently when it is near expirery 
 COMPLETE port server to C# as recommended/suggested by Chris
 COMPLETE Improve mobile design by using hamburger Setup for the navigation over the tab option
-UNCOMPLETE implement additional SQL checks to ensure sanitation 
+COMPLETE implement additional SQL checks to ensure sanitation 
