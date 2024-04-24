@@ -312,11 +312,6 @@ namespace Server.Controllers
         {
             try
             {
-                if (requestModel.UserID <= 0)
-                {
-                    return BadRequest("Invalid UserID.");
-                }
-
                 if (string.IsNullOrWhiteSpace(requestModel.UserName))
                 {
                     return BadRequest("UserName cannot be empty or whitespace.");

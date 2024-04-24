@@ -168,7 +168,7 @@ function Tail() {
         console.log("No authorization found");
         return;
       }
-
+      console.log(userID)
       const response = await axios.post(
         `${serverAddress}/api/TokenRefresh`,
         {
