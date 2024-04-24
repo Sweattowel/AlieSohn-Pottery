@@ -149,6 +149,7 @@ function Tail() {
       if (choice ==='Null') return
       
       const cookies = document.cookie.split(';');
+      console.log(cookies)
       for (let i = 0; i < cookies.length; i++) {
         const cookie = cookies[i].trim();
         if (cookie.startsWith(`${choice}=`)) { // Corrected condition
@@ -159,14 +160,14 @@ function Tail() {
     }
     // REFRESH TOKEN IF NEEDED
     static GetRefreshToken = async (tokenType: string) => {
-      let choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
-      const storedToken = this.getToken(choice)
-      //console.log(storedToken)
+      const storedToken = this.getToken(tokenType)
+      console.log(storedToken)
+      console.log(userID, userName, 'Here')
       if (!storedToken) {
         console.log("No authorization found");
         return;
       }
-      //console.log(userID, userName)
+      
       const response = await axios.post(
         `${serverAddress}/api/TokenRefresh`,
         {
