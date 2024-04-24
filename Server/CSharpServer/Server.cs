@@ -886,8 +886,8 @@ namespace Server.Controllers
                     return StatusCode(401, "Unauthorized");
                 }
 
-                string queryGetImagePath = "SELECT imagePath FROM storeItems WHERE itemId = @ItemId";
-                string queryUpdateItem = "UPDATE storeItems SET isDeleted = 1 WHERE itemId = @ItemId";
+                string queryGetImagePath = "SELECT imagePath FROM storeItems WHERE itemID = @ItemId";
+                string queryUpdateItem = "UPDATE storeItems SET isDeleted = 1 WHERE itemID = @ItemId";
                 string connectionString = ConnectionString.GetConnectionString();
                 
                 string imagePath = null;
