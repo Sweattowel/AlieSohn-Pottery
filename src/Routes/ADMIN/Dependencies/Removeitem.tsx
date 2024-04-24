@@ -49,7 +49,7 @@ function Removeitem() {
   {
     static collectStoreItems = async () => {
       try {
-        const response = await axios.post<storeItem[]>(
+        const response = await axios.get<storeItem[]>(
           `${serverAddress}/api/storeItems`
         );
 

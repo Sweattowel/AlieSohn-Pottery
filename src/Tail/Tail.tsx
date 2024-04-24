@@ -145,8 +145,25 @@ function Tail() {
   }
 
   class TokenHandle {
+    // GET TOKEN FROM COOKIES
+    static getToken(choice: string) 
+    {
+      if (choice == 'Null') return
+      
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(`${choice}=`)) { // Corrected condition
+          return cookie.substring(`${choice}=`.length); // Corrected substring index
+        }
+      }
+      return null;
+    }
+    // REFRESH TOKEN IF NEEDED
     static GetRefreshToken = async (tokenType: string) => {
-      const storedToken = localStorage.getItem(tokenType);
+      let choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+      const storedToken = this.getToken(choice)
+      console.log(storedToken)
       if (!storedToken) {
         console.log("No authorization found");
         return;
@@ -173,11 +190,10 @@ function Tail() {
       }
     };
     // COOKIE HANDLE
-    static SetToken(cookie: string, choice: string) {
+    static SetToken( choice: string, cookie: string) {
       const expirationDate = new Date();
       // Set cookie to expire in one hour
       expirationDate.setTime(expirationDate.getTime() + (60 * 60 * 1000)); 
-  
       document.cookie = `${choice}=${cookie}; expires=${expirationDate.toUTCString()}; path=/`;
     }
   }

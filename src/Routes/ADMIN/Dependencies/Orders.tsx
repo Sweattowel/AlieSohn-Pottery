@@ -34,6 +34,7 @@ function Orders() {
       {
         const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
         const storedToken = getToken(choice);
+        
         if (!storedToken){
             console.log('No authorization found');
             return;
@@ -94,7 +95,9 @@ function Orders() {
 
   const getUsers = async () => 
   {
-    const storedToken = localStorage.getItem('sutoken');
+    const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+    const storedToken = getToken(choice);
+    
     if (!storedToken){
       console.log('No authorization found');
       return;

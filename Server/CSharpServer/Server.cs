@@ -620,6 +620,7 @@ namespace Server.Controllers
                             int rowsAffected = await deleteData.ExecuteNonQueryAsync();
 
                             if (rowsAffected > 0){
+                                DatabaseUtilities.CreateStoreListings();
                                 return Ok();
                             }  
                             else
@@ -847,6 +848,7 @@ namespace Server.Controllers
 
                         if (rowsAffected > 0)
                         {
+                            DatabaseUtilities.CreateStoreListings();
                             return Ok("Item successfully entered");
                         }
                         else
