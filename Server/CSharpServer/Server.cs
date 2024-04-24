@@ -220,7 +220,7 @@ namespace Server
                         reader.Close();
                     }
                 }
-                PreGetStorage.StoreListings = storeItems
+                PreGetStorage.StoreListings = storeItems;
             }
             catch (MySqlException ex)
             {
