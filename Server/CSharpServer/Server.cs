@@ -155,7 +155,7 @@ namespace Server
                 List<BrochureItem> brochure = new List<BrochureItem>();
                 string connectionString = ConnectionString.GetConnectionString();
                 Console.WriteLine(connectionString);
-                string queryStatement = "SELECT storeItems.itemID, storeItems.itemName, storeItems.imagePath, storeItems.itemPrice, COUNT(orders.orderID) AS order_count FROM storeItems JOIN orders ON storeItems.itemID = orders.itemID GROUP BY storeItems.itemID, storeItems.itemName ORDER BY order_count DESC LIMIT 3;";
+                string queryStatement = "SELECT storeItems.itemID, storeItems.itemName, storeItems.imagePath, storeItems.itemPrice, COUNT(orders.orderID) AS order_count FROM storeItems JOIN orders ON storeItems.itemID = orders.itemID WHERE storeItems.isDeleted = 0 GROUP BY storeItems.itemID, storeItems.itemName ORDER BY order_count DESC LIMIT 3;";
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
@@ -195,7 +195,7 @@ namespace Server
             try
             {
                 string connectionString = ConnectionString.GetConnectionString();
-                string queryStatement = "SELECT * FROM storeItems";
+                string queryStatement = "SELECT * FROM storeItems WHERE isCompleted = 0";
                 List<StoreItem> storeItems = new List<StoreItem>();
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -825,7 +825,7 @@ namespace Server.Controllers
                     await createItemRequest.Picture.CopyToAsync(stream);
                 }
 
-                string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath)";
+                string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath, isCompleted) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath, @isCompleted)";
                 string connectionString = ConnectionString.GetConnectionString();
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -838,6 +838,7 @@ namespace Server.Controllers
                         command.Parameters.AddWithValue("@ItemDescription", createItemRequest.ItemDescription);
                         command.Parameters.AddWithValue("@ItemPrice", createItemRequest.ItemPrice);
                         command.Parameters.AddWithValue("@ImagePath", imagePath);
+                        command.Parameters.AddWithValue("@isCompleted", 0);
 
                         int rowsAffected = await command.ExecuteNonQueryAsync();
 
@@ -886,8 +887,7 @@ namespace Server.Controllers
                 }
 
                 string queryGetImagePath = "SELECT imagePath FROM storeItems WHERE itemId = @ItemId";
-                string queryDeleteItem = "DELETE FROM storeItems WHERE itemId = @ItemId";
-                string queryDeleteOrders = "DELETE FROM orders WHERE itemID = @ItemId"; // SQL query to delete references in the orders table
+                string queryUpdateItem = "UPDATE storeItems SET isDeleted = 1 WHERE itemId = @ItemId";
                 string connectionString = ConnectionString.GetConnectionString();
                 
                 string imagePath = null;
@@ -902,10 +902,10 @@ namespace Server.Controllers
                         imagePath = (string)await commandGetImagePath.ExecuteScalarAsync();
                     }
 
-                    using (MySqlCommand commandDeleteItem = new MySqlCommand(queryDeleteItem, connection))
+                    using (MySqlCommand commandUpdateItem = new MySqlCommand(queryUpdateItem, connection))
                     {
-                        commandDeleteItem.Parameters.AddWithValue("@ItemId", itemId);
-                        int rowsAffected = await commandDeleteItem.ExecuteNonQueryAsync();
+                        commandUpdateItem.Parameters.AddWithValue("@ItemId", itemId);
+                        int rowsAffected = await commandUpdateItem.ExecuteNonQueryAsync();
                         
                         if (rowsAffected > 0)
                         {
@@ -918,12 +918,7 @@ namespace Server.Controllers
                                     Console.WriteLine($"Deleted image file: {fullPath}");
                                 }
                             }
-                            using (MySqlCommand commandDeleteOrders = new MySqlCommand(queryDeleteOrders, connection))
-                            {
-                                commandDeleteOrders.Parameters.AddWithValue("@ItemId", itemId);
-                                await commandDeleteOrders.ExecuteNonQueryAsync();
-                            }
-                            return Ok("Item successfully deleted");
+                            return Ok("Item successfully marked as deleted");
                         }
                         else
                         {
@@ -939,7 +934,7 @@ namespace Server.Controllers
             }
         }
     }
-   
+
     ////// ORDER HANDLING
     public class Order
     {
