@@ -195,7 +195,7 @@ namespace Server
             try
             {
                 string connectionString = ConnectionString.GetConnectionString();
-                string queryStatement = "SELECT * FROM storeItems WHERE isCompleted = 0";
+                string queryStatement = "SELECT * FROM storeItems WHERE isDeleted = 0";
                 List<StoreItem> storeItems = new List<StoreItem>();
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -825,7 +825,7 @@ namespace Server.Controllers
                     await createItemRequest.Picture.CopyToAsync(stream);
                 }
 
-                string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath, isCompleted) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath, @isCompleted)";
+                string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath, isDeleted) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath, @isDeleted)";
                 string connectionString = ConnectionString.GetConnectionString();
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -838,7 +838,7 @@ namespace Server.Controllers
                         command.Parameters.AddWithValue("@ItemDescription", createItemRequest.ItemDescription);
                         command.Parameters.AddWithValue("@ItemPrice", createItemRequest.ItemPrice);
                         command.Parameters.AddWithValue("@ImagePath", imagePath);
-                        command.Parameters.AddWithValue("@isCompleted", 0);
+                        command.Parameters.AddWithValue("@isDeleted", 0);
 
                         int rowsAffected = await command.ExecuteNonQueryAsync();
 
