@@ -222,13 +222,9 @@ namespace Server
                 }
                 PreGetStorage.StoreListings = storeItems;
             }
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
-            }
             catch (Exception ex)
             {
-                return BadRequest($"Error: {ex.Message}");
+                Console.WriteLine($"Error: {ex.Message}");
             }
         }
     }
@@ -472,10 +468,6 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during login: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
-            }
         }
     }
     // REGISTRATION
@@ -525,10 +517,6 @@ namespace Server.Controllers
             {
                 Console.WriteLine($"An error occurred during registration: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
-            }
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
             }
         }
     }
@@ -587,10 +575,6 @@ namespace Server.Controllers
             {
                 Console.WriteLine($"An error occurred during user retrieval: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
-            }
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
             }
         }
     }
@@ -651,10 +635,6 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during user retrieval: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
-            }
         }
     }
 
@@ -713,10 +693,6 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during login: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
-            }
         }
     }
     // REGISTRATION SUPER
@@ -773,10 +749,6 @@ namespace Server.Controllers
             {
                 Console.WriteLine($"An error occurred during super user registration: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
-            }
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
             }
         }
     }
@@ -889,10 +861,6 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during item creation: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
-            }
         }
     }
     // ITEM DELETION
@@ -972,10 +940,6 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during item deletion: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
-            }
         }
     }
    
@@ -1047,10 +1011,6 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
-            } 
         }
     }
 
@@ -1124,10 +1084,6 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during item deletion: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
-            }
         }
     }
     // COMPLETE ORDER
@@ -1192,10 +1148,6 @@ namespace Server.Controllers
                 Console.WriteLine($"An error occurred during item deletion: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }  
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
-            }
         }
     }
 }
