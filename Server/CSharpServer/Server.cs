@@ -245,22 +245,19 @@ namespace Server.Controllers
         public ActionResult<IEnumerable<StoreItem>> GetStoreItems()
         {
             Console.WriteLine("Received Request for StoreListings");
-            string connectionString = ConnectionString.GetConnectionString();
             try
-            {
-                return Ok(PreGetStorage.StoreListings);
-            }
-            catch (MySqlException ex)
-            {
-                return StatusCode(500, $"Database Error: {ex.Message}");
+            {   
+                var data = PreGetStorage.StoreListings;
+                return Ok(data);
             }
             catch (Exception ex)
             {
-                return BadRequest($"Error: {ex.Message}");
+                // Log the error
+                Console.WriteLine($"Error retrieving store items: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
             }
         }
     }
-    
     // GET PREMADE BROCHURE
     [Route("/api/getBrochure")]
     [ApiController]
