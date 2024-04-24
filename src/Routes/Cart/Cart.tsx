@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../Context/ContextProvider";
-import { Button, Pagination } from "@mui/material";
+import { Pagination } from "@mui/material";
 import url from "url";
 import axios from "axios";
 import CardHandle from "./Dependencies/CardHandle";
@@ -19,18 +19,18 @@ interface CartItem {
 
 function Cart() {
   const [
-    allItems,
-    setAllItems,
+    ,
+    ,
     cart,
     setCart,
     userID,
-    setUserID,
+    ,
     authenticated,
-    setAuthenticated,
+    ,
     superAuthenticated,
-    setSuperAuthenticated,
+    ,
     userName,
-    setUserName,
+    ,
   ] = useMyContext();
   const serverAddress = `${process.env.REACT_APP_SERVER_ADDRESS}`;
   const [showCardHandle, setShowCardHandle] = useState(false);
@@ -53,7 +53,7 @@ function Cart() {
   // TOKEN HANDLE
   function getToken(choice: string) 
   {
-    if (choice == 'Null') return
+    if (choice === 'Null') return
     
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
@@ -106,7 +106,7 @@ function Cart() {
         } else if (response.status === 200) {
           // PLACE BOUGHT ITEMS INTO STORAGE
           const prev: string[] = JSON.parse(localStorage.getItem('BOUGHTIDS') || '[]')
-          localStorage.setItem('BOUGHTIDS', JSON.stringify([...prev, ...itemIDs]));          
+          localStorage.setItem(`BOUGHTIDS${userID}`, JSON.stringify([...prev, ...itemIDs]));          
           console.log("Successfully made order");
           setCart([]);
         } else {
@@ -118,7 +118,7 @@ function Cart() {
     };
     // BEGIN PAYMENT
     static sendOrder = async () => {
-      if (cart.length == 0){
+      if (cart.length === 0){
         console.log('No items in cart')
         return
       }
@@ -313,7 +313,7 @@ useEffect(() => {
         />
       </div>
       <AnimatePresence>
-        {selectedStoreItem.itemID != -1 && (
+        {selectedStoreItem.itemID !== -1 && (
           <motion.div 
             className="fixed top-0 left-[10%] w-[80%] h-full m-auto justify-center flex items-center justify-center z-50"
             initial={{ opacity: 0 }}
@@ -328,7 +328,7 @@ useEffect(() => {
               exit={{ scale: 0.5 }}
               transition={{ duration: 0.3 }}
             >        
-              <img className="w-full border-BLACK border  h-[60vh] md:h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
+              <img alt={`${selectedStoreItem.imagePath}`} className="w-full border-BLACK border  h-[60vh] md:h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
               <motion.h2 className="justify-center w-[80%] m-auto flex items-center text-2xl border-b border-BLACK">
                 {selectedStoreItem.itemName}
               </motion.h2>

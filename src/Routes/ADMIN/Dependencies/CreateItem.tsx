@@ -1,4 +1,4 @@
-import { Button, Input } from "@mui/material";
+import { Input } from "@mui/material";
 import axios from "axios";
 import React, { ChangeEvent, useState } from "react";
 import { useMyContext } from "../../../Context/ContextProvider";
@@ -13,18 +13,18 @@ interface Item {
 function CreateItem() {
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
   const [
-    allItems,
+    ,
     setAllItems,
-    cart,
-    setCart,
-    userID,
-    setUserID,
+    ,
+    ,
+    ,
+    ,
     authenticated,
-    setAuthenticated,
+    ,
     superAuthenticated,
-    setSuperAuthenticated,
-    userName,
-    setUserName,
+    ,
+    ,
+    ,
   ] = useMyContext();
   const [item, setItem] = useState<Item>({
     ItemName: "",
@@ -91,7 +91,7 @@ function CreateItem() {
   // TOKEN HANDLE
   function getToken(choice: string) 
   {
-    if (choice == 'Null') return
+    if (choice === 'Null') return
     
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {

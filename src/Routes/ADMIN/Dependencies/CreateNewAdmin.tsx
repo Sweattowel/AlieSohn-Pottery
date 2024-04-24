@@ -4,16 +4,16 @@ import { useMyContext } from "../../../Context/ContextProvider";
 
 export default function CreateNewAdmin() {
   const [
-    allItems,
-    setAllItemscart,
-    cart,
-    setCart,
-    userID,
-    setUserID,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
     authenticated,
-    setAuthenticated,
+    ,
     superAuthenticated,
-    setSuperAuthenticated,
+    ,
   ] = useMyContext();
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
   const [userName, setNewUserName] = useState<string>("");
@@ -25,11 +25,11 @@ export default function CreateNewAdmin() {
   const [passWordAttempt, setPassWordAttempt] = useState<string>("");
   // HANDLE LOGIN
   const superLogin = async () => {
-    if (adminAttempts == 0) {
+    if (adminAttempts === 0) {
       setError("Notifying cyberpolice");
       return;
     }
-    if (userNameAttempt == "" || passWordAttempt == "") {
+    if (userNameAttempt === "" || passWordAttempt === "") {
       setError("Please finish inputting details");
       return;
     }
@@ -82,7 +82,7 @@ export default function CreateNewAdmin() {
         }
       );
 
-      if (response.status == 200) {
+      if (response.status === 200) {
         console.log("Created admin");
         setUserNameAttempt('')
         setNewPassWordName('')
@@ -99,7 +99,7 @@ export default function CreateNewAdmin() {
   // TOKEN HANDLE
   function getToken(choice: string) 
   {
-    if (choice == 'Null') return
+    if (choice === 'Null') return
     
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {

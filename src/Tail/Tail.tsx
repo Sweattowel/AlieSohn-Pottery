@@ -1,14 +1,14 @@
-import { Button, Input, TextareaAutosize } from "@mui/material";
+import { Input } from "@mui/material";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useMyContext } from "../Context/ContextProvider";
 
 function Tail() {
   const [
-    allItems,
-    setAllItems,
-    cart,
-    setCart,
+    ,
+    ,
+    ,
+    ,
     userID,
     setUserID,
     authenticated,
@@ -23,7 +23,6 @@ function Tail() {
   const [wantLogin, setWantLogin] = useState<boolean>(false);
   const [userNameAttempt, setUserNameAttempt] = useState<string>("");
   const [passWordAttempt, setPassWordAttempt] = useState<string>("");
-  const [caste, setCaste] = useState<string>("waiting");
   const [attempts, setAttempts] = useState<number>(4);
   const [adminAttempts, setAdminAttempts] = useState<number>(4);
   const [registrationAttempts, setRegistrationAttempts] = useState<number>(4);
@@ -32,11 +31,11 @@ function Tail() {
   class LoginHandle {
     // REGULAR LOGIN
     static Login = async () => {
-      if (attempts == 0) {
+      if (attempts ===0) {
         setError("Out of attempts");
         //return
       }
-      if (userNameAttempt == "" || passWordAttempt == "") {
+      if (userNameAttempt ==="" || passWordAttempt ==="") {
         setError("Please finish inputting details");
         return;
       }
@@ -65,11 +64,11 @@ function Tail() {
     };
     // SUPER LOGIN
     static superLogin = async () => {
-      if (adminAttempts == 0) {
+      if (adminAttempts ===0) {
         setError("Notifying cyberpolice");
         //return;
       }
-      if (userNameAttempt == "" || passWordAttempt == "") {
+      if (userNameAttempt ==="" || passWordAttempt ==="") {
         setError("Please finish inputting details");
         return;
       }
@@ -106,7 +105,6 @@ function Tail() {
       setUserName("");
       setUserNameAttempt("");
       setPassWordAttempt("");
-      setCaste("waiting");
       TokenHandle.SetToken('sutoken', 'Null')
       TokenHandle.SetToken('token', 'Null')
     };
@@ -115,7 +113,7 @@ function Tail() {
   class RegisterHandle {
     // REGISTER
     static register = async () => {
-      if (userNameAttempt == "" || passWordAttempt == "") {
+      if (userNameAttempt ==="" || passWordAttempt ==="") {
         setError(`Please finish inputting details`);
         return;
       }
@@ -148,7 +146,7 @@ function Tail() {
     // GET TOKEN FROM COOKIES
     static getToken(choice: string) 
     {
-      if (choice == 'Null') return
+      if (choice ==='Null') return
       
       const cookies = document.cookie.split(';');
       for (let i = 0; i < cookies.length; i++) {
@@ -163,12 +161,12 @@ function Tail() {
     static GetRefreshToken = async (tokenType: string) => {
       let choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
       const storedToken = this.getToken(choice)
-      console.log(storedToken)
+      //console.log(storedToken)
       if (!storedToken) {
         console.log("No authorization found");
         return;
       }
-      console.log(userID)
+      //console.log(userID, userName)
       const response = await axios.post(
         `${serverAddress}/api/TokenRefresh`,
         {
@@ -182,7 +180,7 @@ function Tail() {
         }
       );
       const token = response.data;
-      if (response.status == 200) {
+      if (response.status === 200) {
         return token;
       } else {
         console.log("Failed to refresh please relog into site");
@@ -201,9 +199,8 @@ function Tail() {
   /////////////////////////////////////
   useEffect(() => {
     const refreshToken = async () => {
-      if (!authenticated && !superAuthenticated) {
-        return;
-      }
+      if (!authenticated && !superAuthenticated) return;
+      if (!userID || !userName) return;
       try {
         console.log("RefreshingToken");
         let enterToken;
@@ -260,7 +257,7 @@ function Tail() {
               className="mb-10"
               onChange={(e) => setPassWordAttempt(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key == "Enter") {
+                if (e.key === "Enter") {
                   LoginHandle.Login();
                 }
               }}

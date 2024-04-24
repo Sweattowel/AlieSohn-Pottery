@@ -5,16 +5,16 @@ import { useMyContext } from "../../Context/ContextProvider";
 
 export default function UserHandle() {
     const [
-        allItems,
-        setAllItemscart,
-        cart,
-        setCart,
-        userID,
-        setUserID,
+        ,
+        ,
+        ,
+        ,
+        ,
+        ,
         authenticated,
-        setAuthenticated,
-        superAuthenticated,
-        setSuperAuthenticated,
+        ,
+        ,
+        ,
       ] = useMyContext();
       
     return (

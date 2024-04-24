@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useMyContext } from "../../Context/ContextProvider";
-import { Button, Pagination } from "@mui/material";
+import { Pagination } from "@mui/material";
 import axios from "axios";
 import url from "url";
 import InfoIcon from '@mui/icons-material/Info';
 import './Dependencies/StoreFront.css'
 import { AnimatePresence, motion } from 'framer-motion'
-import { stringify } from "querystring";
 
 interface storeItem {
   itemID: number;
@@ -23,11 +22,11 @@ function StoreFront() {
     cart,
     setCart,
     userID,
-    setUserID,
-    authenticated,
-    setAuthenticated,
-    superAuthenticated,
-    setSuperAuthenticated,
+    ,
+    ,
+    ,
+    ,
+    ,
   ] = useMyContext();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemCount, setItemCount] = useState(0);
@@ -83,7 +82,7 @@ function StoreFront() {
       {
           try 
           {
-            const newIDS: number[] = JSON.parse(localStorage.getItem('BOUGHTIDS') || '[]')
+            const newIDS: number[] = JSON.parse(localStorage.getItem(`BOUGHTIDS${userID}`) || '[]')
             setIDS(newIDS)
             console.log(newIDS)
           } catch (error) {
@@ -298,12 +297,12 @@ function StoreFront() {
       </div>
 
       <AnimatePresence>
-        {selectedStoreItem.itemID != -1 && (
+        {selectedStoreItem.itemID !== -1 && (
           <motion.div 
             layoutId={`${selectedStoreItem.itemID}`}
             className="w-full h-full fixed top-0 left-0 bg-WHITE bg-opacity-60"
             onClick={(e) => {
-              if (e.target == e.currentTarget) {
+              if (e.target === e.currentTarget) {
                 setSelectedStoreItem({
                   itemID: -1,
                   itemName: "",
@@ -321,7 +320,7 @@ function StoreFront() {
                 opacity: '100'
               }}
             >        
-              <img className="md:w-[80%] m-auto border-BLACK border  max-h-[60vh] md:h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
+              <img alt={`${selectedStoreItem.imagePath}`} className="md:w-[80%] m-auto border-BLACK border  max-h-[60vh] md:h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
               <motion.h2 className="justify-center w-[80%] m-auto flex items-center text-2xl border-b border-BLACK">
                 {selectedStoreItem.itemName}
               </motion.h2>
@@ -346,6 +345,7 @@ function StoreFront() {
           </motion.div>
         )}
       </AnimatePresence>
+
 
     </div>
   );

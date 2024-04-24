@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useMyContext } from "../../Context/ContextProvider";
 import axios from "axios";
 import url from "url";
 import Slider from "react-slick";
@@ -17,17 +16,6 @@ interface StoreItem {
 
 function Brochure() {
   const serverAddress = `${process.env.REACT_APP_SERVER_ADDRESS}`;
-  const [
-    allItems,
-    setAllItemscart,
-    setCart,
-    userID,
-    setUserID,
-    authenticated,
-    setAuthenticated,
-    superAuthenticated,
-    setSuperAuthenticated,
-  ] = useMyContext();
   const [brochure, setBrochure] = useState<any[]>([]);
 
   const getBrochure = async () => {
@@ -49,7 +37,7 @@ function Brochure() {
   };
   ///////////////////////////////////////// USEEFFECT
   useEffect(() => {
-    if (brochure.length == 0) {
+    if (brochure.length === 0) {
       getBrochure();
     }
   }, []);
@@ -94,7 +82,7 @@ function Brochure() {
               alt={item.itemName}
               className="h-[45vh] max-h-[500px] w-[90%] md:w-[80%] m-auto"
             />
-            <div className="text-BLACK w-[30%] md:w-[80%] m-auto">
+            <div className="text-BLACK w-[90%] md:w-[80%] m-auto">
               <h1 className="text-[1.5em] text-WHITE h-[8vh] font-serif bg-BACKGROUND rounded-b-lg justify-center items-center flex">
                 {item.itemName}
               </h1>

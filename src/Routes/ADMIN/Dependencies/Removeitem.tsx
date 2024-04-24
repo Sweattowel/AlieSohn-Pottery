@@ -1,4 +1,4 @@
-import { Button, Pagination } from "@mui/material";
+import { Pagination } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../../Context/ContextProvider";
@@ -15,18 +15,18 @@ interface RemoveItemProps {
 }
 function Removeitem() {
   const [
-    allItems,
-    setAllItems,
-    cart,
-    setCart,
-    userID,
-    setUserID,
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
     authenticated,
-    setAuthenticated,
+    ,
     superAuthenticated,
-    setSuperAuthenticated,
-    userName,
-    setUserName,
+    ,
+    ,
+    ,
   ] = useMyContext();
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
   const [locked, setLocked] = useState(true);
@@ -102,7 +102,7 @@ function Removeitem() {
   // TOKEN HANDLE
   function getToken(choice: string) 
   {
-    if (choice == 'Null') return
+    if (choice === 'Null') return
     
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {

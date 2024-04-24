@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../../Context/ContextProvider";
 import axios from "axios";
-import { Button, Checkbox, Pagination } from "@mui/material";
+import { Pagination } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 function Orders() {
@@ -9,14 +9,14 @@ function Orders() {
   const [users, setUsers] = useState<any[]>([]);
   const [selectedCustomer, setSelectedCustomer] = useState<number>(-1);
   const [
-    cart,
-    setCart,
-    userID,
-    setUserID,
+    ,
+    ,
+    ,
+    ,
     authenticated,
-    setAuthenticated,
+    ,
     superAuthenticated,
-    setSuperAuthenticated,
+    ,
   ] = useMyContext();
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
   const usersPerPage = 6;
@@ -139,7 +139,7 @@ function Orders() {
   // TOKEN HANDLE
   function getToken(choice: string) 
   {
-    if (choice == 'Null') return
+    if (choice === 'Null') return
     
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {

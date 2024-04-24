@@ -4,9 +4,9 @@ import axios from "axios";
 
 export default function UserDelete() {
   const [
-    allItems,
-    setAllItems,
-    cart,
+    ,
+    ,
+    ,
     setCart,
     userID,
     setUserID,
@@ -53,7 +53,7 @@ export default function UserDelete() {
       }
       );
 
-      if (response.status == 200) {
+      if (response.status === 200) {
         console.log("Account deleted");
         setAuthenticated(false);
         setCart([]);
@@ -67,7 +67,7 @@ export default function UserDelete() {
   }
 
   function getToken(choice: string) {
-    if (choice == 'Null') return
+    if (choice === 'Null') return
     
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {

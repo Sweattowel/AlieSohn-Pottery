@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../Context/ContextProvider";
 import axios from "axios";
-import { MenuItem, Pagination, Select } from "@mui/material";
+import {  Pagination } from "@mui/material";
 
 export default function UserAccount() {
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
   const [
     ,
     ,
-    cart,
-    setCart,
+    ,
+    ,
     userID,
-    setUserID,
+    ,
     authenticated,
-    setAuthenticated,
+    ,
     superAuthenticated,
-    setSuperAuthenticated,
+    ,
     userName,
-    setUserName,
+    ,
   ] = useMyContext();
   const [orders, setOrders] = useState<any[]>([]);
   const [originalOrders, setOriginalOrders] = useState<any[]>([]);
@@ -30,7 +30,7 @@ export default function UserAccount() {
   {
     // GET ORDERS
     static getOrders = async () => 
-      {
+    {
         const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
         const storedToken = getToken(choice);
         
@@ -56,7 +56,7 @@ export default function UserAccount() {
     }; 
     // CHANGE ORDER ORDERING
     static sortDate = (choice: any) => 
-      {
+    {
       let sortedOrders = [...originalOrders]; // Use the original orders data for sorting/grouping
 
       if (choice === 1) {
@@ -108,7 +108,7 @@ export default function UserAccount() {
 
   function getToken(choice: string) 
   {
-    if (choice == 'Null') return
+    if (choice === 'Null') return
     
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
@@ -120,7 +120,8 @@ export default function UserAccount() {
     return null;
   }
   // useEffect to fetch orders when component mounts
-  useEffect(() => {
+  useEffect(() => 
+  {
     OrderHandle.getOrders();
   }, []);
 
@@ -137,9 +138,9 @@ export default function UserAccount() {
         </div>
         <div className="rounded-b w-[50%] m-auto text-WHITE mt-1 mb-1 flex justify-center items-center">
           
-            <button className={ groupSettingChoice == 1 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK"} onClick={() => OrderHandle.sortDate(1)} >DESC</button>
-            <button className={ groupSettingChoice == 2 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK"} onClick={() => OrderHandle.sortDate(2)} >ASC</button>
-            <button className={ groupSettingChoice == 3 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK"} onClick={() => OrderHandle.sortDate(3)} >GRP</button>
+            <button className={ groupSettingChoice === 1 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(1)} >DESC</button>
+            <button className={ groupSettingChoice === 2 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(2)} >ASC</button>
+            <button className={ groupSettingChoice === 3 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(3)} >GRP</button>
           
         </div>
         <Pagination
@@ -153,6 +154,12 @@ export default function UserAccount() {
           onChange={OrderHandle.handleChangeOrdersPage}
           variant="outlined"
         />
+        <div className="m-2 bg-BACKGROUND flex flex-grow flex-row text-[0.7rem] md:text-lg border-b border-BLACK">
+          <div className="w-[25%] text-center border-r border-BLACK">ITEM ID</div>
+          <div className="w-[25%] text-center border-r border-BLACK">NAME</div>
+          <div className="w-[25%] text-center border-r border-BLACK">STATUS</div>
+          <div className="w-[25%] text-center border-r border-BLACK">PLACED</div>
+        </div>
         {authenticated && !superAuthenticated
           ? orders
               .slice(
@@ -168,24 +175,24 @@ export default function UserAccount() {
                       : "opacity-60 m-2 flex  text-white justify-center text-center"
                   }
                 >
-                  <h1 className="bg-BACKGROUND  w-[25%] text-[0.7rem] md:text-lg">
-                    Item ID : {order.itemID}{" "}
+                  <h1 className="bg-BACKGROUND text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
+                    {order.itemID}{" "}
                   </h1>
-                  <h1 className="bg-BACKGROUND  w-[25%] text-[0.7rem] md:text-m">
-                    Item : {order.itemName}{" "}
+                  <h1 className="bg-BACKGROUND text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
+                    {order.itemName}{" "}
                   </h1>
-                  <h1 className="bg-BACKGROUND  w-[25%] text-[0.7rem] md:text-lg">
-                    Completed : {order.completed ? "TRUE" : "FALSE"}{" "}
+                  <h1 className="bg-BACKGROUND text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
+                    {order.completed ? "TRUE" : "FALSE"}{" "}
                   </h1>
                   {order.orderDate ? (
-                    <h1 className="bg-BACKGROUND  w-[25%] text-[0.7rem] md:text-lg">
-                      Date : {order.orderDate.split('T')[0]}
+                    <h1 className="bg-BACKGROUND text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
+                      {order.orderDate.split('T')[0]}
                     </h1>
                   ) : (
-                    <div className="bg-BACKGROUND w-[25%] text-[0.7rem] md:text-lg"></div>
+                    <div className="bg-BACKGROUND w-[0%] text-[0.7rem] md:text-lg"></div>
                   )}
                   {order.count && (
-                    <h1 className="bg-BACKGROUND  w-[25%] text-[0.7rem] md:text-lg">
+                    <h1 className="bg-BACKGROUND text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
                       COUNT : {order.count}
                     </h1>
                   )}
