@@ -104,6 +104,9 @@ function Cart() {
           console.log('Unauthorized, please log in')
           setError('Unauthorized, please log in')
         } else if (response.status === 200) {
+          // PLACE BOUGHT ITEMS INTO STORAGE
+          const prev: string[] = JSON.parse(localStorage.getItem('BOUGHTIDS') || '[]')
+          localStorage.setItem('BOUGHTIDS', JSON.stringify([...prev, ...itemIDs]));          
           console.log("Successfully made order");
           setCart([]);
         } else {
@@ -181,6 +184,14 @@ useEffect(() => {
   setTotalCost(totalCost);
   setItemCount(itemCount);
 }, [cart]);
+
+useEffect(() => {
+  const boughtIds = localStorage.getItem('BOUGHTIDS');
+  if (!boughtIds) {
+    localStorage.setItem('BOUGHTIDS', JSON.stringify([]));
+  }
+  
+},[])
   
   ///////////////////////////////////////////////////////////////////
   return (

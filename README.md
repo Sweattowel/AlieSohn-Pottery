@@ -19,16 +19,17 @@ COMPLETE Implement the same brochure system but for storeItems to further reduce
 COMPLETE Put tokens into cookies over localStorage
 COMPLETE Switch to class based programming for ease of organisation A̢͉͍͙͇͌̔̄͝ǘ̷̠̥̳̮̜͜g̸͙͓͎͍̟̟̐̉̇̍͊͆͝h̵͔͉̰̬͑͋͝u̵̹̳̜̳͕͌̃̅͊g̸͚̗͍̦̞͚͋͑̂̆̍̈́͆͜h̶̢̗̮͙̖͖̓͗̓̍̏̒̊̔̕
     Addit:
-        Wasnt that bad
+        Wasnt that bad actually :D
 Feedback TODO List:
 
 COMPLETE Implement Responsive Design: Optimize design for various screen sizes and devices.
-UNCOMPLETE Retain State After Component Unmount: Explore using LocalStorage, Cookies, or unique user ID-based cookie storage to retain state after users leave the webpage.
+COMPLETE Retain State After Component Unmount: Explore using LocalStorage, Cookies, or unique user ID-based cookie storage to retain state after users leave the webpage.
     Addit: 
         Its like saving progress, i.e. if you visit this spot on say google maps and you register it as seen, store that in local memory 
             Idea for implemen:
                 Save current page into memory, could be easy and painless page meaning the internal page not the page url itself as that would not need to be saved, also include an encrypted login state?
                 Save visited items? i.e. have a tick if you have clicked its description?
+                Saved bought items into localStorage to give an idea on what a customer has bought, simply store and retrieve
 COMPLETE Implement Route Protection: Use JWT or session-based authentication for protecting routes on the backend.
     Addit: 
         More research into how i did it and whether it is secure or not is required 

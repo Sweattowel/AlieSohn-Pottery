@@ -94,12 +94,12 @@ function Brochure() {
               alt={item.itemName}
               className="h-[45vh] max-h-[500px] w-[90%] md:w-[80%] m-auto"
             />
-            <div className="text-BLACK w-[90%] md:w-[80%] m-auto">
+            <div className="text-BLACK w-[30%] md:w-[80%] m-auto">
               <h1 className="text-[1.5em] text-WHITE h-[8vh] font-serif bg-BACKGROUND rounded-b-lg justify-center items-center flex">
                 {item.itemName}
               </h1>
               <div>${item.itemPrice} </div>
-              <div className="text-sm">Happy customers {item.orderCount}</div>
+              <div className="text-sm">{item.orderCount} Orders</div>
             </div>
           </motion.div>
         ))}

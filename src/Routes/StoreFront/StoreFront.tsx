@@ -6,6 +6,7 @@ import url from "url";
 import InfoIcon from '@mui/icons-material/Info';
 import './Dependencies/StoreFront.css'
 import { AnimatePresence, motion } from 'framer-motion'
+import { stringify } from "querystring";
 
 interface storeItem {
   itemID: number;
@@ -52,25 +53,45 @@ function StoreFront() {
     itemDescription: "",
   });
   const [confirmationMessages, setConfirmationMessages] = useState<{ index: number; id: number }[]>([]);
+  const [ IDS, setIDS ] = useState<number[]>([])
 
-  const collectStoreItems = async () => 
+  class StoreItemHandle 
   {
-    try {
-      const response = await axios.get<storeItem[]>(
-        `${serverAddress}/api/storeItems`
-      );
-      
-      if (response.status === 200) {
-        setAllItemscart(response.data);
-      } else if (response.status === 404) {
-        console.log("No items available to purchase");
-      } else {
-        console.log("Internal Server Error");
+      // COLLECT STORE ITEMS
+      static collectStoreItems = async () => 
+      {
+          try 
+          {
+              const response = await axios.get<storeItem[]>(
+                `${serverAddress}/api/storeItems`
+              );
+              
+              if (response.status === 200) {
+                setAllItemscart(response.data);
+              } else if (response.status === 404) {
+                console.log("No items available to purchase");
+              } else {
+                console.log("Internal Server Error");
+              }
+          } catch (error) 
+          {
+              console.log(error);
+          }
+      };    
+      // COLLECT BOUGHT IDS
+      static collectIDS = async () => 
+      {
+          try 
+          {
+            const newIDS: number[] = JSON.parse(localStorage.getItem('BOUGHTIDS') || '[]')
+            setIDS(newIDS)
+            console.log(newIDS)
+          } catch (error) {
+            console.log(error)
+          }
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  }
+
 
   function addToCart(
     itemID: number,
@@ -107,8 +128,9 @@ function StoreFront() {
   useEffect(() => 
   {
     if (allItems.length === 0) {
-      collectStoreItems();
+      StoreItemHandle.collectStoreItems();
     }
+    StoreItemHandle.collectIDS();
   }, []);
   useEffect(() => 
   {
@@ -227,7 +249,14 @@ function StoreFront() {
                     }, 2000);
                   }}
                 >
-                  Add to cart
+                  {IDS.includes(item.itemID) ? 
+                  <>
+                    Buy Again?
+                  </> 
+                    : 
+                  <>
+                    Add to cart
+                  </>}
                 </button>
                 {confirmationMessages.map((msg, i) => {
                   const itemCount = cart.find(item => item.itemID === currentItems[msg.index].itemID)?.itemCount;
