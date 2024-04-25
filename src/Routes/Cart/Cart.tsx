@@ -50,6 +50,7 @@ function Cart() {
     itemDescription: "",
   });
   const [confirmationMessages, setConfirmationMessages] = useState<{ index: number; id: number, type: string }[]>([]);
+  const [conflicts, setConflicts] = useState<number[]>([])
   // TOKEN HANDLE
   function getToken(choice: string) 
   {
@@ -80,9 +81,7 @@ function Cart() {
       try {
         const itemIDs = [];
         for (let i = 0; i < cart.length; i++) {
-          for (let j = 0; j < cart[i].itemCount; j++) {
             itemIDs.push(cart[i].itemID);
-          }
         }
         const orderDate = new Date();
         const response = await axios.post(
@@ -109,6 +108,9 @@ function Cart() {
           localStorage.setItem(`BOUGHTIDS${userID}`, JSON.stringify([...prev, ...itemIDs]));          
           console.log("Successfully made order");
           setCart([]);
+        } else if (response.status === 409){
+          console.log("Items have already been purchased")
+          setConflicts(response.data)
         } else {
           console.log("Failed to make order");
         }
@@ -135,7 +137,8 @@ function Cart() {
   // CART HANDLE
   class CartHandle 
   {
-    // INCREMENT ITEMCOUNT BY 1
+    // INCREMENTS ARE REDUNDANT AS DEFINED BY NEW REQUIREMENTS
+    /*/ INCREMENT ITEMCOUNT BY 1
     static increment = (id: number) => {
       setCart((prevItems) =>
         prevItems.map((item, i) =>
@@ -153,6 +156,7 @@ function Cart() {
         )
       );
     };
+    */
     // REMOVE ITEM FROM CART IN FULL
     static removeFromCart(id: number) {
       setCart((prevItems) =>
@@ -177,8 +181,8 @@ useEffect(() => {
   let itemCount = 0;
 
   cart.forEach((item) => {
-    totalCost += parseFloat(item.itemPrice) * item.itemCount;
-    itemCount += item.itemCount;
+    totalCost += parseFloat(item.itemPrice);
+    itemCount += 1;
   });
   setCurrentPage(currentPage)
   setTotalCost(totalCost);
@@ -233,7 +237,7 @@ useEffect(() => {
               </div>
             </div>
               <div className="text-center text-[0.8em] text-WHITE">
-                ${(item.itemPrice * item.itemCount).toFixed(2)} For {item.itemCount} item/s
+                ${(item.itemPrice).toFixed(2)}
               </div>
               <img
                 className="w-full border-BLACK border-b border-t h-[60%] md:h-[80%] bg-WHITE"
@@ -250,33 +254,13 @@ useEffect(() => {
                 }}
                 className="border rounded bg-WHITE mr-1 hover:opacity-90 flex-grow shadow-lg border border-BLACK"
               >
-                Remove from cart
+                {conflicts.includes(item.itemID) ? <>Please Remove from cart</> : <>Remove from cart</>}
               </button>
-              <button
-                onClick={() => {
-                  CartHandle.increment(item.itemID);
-                  setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '+' }]);
-                  setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
-                }}
-                className="border rounded hover:opacity-70 flex-grow bg-WHITE mr-1 shadow-lg border border-BLACK"
-              >
-                ++
-              </button>
-              <button
-                onClick={() => {
-                  CartHandle.decrement(item.itemID);
-                  setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '-' }]);
-                  setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
-                }}
-                className="border rounded hover:opacity-70 flex-grow bg-WHITE shadow-lg border border-BLACK"
-              >
-                --
-              </button>
+
               {confirmationMessages.map((msg, i) => {
-                const itemCount = cart.find(item => item.itemID === currentItems[msg.index].itemID)?.itemCount;
                 return msg.index === index && (
                   <div key={msg.id} className="absolute top-0 right-0 text-WHITE p-1 rounded animate-floatAway">
-                    {msg.type}{msg.type !== 'Removed' && itemCount} 
+                    {msg.type}{msg.type !== 'Removed'} 
                   </div>
                 );
               })}
@@ -358,3 +342,28 @@ useEffect(() => {
 }
 
 export default Cart;
+
+/**   
+              SAVE
+               <button
+                onClick={() => {
+                  //CartHandle.increment(item.itemID);
+                  setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '+' }]);
+                  setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
+                }}
+                className="border rounded hover:opacity-70 flex-grow bg-WHITE mr-1 shadow-lg border border-BLACK"
+              >
+                ++
+              </button>
+              <button
+                onClick={() => {
+                  //CartHandle.decrement(item.itemID);
+                  setConfirmationMessages(prev => [...prev, { index, id: Date.now(), type: '-' }]);
+                  setTimeout(() => setConfirmationMessages(prev => prev.filter(msg => msg.id !== prev[0]?.id)), 2000);
+                }}
+                className="border rounded hover:opacity-70 flex-grow bg-WHITE shadow-lg border border-BLACK"
+              >
+                --
+              </button>
+          
+ */

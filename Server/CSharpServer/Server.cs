@@ -148,6 +148,12 @@ namespace Server
     {
         ////////////////// BROCHURE HANDLE    
         // BROCHURE CREATE
+        // StoreItems use 4 states defined as 1, 2, 3, and 4 which represent 
+        // 0 OPEN: Ready to be purchased
+        // 1 PENDING: an order has been placed for this item so it should not appear on the store at all 
+        // 2 BOUGHT: Item has been bought and should be kept for record keeping purchases
+        // 3 DELETED/INVALID: Item is no longer available for purchase not because it has been bough
+
         public static void CreateBrochure()
         {
             try
@@ -155,7 +161,7 @@ namespace Server
                 List<BrochureItem> brochure = new List<BrochureItem>();
                 string connectionString = ConnectionString.GetConnectionString();
                 Console.WriteLine(connectionString);
-                string queryStatement = "SELECT storeItems.itemID, storeItems.itemName, storeItems.imagePath, storeItems.itemPrice, COUNT(orders.orderID) AS order_count FROM storeItems JOIN orders ON storeItems.itemID = orders.itemID WHERE storeItems.isDeleted = 0 GROUP BY storeItems.itemID, storeItems.itemName ORDER BY order_count DESC LIMIT 3;";
+                string queryStatement = "SELECT storeItems.itemID, storeItems.itemName, storeItems.imagePath, storeItems.itemPrice, COUNT(orders.orderID) AS order_count FROM storeItems JOIN orders ON storeItems.itemID = orders.itemID WHERE storeItems.itemState = 0 GROUP BY storeItems.itemID, storeItems.itemName ORDER BY order_count DESC LIMIT 3;";
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
@@ -195,7 +201,7 @@ namespace Server
             try
             {
                 string connectionString = ConnectionString.GetConnectionString();
-                string queryStatement = "SELECT * FROM storeItems WHERE isDeleted = 0";
+                string queryStatement = "SELECT * FROM storeItems WHERE itemState = 0";
                 List<StoreItem> storeItems = new List<StoreItem>();
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -825,7 +831,7 @@ namespace Server.Controllers
                     await createItemRequest.Picture.CopyToAsync(stream);
                 }
 
-                string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath, isDeleted) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath, @isDeleted)";
+                string queryStatement = "INSERT INTO storeItems (itemName, itemDescription, itemPrice, imagePath, itemState) VALUES (@ItemName, @ItemDescription, @ItemPrice, @ImagePath, @itemState)";
                 string connectionString = ConnectionString.GetConnectionString();
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -838,7 +844,7 @@ namespace Server.Controllers
                         command.Parameters.AddWithValue("@ItemDescription", createItemRequest.ItemDescription);
                         command.Parameters.AddWithValue("@ItemPrice", createItemRequest.ItemPrice);
                         command.Parameters.AddWithValue("@ImagePath", imagePath);
-                        command.Parameters.AddWithValue("@isDeleted", 0);
+                        command.Parameters.AddWithValue("@itemState", 0);
 
                         int rowsAffected = await command.ExecuteNonQueryAsync();
 
@@ -887,7 +893,7 @@ namespace Server.Controllers
                 }
 
                 string queryGetImagePath = "SELECT imagePath FROM storeItems WHERE itemID = @ItemId";
-                string queryUpdateItem = "UPDATE storeItems SET isDeleted = 1 WHERE itemID = @ItemId";
+                string queryUpdateItem = "UPDATE storeItems SET itemState = 4 WHERE itemID = @ItemId";
                 string connectionString = ConnectionString.GetConnectionString();
                 
                 string imagePath = null;
@@ -949,11 +955,16 @@ namespace Server.Controllers
     [ApiController]
     public class CreateOrderController : ControllerBase
     {
+        private class SeenItem
+        {
+            int itemID { get; set};
+        }
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] Order order)
         {
             try
             {
+                if (order == null) return StatusCode(404, "Missing Parameters")
                 Console.WriteLine("Received createOrder request, verifying token");
                 string authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
@@ -976,7 +987,11 @@ namespace Server.Controllers
                 }
 
                 string queryStatement = "INSERT INTO orders (userName, userID, itemID, orderDate) VALUES (@UserName, @UserID, @ItemID, @OrderDate)";
+                string UpdateStatement = "UPDATE storeItems SET itemState = 2 WHERE itemID = @ItemID"
+                string CheckStateMent = "SELECT * FROM storeItems WHERE itemID = @ItemID AND itemState != 0"
                 string connectionString = ConnectionString.GetConnectionString();
+                List<SeenItem> SeenItems= new List<SeenItem>
+
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
@@ -984,6 +999,28 @@ namespace Server.Controllers
 
                     foreach (int itemID in order.ItemIDs)
                     {
+                        using (MySqlCommand command = new MySqlCommand(CheckStateMent, connection))
+                        {
+                            command.Parameters.AddWithValue("@ItemID", itemID)
+                            MySqlDataReader reader = command.ExecuteReader();
+
+                            while (reader.Read())
+                            {
+                                BrochureItem item = new BrochureItem
+                                {
+                                    ItemID = reader.GetInt32(reader.GetOrdinal("itemID")),
+                                };
+                                SeenItems.Add(item);
+                            }
+                            reader.Close();
+                            if (SeenItem.Length > 0)
+                            {   
+                                return StatusCode(409, SeenItems)
+                            }
+                        } 
+                    }
+                    foreach (int itemID in order.ItemIDs)
+                    {                       
                         using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
                         {
                             command.Parameters.AddWithValue("@UserName", order.UserName);
@@ -993,8 +1030,14 @@ namespace Server.Controllers
 
                             await command.ExecuteNonQueryAsync();
                         }
-                    }
+                        using (MySqlCommand command = new MySqlCommand(UpdateStatement, connection))
+                        {
+                            command.Parameters.AddWithValue("@ItemID", itemID)
 
+                            await command.ExecuteNonQueryAsync();
+                        }
+                    }
+                    DatabaseUtilities.CreateStoreListings();
                     return Ok();
                 }
             }
@@ -1040,7 +1083,7 @@ namespace Server.Controllers
                     return StatusCode(401, "Unauthorized");
                 }
 
-                string queryStatement = "SELECT storeItems.itemName, orders.itemID, orders.orderID, orders.orderDate, completed FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = @UserId";
+                string queryStatement = "SELECT storeItems.itemName, orders.itemID, orders.orderID, orders.orderDate, itemState FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = @UserId";
                 string connectionString = ConnectionString.GetConnectionString();
                 List<IndividualOrders> orders = new List<IndividualOrders>();
 
@@ -1062,7 +1105,7 @@ namespace Server.Controllers
                                     ItemID = reader.GetInt32(reader.GetOrdinal("itemID")),
                                     ItemName = reader.GetString(reader.GetOrdinal("itemName")),
                                     OrderDate = reader.GetDateTime(reader.GetOrdinal("orderDate")),
-                                    Completed = reader.GetBoolean(reader.GetOrdinal("completed")),
+                                    Completed = reader.GetBoolean(reader.GetOrdinal("itemState")),
                                 };
                                 orders.Add(order);
                             }
@@ -1085,7 +1128,7 @@ namespace Server.Controllers
     {
         public class ChosenOrder
         {
-            public bool completed { get; set; }
+            public int completed { get; set; }
             public int orderID { get; set; }
             public int userID { get; set; }
         }
@@ -1109,7 +1152,7 @@ namespace Server.Controllers
                     return StatusCode(401, "Unauthorized");
                 }
 
-                string queryStatement = "UPDATE orders SET completed = @Completed WHERE orderID = @OrderID AND userID = @UserID";
+                string queryStatement = "UPDATE orders SET itemState = @Completed WHERE orderID = @OrderID AND userID = @UserID";
                 string connectionString = ConnectionString.GetConnectionString();
                 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))

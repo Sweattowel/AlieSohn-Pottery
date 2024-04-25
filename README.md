@@ -51,3 +51,14 @@ COMPLETE Refurbish JWT to use cookies or an interceptor which will update the to
 COMPLETE port server to C# as recommended/suggested by Chris
 COMPLETE Improve mobile design by using hamburger Setup for the navigation over the tab option
 COMPLETE implement additional SQL checks to ensure sanitation 
+
+Client adjustment of goals and scope:
+UNCOMPLETE Adjust storeFront to be a oneitem one customer deal as items will not be produced in any quantity whatsoever
+    Addit:
+        Adjust storeItems to use 3 states, open, pending, and bought which will adjust how they are presented
+        Remove buying multiples of items, no longer necessary can be used to make things beautiful
+UNCOMPLETE Adjust brochure to be a about me page for the client NO PII NO PII NO PII
+UNCOMPLETE Include reviews in about me
+    Addit:
+        Include a star system
+UNCOMPLETE Improve overall design and make the page look far more inviting i.e. maybe some image on the sidebar that can scroll nicely

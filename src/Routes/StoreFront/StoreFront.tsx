@@ -101,13 +101,7 @@ function StoreFront() {
   ) {
     const existingItem = cart.find((item) => item.itemID === itemID);
     if (existingItem) {
-      setCart((prevItems) =>
-        prevItems.map((item) =>
-          item.itemID === itemID
-            ? { ...item, itemCount: item.itemCount + 1 }
-            : item
-        )
-      );
+      return
     } else {
       setCart((prevItems) => [
         ...prevItems,
@@ -117,7 +111,6 @@ function StoreFront() {
           itemPrice,
           imagePath,
           itemDescription,
-          itemCount: 1,
         },
       ]);
     }
@@ -142,12 +135,15 @@ function StoreFront() {
     let totalPrice = 0;
 
     cart.forEach((item) => {
-      totalCount += item.itemCount;
-      totalPrice += item.itemPrice * item.itemCount;
+      totalCount += 1;
+      totalPrice += item.itemPrice;
     });
 
     setCount(totalCount);
     setTotalPrice(totalPrice);
+    if (cart.length === 0){
+      StoreItemHandle.collectStoreItems();
+    }
   }, [cart]);
 
  useEffect(() => 
@@ -168,7 +164,7 @@ function StoreFront() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
+  
   ///////////////////////////////////////////
 
   const container = {
@@ -248,9 +244,8 @@ function StoreFront() {
                     }, 2000);
                   }}
                 >
-                  {IDS.includes(item.itemID) ? 
+                  {IDS.includes(item.itemID) || cart.includes(item.itemID) ? 
                   <>
-                    Buy Again?
                   </> 
                     : 
                   <>
@@ -258,10 +253,9 @@ function StoreFront() {
                   </>}
                 </button>
                 {confirmationMessages.map((msg, i) => {
-                  const itemCount = cart.find(item => item.itemID === currentItems[msg.index].itemID)?.itemCount;
                   return msg.index === index && (
                     <div key={msg.id} className="absolute top-0 right-0 text-WHITE p-1 rounded animate-floatAway">
-                      +{itemCount} 
+                      +{item.itemName} 
                     </div>
                   );
                 })}
