@@ -148,6 +148,7 @@ namespace Server
     {
         ////////////////// BROCHURE HANDLE    
         // BROCHURE CREATE
+        // SEARCH what is itemStatus itemstatus itemState itemstate 
         // StoreItems use 4 states defined as 1, 2, 3, and 4 which represent 
         // 0 OPEN: Ready to be purchased
         // 1 PENDING: an order has been placed for this item so it should not appear on the store at all 
@@ -161,7 +162,7 @@ namespace Server
                 List<BrochureItem> brochure = new List<BrochureItem>();
                 string connectionString = ConnectionString.GetConnectionString();
                 Console.WriteLine(connectionString);
-                string queryStatement = "SELECT storeItems.itemID, storeItems.itemName, storeItems.imagePath, storeItems.itemPrice, COUNT(orders.orderID) AS order_count FROM storeItems JOIN orders ON storeItems.itemID = orders.itemID WHERE storeItems.itemState = 0 GROUP BY storeItems.itemID, storeItems.itemName ORDER BY order_count DESC LIMIT 3;";
+                string queryStatement = "SELECT itemID, itemName, imagePath, itemPrice FROM storeItems ORDER BY RAND() LIMIT 4;";
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
