@@ -188,7 +188,7 @@ function StoreFront() {
   };
 
   return (
-    <div className="m-auto text-white flex flex-wrap justify-center mb-20">
+    <div className="m-auto text-white flex flex-wrap justify-center mb-20  mt-[20%] md:mt-0">
       
       <motion.ul 
         className="container w-full flex flex-wrap justify-center"

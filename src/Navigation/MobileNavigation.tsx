@@ -41,8 +41,8 @@ function MobileNavigation(){
       };
 
     return (
-        <div className="flex flex-row">
-            <div className="w-[70%] text-xl bg-BACKGROUND">
+        <div className="flex flex-row fixed top-0 left-0 w-full">
+            <div className="w-[70%] text-xl bg-BACKGROUND ">
                 <h1 className="font-serif h-[8vh] md:h-[5vh] rounded w-full text-center flex items-center justify-center text-[2rem] md:text-[3rem] text-WHITE ">
                     AlieSohn
                 </h1>
@@ -59,13 +59,13 @@ function MobileNavigation(){
                 initial="hidden"
                 animate="visible"   
                 variants={container}         
-                className={`fixed top-[10vh] right-0 h-[45vh] bg-BACKGROUND w-[35vw] z-10  rounded-lg `}>
+                className={`fixed top-[10vh] right-0 h-[45vh] bg-BACKGROUND w-[30vw] z-20  rounded-lg `}>
             
                 <motion.ul         
     
-                    className="flex flex-col h-full w-full justify-center  flex-column flex border border-BLACK rounded-lg "
+                    className="flex flex-col h-full w-full justify-evenly  flex-column flex border border-BLACK rounded-lg "
                 >
-                    <div onClick={() => setWanted(!wanted)}  className="border border-BLACK bg-WHITE text-BLACK w-[80%] flex ml-auto mr-auto mb-2 text-center items-center justify-center font-serif rounded shadow-lg">
+                    <div className="text-WHITE text-lg font-bold w-[80%] text-center border-b border-WHITE ml-auto mr-auto font-serif">
                         Menu
                     </div>
                     <motion.li variants={itemded}>

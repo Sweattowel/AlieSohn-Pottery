@@ -57,8 +57,9 @@ UNCOMPLETE Adjust storeFront to be a oneitem one customer deal as items will not
     Addit:
         Adjust storeItems to use 3 states, open, pending, and bought which will adjust how they are presented
         Remove buying multiples of items, no longer necessary can be used to make things beautiful
-UNCOMPLETE Adjust brochure to be a about me page for the client NO PII NO PII NO PII
-UNCOMPLETE Include reviews in about me
-    Addit:
-        Include a star system
-UNCOMPLETE Improve overall design and make the page look far more inviting i.e. maybe some image on the sidebar that can scroll nicely
+DESIGN CHANGES:
+    UNCOMPLETE Adjust brochure to be a about me page for the client NO PII NO PII NO PII
+    UNCOMPLETE Include reviews in about me
+        Addit:
+            Include a star system
+    UNCOMPLETE Improve overall design and make the page look far more inviting i.e. maybe some image on the sidebar that can scroll nicely

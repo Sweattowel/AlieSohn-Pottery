@@ -5,6 +5,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import {motion} from 'framer-motion'
+import { Rating } from "@mui/material";
 
 interface StoreItem {
   itemID: number;
@@ -18,6 +19,24 @@ function Brochure() {
   const serverAddress = `${process.env.REACT_APP_SERVER_ADDRESS}`;
   const [brochure, setBrochure] = useState<any[]>([]);
 
+  // PREWRITTEN REVIEWS DONT HATE
+  const [ reviews, setReviews ] = useState([
+    {
+      rating: 4,
+      reviewer: 'Renata',
+      reviewText: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magnam accusantium necessitatibus voluptas consequatur sint, veniam excepturi at quos itaque sequi molestiae unde cum delectus eius iusto fugiat reprehenderit quaerat sapiente.' 
+    },
+    {
+      rating: 5,
+      reviewer: 'Gloria',
+      reviewText: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magnam accusantium necessitatibus voluptas consequatur sint, veniam excepturi at quos itaque sequi molestiae unde cum delectus eius iusto fugiat reprehenderit quaerat sapiente.' 
+    },
+    {
+      rating: 4.5,
+      reviewer: 'Martin',
+      reviewText: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magnam accusantium necessitatibus voluptas consequatur sint, veniam excepturi at quos itaque sequi molestiae unde cum delectus eius iusto fugiat reprehenderit quaerat sapiente.' 
+    }
+  ])
   const getBrochure = async () => {
     try {
       const response = await axios.post<StoreItem[]>(
@@ -69,9 +88,63 @@ function Brochure() {
   });
 
   return (
-    <div className="text-BLACK h-[80vh] w-[90vw] m-auto text-center">
-      <h1 className="font-serif text-[2em] mt-2 mb-8 border-BLACK bg-BACKGROUND rounded text-WHITE h-[5vh] h-[10vh] items-center justify-center flex">
-        Our Top Sellers!
+    <div className="text-BLACK h-[150vh] w-[90vw] m-auto text-center mt-[50vh] md:mt-0">
+      <div className="md:flex-row flex-col flex mt-20 items-center justify-center h-[70vh]">
+        <div className="md:w-[50%] w-full  md:h-[50vh] h-full shadow-lg flex md:flex-row flex-col rounded-lg">
+          <img src="https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1714003200&semt=sph" 
+            alt="Profile Picture" 
+            className="w-[45%] h-[65%] md:ml-5 m-auto flex justify-center items-center rounded-lg " 
+          />
+          <div className="flex flex-col items-center justify-center h-[70%] m-auto">
+            <h2 className="font-serif text-2xl text-BACKGROUND">
+              ABOUT ME
+            </h2>
+            <div className="m-auto w-[80%]">
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magnam accusantium necessitatibus voluptas consequatur sint, veniam excepturi at quos itaque sequi molestiae unde cum delectus eius iusto fugiat reprehenderit quaerat sapiente.
+            </div>            
+            <h2 className="font-serif text-2xl text-BACKGROUND">
+              EMAIL
+            </h2>
+            <div className="m-auto w-[80%]">
+              test@test@fakemail.com.au
+            </div>      
+            <h2 className="font-serif text-2xl text-BACKGROUND">
+              PH
+            </h2>
+            <div className="m-auto w-[80%]">
+              000 000 000
+            </div>        
+          </div>
+        </div>
+        <div className="md:w-[50%] w-full h-[80%] items-center flex md:mt-0 mt-40 md:mb-0 mb-20">
+          <div className="w-full h-full flex flex-col justify-evenly">
+            {reviews.map((review: any, index: number) => (
+              <div key={index} className=" w-[90%] h-40 m-auto flex flex shadow-lg rounded-lg bg-BACKGROUND text-WHITE mb-2 md:mb-0">     
+                <div className="flex items-center">             
+                  <img src="https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1714003200&semt=sph" 
+                  alt="Profile Picture" 
+                  className="w-[90%] h-[90%] m-auto flex justify-center  rounded-lg " 
+                  />
+                </div>
+                <div className="w-full flex-col flex justify-evenly mt-2">
+                  <div className="font-bold text-lg font-serif justify-evenly flex ">
+                    {review.reviewer}
+                    <Rating name="half-rating-read" defaultValue={review.rating} precision={0.5} readOnly />
+                  </div>
+                  
+                  <div className="w-[80%] m-auto flex md:text-[0.8rem] text-[0.65rem]">
+                    {review.reviewText}
+                  </div>                  
+                </div>                
+
+              </div>
+            ))}          
+          </div>          
+        </div>
+      </div>
+
+      <h1 className="font-serif text-[2em] md:mt-[10vh] mt-[40vh] mb-8 border-BLACK bg-BACKGROUND rounded text-WHITE h-[5vh] h-[10vh] items-center justify-center flex">
+        Our Unique Selection
       </h1>
       <Slider {...settings}>
         {brochure.map((item: StoreItem, index: number) => (

@@ -199,7 +199,7 @@ useEffect(() => {
   
   ///////////////////////////////////////////////////////////////////
   return (
-    <div className="w-[90vw] h-full m-auto mb-20 mt-2">
+    <div className="w-[90vw] h-full m-auto mb-20  mt-[20%] md:mt-2">
       <div className="flex rounded-b rounded-t h-[10vh] bg-BACKGROUND">
         <h1 className="flex m-auto rounded w-[40%] text-center text-WHITE justify-center items-center bg-BACKGROUND">
           Total cost: ${totalCost.toFixed(2)} Item count: {itemCount} items

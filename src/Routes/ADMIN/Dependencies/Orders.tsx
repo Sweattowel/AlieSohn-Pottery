@@ -57,7 +57,7 @@ function Orders() {
         }
       };
     // COMPLETE ORDER
-    static completeOrder = async (orderID: number, decision: boolean) => 
+    static completeOrder = async (orderID: number, decision: number) => 
       {
         const storedToken = localStorage.getItem('sutoken');
         if (!storedToken){
@@ -71,7 +71,7 @@ function Orders() {
           const response = await axios.post(`${serverAddress}/api/completeOrder`, {
             userID: selectedCustomer,
             orderID: orderID,
-            completed: decision,
+            itemState: decision,
           },       
           {
             headers: {
@@ -251,7 +251,7 @@ function Orders() {
                   <div
                     key={index}
                     className={
-                      !order.completed
+                      !order.itemState 
                         ? "m-2 flex bg-SELECTED text-WHITE justify-center text-center hover:text-BLACK hover:opacity-90 w-[40vw] text-[0.5rem] md:text-base items-center"
                         : "opacity-60 m-2 flex bg-BACKGROUND text-BLACK justify-center text-center items-center w-[40vw] text-[0.5rem] md:text-base"
                     }
@@ -267,7 +267,7 @@ function Orders() {
                       onClick={() => {
                         OrderHandle.completeOrder(
                           order.orderID,
-                          !order.completed ? true : false
+                          order.itemState == 1 ? 2 : 1
                         );
                       }}
                       className="w-[25%] bg-WHITE text-BACKGROUND border border-BLACK h-full w-[25%] shadow-lg hover:opacity-60"

@@ -186,6 +186,7 @@ namespace Server
                     }
                 }
                 PreGetStorage.Brochure = brochure;
+                Console.WriteLine("Brochure set")
             }
             catch (MySqlException ex)
             {
@@ -227,6 +228,7 @@ namespace Server
                     }
                 }
                 PreGetStorage.StoreListings = storeItems;
+                Console.WriteLine("StoreListings set");
             }
             catch (Exception ex)
             {
@@ -1060,7 +1062,7 @@ namespace Server.Controllers
             public int ItemID { get; set; }
             public string ItemName { get; set; }
             public DateTime OrderDate { get; set; }
-            public bool Completed { get; set; }
+            public int itemState { get; set; }
         }
 
         [HttpGet]
@@ -1105,7 +1107,7 @@ namespace Server.Controllers
                                     ItemID = reader.GetInt32(reader.GetOrdinal("itemID")),
                                     ItemName = reader.GetString(reader.GetOrdinal("itemName")),
                                     OrderDate = reader.GetDateTime(reader.GetOrdinal("orderDate")),
-                                    Completed = reader.GetBoolean(reader.GetOrdinal("itemState")),
+                                    itemState = reader.GetInt32(reader.GetOrdinal("itemState")),
                                 };
                                 orders.Add(order);
                             }
@@ -1128,7 +1130,7 @@ namespace Server.Controllers
     {
         public class ChosenOrder
         {
-            public int completed { get; set; }
+            public int itemState { get; set; }
             public int orderID { get; set; }
             public int userID { get; set; }
         }
@@ -1161,7 +1163,7 @@ namespace Server.Controllers
 
                     using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
                     {
-                        command.Parameters.AddWithValue("@Completed", OrderDetails.completed);
+                        command.Parameters.AddWithValue("@Completed", OrderDetails.itemState);
                         command.Parameters.AddWithValue("@OrderID", OrderDetails.orderID);
                         command.Parameters.AddWithValue("@UserID", OrderDetails.userID);
 

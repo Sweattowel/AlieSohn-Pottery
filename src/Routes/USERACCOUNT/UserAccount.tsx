@@ -20,7 +20,6 @@ export default function UserAccount() {
     ,
   ] = useMyContext();
   const [orders, setOrders] = useState<any[]>([]);
-  const [originalOrders, setOriginalOrders] = useState<any[]>([]);
   const ordersPerPage = 15;
   const [currentOrdersPage, setCurrentOrdersPage] = useState(1);
   const [orderCount, setOrderCount] = useState(0);
@@ -42,8 +41,7 @@ export default function UserAccount() {
             });
             if (response.status === 200) {
                 const data = response.data;
-                setOrders(data);
-                setOriginalOrders(data); 
+                setOrders(data); 
                 setOrderCount(data.length);
             } else if (response.status === 404) {
                 console.log("No orders to collect");
@@ -57,45 +55,19 @@ export default function UserAccount() {
     // CHANGE ORDER ORDERING
     static sortDate = (choice: any) => 
     {
-      let sortedOrders = [...originalOrders]; // Use the original orders data for sorting/grouping
-
       if (choice === 1) {
         setGroupSettingChoice(1)
-        sortedOrders.sort(
+        setOrders(orders.sort(
           (a, b) =>
             new Date(a.orderDate).getTime() - new Date(b.orderDate).getTime()
-        );
+        ))
       } else if (choice === 2) {
         setGroupSettingChoice(2)
-        sortedOrders.sort(
+        setOrders(orders.sort(
           (a, b) =>
             new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
-        );
-      } else if (choice === 3) {
-        const items: any = {};
-        setGroupSettingChoice(3)
-        for (let i = 0; i < originalOrders.length; i++) {
-          const currentOrder = originalOrders[i];
-          if (!currentOrder) {
-            console.error(`Invalid order at index ${i}:`, currentOrder);
-            continue; // Skip this iteration and continue to the next one
-          }
-          const itemID = currentOrder.itemID;
-          if (!items[itemID]) {
-            items[itemID] = {
-              itemID: itemID,
-              itemName: currentOrder.itemName,
-              count: 0,
-            };
-          }
-          items[itemID].count++;
-        }
-
-        // Convert items object back into an array
-        sortedOrders = Object.values(items);
+        ));
       }
-
-      setOrders(sortedOrders);
     };       
     // PAGINATION
     static handleChangeOrdersPage = (
@@ -137,11 +109,8 @@ export default function UserAccount() {
           Group by?
         </div>
         <div className="rounded-b w-[50%] m-auto text-WHITE mt-1 mb-1 flex justify-center items-center">
-          
-            <button className={ groupSettingChoice === 1 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(1)} >DESC</button>
-            <button className={ groupSettingChoice === 2 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(2)} >ASC</button>
-            <button className={ groupSettingChoice === 3 ? "bg-BACKGROUND w-[33%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(3)} >GRP</button>
-          
+            <button className={ groupSettingChoice === 1 ? "bg-BACKGROUND w-[50%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(1)} >DESC</button>
+            <button className={ groupSettingChoice === 2 ? "bg-BACKGROUND w-[50%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(2)} >ASC</button>          
         </div>
         <Pagination
           style={{
@@ -182,7 +151,10 @@ export default function UserAccount() {
                     {order.itemName}{" "}
                   </h1>
                   <h1 className="bg-BACKGROUND text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
-                    {order.completed ? "TRUE" : "FALSE"}{" "}
+                    {order.itemStatus == 0 || order.itemStatus > 3 ? "ERROR" : ""}
+                    {order.itemStatus == 1 ? "PENDING" : ""}
+                    {order.itemStatus == 2 ? "COMPLETE" : ""}
+                    {order.itemStatus == 3 ? "DELETED" : ""}
                   </h1>
                   {order.orderDate ? (
                     <h1 className="bg-BACKGROUND text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
@@ -190,11 +162,6 @@ export default function UserAccount() {
                     </h1>
                   ) : (
                     <div className="bg-BACKGROUND w-[0%] text-[0.7rem] md:text-lg"></div>
-                  )}
-                  {order.count && (
-                    <h1 className="bg-BACKGROUND text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
-                      COUNT : {order.count}
-                    </h1>
                   )}
                 </div>
               ))
