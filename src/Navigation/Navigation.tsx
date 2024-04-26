@@ -21,10 +21,10 @@ function Navigation() {
 
   
   return (
-    <nav className="m-auto h-[8vh] flex bg-BACKGROUND border-BLACK border-b-2 w-full bg-60 rounded-b">
+    <nav className="m-auto h-[5vh] flex bg-BACKGROUND border-BLACK border-b-2 w-full bg-60 rounded-b">
       <div className="flex  w-full mb-2">
         <div className="w-[50%] m-auto   text-xl">
-          <h1 className="font-serif h-[8vh] md:h-[5vh] rounded w-[25vw] mr-3 text-center flex items-center justify-center text-[2rem] md:text-[3rem] text-WHITE ">
+          <h1 className="font-serif h-[8vh] md:h-[5vh] rounded w-[25vw] mr-3 text-center flex items-center justify-center text-[2rem] md:text-[2rem] text-WHITE ">
             AlieSohn
           </h1>
         </div>
@@ -33,13 +33,10 @@ function Navigation() {
             <li>
               <Link to={`/MyAccount/${userID}`}>
                 <button
-                  className={
-                    page === 5
-                    ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-xl"
-                    : "text-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-xl hover:text-BLACK"
-                  }
+                  className={`text-${page === 1 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
+    
                   onClick={() => {
-                    setPage(5);
+                    setPage(1);
                   }}
                 >
                   My Account
@@ -51,13 +48,9 @@ function Navigation() {
             <li>
               <Link to="/ADMIN">
                 <button
-                  className={
-                    page === 4
-                    ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-xl"
-                    : "text-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-xl hover:text-BLACK"
-                  }
+                  className={`text-${page === 2 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
                   onClick={() => {
-                    setPage(4);
+                    setPage(2);
                   }}
                 >
                   Admin
@@ -68,13 +61,9 @@ function Navigation() {
           <li>
             <Link to="/">
               <button
-                className={
-                  page === 1
-                  ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-xl"
-                  : "text-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-xl hover:text-BLACK"
-                }
+                className={`text-${page === 3 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
                 onClick={() => {
-                  setPage(1);
+                  setPage(3);
                 }}
               >
                 Brochure
@@ -84,13 +73,9 @@ function Navigation() {
           <li>
             <Link to="/StoreFront">
               <button
-                className={
-                  page === 2
-                  ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-xl"
-                  : "text-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-xl hover:text-BLACK"
-                }
+                className={`text-${page === 4 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
                 onClick={() => {
-                  setPage(2);
+                  setPage(4);
                 }}
               >
                 Store Front
@@ -100,13 +85,9 @@ function Navigation() {
           <li>
             <Link to="/Cart">
               <button
-                className={
-                  page === 3
-                  ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[15vw] text-base md:text-xl"
-                  : "text-WHITE h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-xl hover:text-BLACK"
-                }
+                className={`text-${page === 5 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
                 onClick={() => {
-                  setPage(3);
+                  setPage(5);
                 }}
               >
                 CART

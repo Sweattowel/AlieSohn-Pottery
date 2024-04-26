@@ -49,7 +49,7 @@ function MobileNavigation(){
             </div>
             <div className="w-[30%] text-xl bg-BACKGROUND ">
                 <h1 onClick={() => setWanted(!wanted)} className="font-serif h-[8vh] md:h-[5vh] w-full text-center flex items-center justify-center text-[2rem] md:text-[3rem] border-BACKGROUND border bg-BACKGROUND text-BLACK  rounded-lg">
-                    <div className={ wanted ? "bg-WHITE m-2 border-BLACK border w-[80%] h-[80%] flex items-center justify-center rounded shadow-lg opacity-90" : "bg-WHITE m-2 border-BLACK border w-[80%] h-[80%] flex items-center justify-center rounded shadow-lg"}>
+                    <div className={ `${wanted ? ' opacity-80': ''} text-WHITE m-2 w-[80%] h-[80%] flex items-center justify-center rounded`}>
                         <MenuIcon />
                     </div>
                 </h1>
@@ -59,24 +59,17 @@ function MobileNavigation(){
                 initial="hidden"
                 animate="visible"   
                 variants={container}         
-                className={`fixed top-[10vh] right-0 h-[45vh] bg-BACKGROUND w-[30vw] z-20  rounded-lg `}>
+                className={`fixed top-[10vh] right-10 bg-BACKGROUND w-[30vw] z-20  rounded-lg `}>
             
                 <motion.ul         
     
-                    className="flex flex-col h-full w-full justify-evenly  flex-column flex border border-BLACK rounded-lg "
+                    className="flex flex-col h-full w-full justify-evenly  flex-column flex rounded shadow-lg"
                 >
-                    <div className="text-WHITE text-lg font-bold w-[80%] text-center border-b border-WHITE ml-auto mr-auto font-serif">
-                        Menu
-                    </div>
                     <motion.li variants={itemded}>
                     {authenticated ? (
                         <Link to={`/MyAccount/${userID}`}>
                                 <button
-                                className={
-                                    page === 5
-                                    ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[80%] flex text-center justify-center items-center bg-WHITE  text-BLACK  rounded  shadow-lg m-auto text-base md:text-xl border-BLACK border opacity-90"
-                                    : "text-BLACK h-[8vh] md:w-[13vw] w-[80%] md:h-[5vh] text-base md:text-xl hover:text-BLACK m-auto border-BLACK border flex text-center justify-center items-center bg-WHITE  rounded  shadow-lg"
-                                }
+                                className={`text-${page === 5 ? 'BLACK bg-WHITE' : 'WHITE'} h-[8vh] w-full text-[0.7rem] bg-BACKGROUND rounded-t`}
                                 onClick={() => {
                                     setPage(5);
                                 }}
@@ -92,13 +85,10 @@ function MobileNavigation(){
                         <li>
                             <Link to="/ADMIN">
                             <button
-                                className={
-                                page === 4
-                                ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[80%] flex text-center justify-center items-center bg-WHITE  text-BLACK  rounded  shadow-lg m-auto text-base md:text-xl border-BLACK border opacity-90"
-                                : "text-BLACK h-[8vh] md:w-[13vw] w-[80%] md:h-[5vh] text-base md:text-xl hover:text-BLACK m-auto border-BLACK border flex text-center justify-center items-center bg-WHITE  rounded  shadow-lg"
-                                }
+                                className={`text-${page === 4 ? 'BLACK bg-WHITE' : 'WHITE'} h-[8vh] w-full text-[0.7rem] bg-BACKGROUND rounded-t`}
                                 onClick={() => {
                                 setPage(4);
+                                setWanted(false);
                                 }}
                             >
                                 Admin
@@ -110,13 +100,10 @@ function MobileNavigation(){
                     <motion.li variants={itemded}>
                     <Link to="/">
                         <button
-                            className={
-                            page === 1
-                            ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[80%] flex text-center justify-center items-center bg-WHITE  text-BLACK  rounded  shadow-lg m-auto text-base md:text-xl border-BLACK border opacity-90"
-                            : "text-BLACK h-[8vh] md:w-[13vw] w-[80%] md:h-[5vh] text-base md:text-xl hover:text-BLACK m-auto border-BLACK border flex text-center justify-center items-center bg-WHITE  rounded  shadow-lg"
-                            }
+                            className={`text-${page === 1 ? 'BLACK bg-WHITE' : 'WHITE'} h-[8vh] w-full text-[0.7rem] bg-BACKGROUND rounded-t`}
                             onClick={() => {
                             setPage(1);
+                            setWanted(false);
                             }}
                         >
                             Brochure
@@ -126,13 +113,10 @@ function MobileNavigation(){
                     <motion.li variants={itemded}>
                     <Link to="/StoreFront">
                         <button
-                            className={
-                            page === 2
-                            ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[80%] flex text-center justify-center items-center bg-WHITE  text-BLACK  rounded  shadow-lg m-auto text-base md:text-xl border-BLACK border opacity-90"
-                            : "text-BLACK h-[8vh] md:w-[13vw] w-[80%] md:h-[5vh] text-base md:text-xl hover:text-BLACK m-auto border-BLACK border flex text-center justify-center items-center bg-WHITE  rounded  shadow-lg"
-                            }
+                            className={`text-${page === 2 ? 'BLACK bg-WHITE' : 'WHITE'} h-[8vh] w-full text-[0.7rem] bg-BACKGROUND`}
                             onClick={() => {
                             setPage(2);
+                            setWanted(false)
                             }}
                         >
                             Store Front
@@ -142,13 +126,10 @@ function MobileNavigation(){
                     <motion.li variants={itemded}>
                     <Link to="/Cart">
                         <button
-                            className={
-                            page === 3
-                            ? "text-BLACK  md:h-[5vh] h-[8vh] md:w-[13vw] w-[80%] flex text-center justify-center items-center bg-WHITE  text-BLACK  rounded  shadow-lg m-auto text-base md:text-xl border-BLACK border opacity-90"
-                            : "text-BLACK h-[8vh] md:w-[13vw] w-[80%] md:h-[5vh] text-base md:text-xl hover:text-BLACK m-auto border-BLACK border flex text-center justify-center items-center bg-WHITE  rounded  shadow-lg"
-                            }
+                            className={`text-${page === 3 ? 'BLACK bg-WHITE' : 'WHITE'} h-[8vh] w-full text-[0.7rem] bg-BACKGROUND rounded-b`}
                             onClick={() => {
                             setPage(3);
+                            setWanted(false)
                             }}
                         >
                             CART
