@@ -960,8 +960,8 @@ namespace Server.Controllers
     {
         private class SeenItem
         {
-            int itemID { get; set};
-        }
+            public int ItemID { get; set};
+        };
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] Order order)
         {
@@ -1013,7 +1013,7 @@ namespace Server.Controllers
 
                             while (reader.Read())
                             {
-                                BrochureItem item = new BrochureItem
+                                SeenItem item = new SeenItem
                                 {
                                     ItemID = reader.GetInt32(reader.GetOrdinal("itemID"));
                                 };
@@ -1039,9 +1039,9 @@ namespace Server.Controllers
                         }
                         using (MySqlCommand command = new MySqlCommand(UpdateStatement, connection))
                         {
-                            command.Parameters.AddWithValue("@ItemID", itemID)
-
+                            command.Parameters.AddWithValue("@ItemID", itemID);
                             await command.ExecuteNonQueryAsync();
+
                         }
                     }
                     DatabaseUtilities.CreateStoreListings();
@@ -1052,7 +1052,7 @@ namespace Server.Controllers
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
-            }
+            };
         }
     }
 
