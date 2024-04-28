@@ -1161,6 +1161,7 @@ namespace Server.Controllers
                 }
 
                 string queryStatement = "UPDATE orders SET itemState = @NewItemState WHERE orderID = @OrderID AND userID = @UserID";
+                string queryStatementTwo = "UPDATE storeItems SET itemState = @NewItemState WHERE itemID = @ItemID";
                 string connectionString = ConnectionString.GetConnectionString();
                 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -1175,13 +1176,25 @@ namespace Server.Controllers
 
                         int rowsAffected = await command.ExecuteNonQueryAsync();
 
-                        if (rowsAffected == 1)
+                        if (rowsAffected !== 1)
+                        {
+                            return StatusCode(500, "Internal server error");
+                        }
+                    }
+                    using (MySqlCommand command = new MySqlCommand(queryStatementTwo, connection))
+                    {
+                        command.Parameters.AddWithValue("@ItemID", OrderDetails.ItemID);
+                        command.Parameters.AddWithValue("@NewItemState", OrderDetails.NewItemState);
+
+                        int rowsAffected = await command.ExecuteNonQueryAsync();
+                        
+                        if (rowsAffected === 1)
                         {
                             return Ok();
-                        }
-                        else
+                        } 
+                        else 
                         {
-                            return StatusCode(404, "Not found");
+                            return StatusCode(500, "Failed to adjust order")
                         }
                     }
                 }

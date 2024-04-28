@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../../Context/ContextProvider";
 import axios from "axios";
 import { Pagination } from "@mui/material";
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
+
 function Orders() {
   const [orders, setOrders] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
@@ -39,7 +38,7 @@ function Orders() {
             console.log('No authorization found');
             return;
         }
-
+        console.log('Getting orders')
         try {
             const response = await axios.get(`${serverAddress}/api/orders/${selectedCustomer}`, {
                 headers: {
@@ -48,6 +47,7 @@ function Orders() {
             });
             if (response.status === 200) {
                 const data = response.data;
+                console.log(data)
                 setOrders(data);
             } else if (response.status === 404) {
                 console.log("No orders to collect");
@@ -164,17 +164,17 @@ function Orders() {
   }, []);
 
   useEffect(() => {
-    console.log("Orders:", orders);
+    //console.log("Orders:", orders);
     if (orders) {
-      console.log("Orders length:", orders.length);
+      //console.log("Orders length:", orders.length);
       setOrderCount(orders.length);
     }
   }, [orders, currentOrdersPage]);
   
   useEffect(() => {
-    console.log("Users:", users);
+    //console.log("Users:", users);
     if (users) {
-      console.log("Users length:", users.length);
+      //console.log("Users length:", users.length);
       setUserCount(users.length);
     }
   }, [users]);
@@ -250,11 +250,7 @@ function Orders() {
                 .map((order: any, index: number) => (
                   <div
                     key={index}
-                    className={
-                      !order.itemState 
-                        ? "m-2 flex bg-SELECTED text-WHITE justify-center text-center hover:text-BLACK hover:opacity-90 w-[40vw] text-[0.5rem] md:text-base items-center"
-                        : "opacity-60 m-2 flex bg-BACKGROUND text-BLACK justify-center text-center items-center w-[40vw] text-[0.5rem] md:text-base"
-                    }
+                    className="flex bg-BACKGROUND w-full rounded mt-1 mb-2 justify-center items-center"
                   >
                     <h1 className="w-[20%]">
                       <>Item : {order.itemID}</>
@@ -264,11 +260,10 @@ function Orders() {
                     <h1 className="w-[20%]">{order.itemName} </h1>
                     <h1 className="w-[20%]">{order.completed ? "SUCC" : "NOT"} </h1>
                     <button
-                      onClick={() => {
-                        OrderHandle.adjustOrder(
-                          order.orderID,
-                          order.itemState == 3 ? order.itemState++ : 0
-                        );
+                        onClick={async () => {
+                          const newState = order.itemState >= 3 ? 0 : order.itemState + 1;
+                          await OrderHandle.adjustOrder(order.orderID, newState);
+                          OrderHandle.getOrders();
                       }}
                       className="w-[25%] bg-WHITE text-BACKGROUND border border-BLACK h-full w-[25%] shadow-lg hover:opacity-60 rounded"
                     >
