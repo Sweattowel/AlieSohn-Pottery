@@ -1015,12 +1015,12 @@ namespace Server.Controllers
                             {
                                 SeenItem item = new SeenItem
                                 {
-                                    ItemID = reader.GetInt32(reader.GetOrdinal("itemID"));
+                                    ItemID = reader.GetInt32(reader.GetOrdinal("itemID"))
                                 };
                                 SeenItems.Add(item);
                             }
                             reader.Close();
-                            if (SeenItem.Length > 0)
+                            if (SeenItem.Count > 0)
                             {   
                                 return StatusCode(409, SeenItems);
                             }
