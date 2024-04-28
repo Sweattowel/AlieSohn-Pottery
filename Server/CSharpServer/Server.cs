@@ -1020,7 +1020,7 @@ namespace Server.Controllers
                                 SeenItems.Add(item);
                             }
                             reader.Close();
-                            if (SeenItem.Count > 0)
+                            if (SeenItem.Length > 0)
                             {   
                                 return StatusCode(409, SeenItems);
                             }
