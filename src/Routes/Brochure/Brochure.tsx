@@ -12,7 +12,6 @@ interface StoreItem {
   itemName: string;
   itemPrice: number;
   imagePath: string;
-  orderCount: number;
 }
 
 function Brochure() {
@@ -143,7 +142,7 @@ function Brochure() {
           Our Unique Selection
         </h1>
         <Slider {...settings}>
-          {brochure.map((item: StoreItem, index: number) => (
+          {brochure.map((item: StoreItem, index: number) => item.imagePath && (
             <motion.div key={index} className="border-BLACK text-center m-auto flex mt-5 p-10 pt-20 pb-20" whileHover={{scale: 1.2}}>
               <img
                 key={item.itemID}
@@ -156,7 +155,6 @@ function Brochure() {
                   {item.itemName}
                 </h1>
                 <div>${item.itemPrice} </div>
-                <div className="text-sm">{item.orderCount} Orders</div>
               </div>
             </motion.div>
           ))}

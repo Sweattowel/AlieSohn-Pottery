@@ -130,6 +130,7 @@ namespace Server
         public decimal ItemPrice { get; set; }
         public string ImagePath { get; set; }
         public string ItemDescription { get; set; }
+        public string itemState { get; set; }
     }
     // method for getting database variables
     public class ConnectionString
@@ -202,7 +203,7 @@ namespace Server
             try
             {
                 string connectionString = ConnectionString.GetConnectionString();
-                string queryStatement = "SELECT * FROM storeItems WHERE itemState = 0";
+                string queryStatement = "SELECT * FROM storeItems WHERE itemState = 0 OR itemState = 1";
                 List<StoreItem> storeItems = new List<StoreItem>();
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -220,7 +221,8 @@ namespace Server
                                 ItemName = reader.GetString(reader.GetOrdinal("itemName")),
                                 ItemPrice = reader.GetDecimal(reader.GetOrdinal("itemPrice")),
                                 ImagePath = reader.GetString(reader.GetOrdinal("imagePath")),
-                                ItemDescription = reader.GetString(reader.GetOrdinal("itemDescription"))
+                                ItemDescription = reader.GetString(reader.GetOrdinal("itemDescription")),
+                                itemState = reader.GetInt32(reader.GetOrdinal("itemState"))
                             };
                             storeItems.Add(item);
                         }

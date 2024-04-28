@@ -13,6 +13,7 @@ interface storeItem {
   itemPrice: number;
   imagePath: string;
   itemDescription: string;
+  itemState: number
 }
 
 function StoreFront() {
@@ -50,6 +51,7 @@ function StoreFront() {
     itemPrice: 0,
     imagePath: "",
     itemDescription: "",
+    itemState: 0
   });
   const [confirmationMessages, setConfirmationMessages] = useState<{ index: number; id: number }[]>([]);
   const [ IDS, setIDS ] = useState<number[]>([])
@@ -155,6 +157,7 @@ function StoreFront() {
         itemPrice: 0,
         imagePath: "",
         itemDescription: "",
+        itemState: 0
       });
     };
 
@@ -211,7 +214,7 @@ function StoreFront() {
               </div>
 
               <img
-                className="w-full border-BLACK border-b border-t h-[60%] md:h-[80%] bg-WHITE"
+                className={`${item.itemState !== 0 ? 'opacity-70' : ''}w-full border-BLACK border-b border-t h-[60%] md:h-[80%] bg-WHITE`}
                 src={url.resolve(serverAddress, item.imagePath)}
                 alt={item.itemName}
                 onError={() =>
@@ -244,7 +247,7 @@ function StoreFront() {
                     }, 2000);
                   }}
                 >
-                  {IDS.includes(item.itemID) || cart.includes(item.itemID) ? 
+                  {IDS.includes(item.itemID) || cart.includes(item.itemID) || item.itemState !== 0 ? 
                   <>
                   </> 
                     : 
@@ -303,6 +306,7 @@ function StoreFront() {
                   itemPrice: 0,
                   imagePath: "",
                   itemDescription: "",
+                  itemState: 0
                 })                
               }
 
@@ -330,6 +334,7 @@ function StoreFront() {
                   itemPrice: 0,
                   imagePath: "",
                   itemDescription: "",
+                  itemState: 0
                 })}
               >
                 Close
