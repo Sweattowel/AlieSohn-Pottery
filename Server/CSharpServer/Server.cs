@@ -179,7 +179,6 @@ namespace Server
                                 ItemName = reader.GetString(reader.GetOrdinal("itemName")),
                                 ItemPrice = reader.GetDecimal(reader.GetOrdinal("itemPrice")),
                                 ImagePath = reader.GetString(reader.GetOrdinal("imagePath")),
-                                OrderCount = reader.GetInt32(reader.GetOrdinal("order_count"))
                             };
                             brochure.Add(item);
                         }
