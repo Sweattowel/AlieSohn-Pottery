@@ -1091,7 +1091,7 @@ namespace Server.Controllers
                     return StatusCode(401, "Unauthorized");
                 }
 
-                string queryStatement = "SELECT storeItems.itemName, orders.itemID, orders.orderID, orders.orderDate, itemState FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = @UserId";
+                string queryStatement = "SELECT storeItems.itemName, orders.itemID, orders.orderID, orders.orderDate, storeItems.itemState FROM orders LEFT JOIN storeItems ON storeItems.itemID = orders.itemID WHERE userID = @UserId";
                 string connectionString = ConnectionString.GetConnectionString();
                 List<IndividualOrders> orders = new List<IndividualOrders>();
 
@@ -1124,7 +1124,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred during item deletion: {ex.Message}");
+                Console.WriteLine($"An error occurred getting orders: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
         }
@@ -1188,7 +1188,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred during item deletion: {ex.Message}");
+                Console.WriteLine($"An error occurred during order adjustment: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }  
         }
