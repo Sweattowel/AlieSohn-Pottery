@@ -1176,7 +1176,7 @@ namespace Server.Controllers
 
                         int rowsAffected = await command.ExecuteNonQueryAsync();
 
-                        if (rowsAffected !== 1)
+                        if (rowsAffected != 1)
                         {
                             return StatusCode(500, "Internal server error");
                         }
@@ -1188,13 +1188,13 @@ namespace Server.Controllers
 
                         int rowsAffected = await command.ExecuteNonQueryAsync();
                         
-                        if (rowsAffected === 1)
+                        if (rowsAffected == 1)
                         {
                             return Ok();
                         } 
                         else 
                         {
-                            return StatusCode(500, "Failed to adjust order")
+                            return StatusCode(500, "Failed to adjust order");
                         }
                     }
                 }
