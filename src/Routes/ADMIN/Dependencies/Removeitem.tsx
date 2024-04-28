@@ -119,7 +119,7 @@ function Removeitem() {
   }, []);
   ///////////////////////////////////////////////////////////////////
   return (
-    <div>
+    <div className="flex flex-col md:flex-row justify-center items-center m-auto">
       {superAuthenticated ? (
       <div className="w-[40vw] h-[60vh] bg-WHITE text-WHITE">
       <div className="h-full mb-20">
@@ -140,8 +140,8 @@ function Removeitem() {
           }
         >
           {currentItems.map((item: storeItem, index: number) => (
-            <div key={index} className="bg-BACKGROUND m-auto flex items-center mb-1 text-[0.7rem] text-WHITE rounded border-b-2 border-BLACK hover:text-BLACK">
-              <div className=" rounded justify-center flex w-[20%] h-full align-middle ">
+            <div key={index} className="bg-BACKGROUND m-auto flex flex-col md:flex-row items-center mb-1 text-[0.7rem] text-WHITE rounded border-b-2 border-BLACK hover:text-BLACK">
+              <div className=" rounded justify-center flex w-full md:w-[20%] h-full align-middle ">
                 ID: {item.itemID}
               </div>
               <div className="w-[50%]">{item.itemName}</div>

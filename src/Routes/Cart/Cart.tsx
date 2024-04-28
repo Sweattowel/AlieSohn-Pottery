@@ -51,6 +51,12 @@ function Cart() {
   });
   const [confirmationMessages, setConfirmationMessages] = useState<{ index: number; id: number, type: string }[]>([]);
   const [conflicts, setConflicts] = useState<number[]>([])
+  const [ address, setAddress ] = useState({
+    houseNumber: '',
+    street: '',
+    city: '',
+    state: '',
+  })
   // TOKEN HANDLE
   function getToken(choice: string) 
   {
@@ -122,6 +128,10 @@ function Cart() {
     static sendOrder = async () => {
       if (cart.length === 0){
         console.log('No items in cart')
+        return
+      }
+      if (address.city == '' || address.houseNumber == '' || address.state == '' || address.street == '') {
+        setError("Invalid address")
         return
       }
       setShowCardHandle(true); 
@@ -199,27 +209,48 @@ useEffect(() => {
   
   ///////////////////////////////////////////////////////////////////
   return (
-    <div className="w-[90vw] h-full m-auto mb-20  mt-[20%] md:mt-2">
-      <div className="flex rounded-b rounded-t h-[10vh] bg-BACKGROUND">
-        <h1 className="flex m-auto rounded w-[40%] text-center text-WHITE justify-center items-center bg-BACKGROUND">
-          Total cost: ${totalCost.toFixed(2)} Item count: {itemCount} items
-          <br />
-          {error}
-        </h1>
-        {authenticated ? (
-          <button
-            className="text-BLACK border-BLACK border w-[20vw] bg-WHITE rounded m-auto justify-center text-center text-BACKGROUND items-center flex hover:opacity-90 hover:border-BLACK hover:shadow-lg"
-            onClick={() => OrderHandle.sendOrder()}
-          >
-            Create Order
-          </button>
-        ) : (
-          <div className="text-WHITE mt-[auto] mb-[auto] ml-[1em] h-[50px] w-[40vw] text-center flex justify-center items-center rounded-lg bg-BACKGROUND text-[0.8em]">
-            Please Create an account and log in to create an order
-          </div>
-        )}
+    <div className="w-full h-[150vh] m-auto mb-20  mt-[20%] md:mt-2 flex md:flex-row flex-col">
+      <div className="flex rounded-b rounded-t h-[30%] w-[80%] m-auto md:w-[30%] bg-BACKGROUND">
+        <div className="h-[50%] flex flex-col justify-center items-center m-auto">
+          <h1 className="flex m-auto rounded w-full text-center text-WHITE justify-center items-center bg-BACKGROUND flex-col">
+            Total cost: ${totalCost.toFixed(2)} Item count: {itemCount} items
+            <br />
+              <div className="text-WHITE">
+                Enter Delivery location
+                <div className="rounded h-[12vh] flex flex-col justify-center items-center text-BLACK">
+                  <input onChange={(e) => setAddress({ ...address, houseNumber: e.target.value})} className="rounded border border-BLACK shadow-lg text-center" type="text" name="houseNumber" id="houseNumber" placeholder="houseNumber" />
+                  <input onChange={(e) => setAddress({ ...address, street: e.target.value})} className="rounded border border-BLACK shadow-lg text-center" type="text" name="street" id="street" placeholder="street" />
+                  <input onChange={(e) => setAddress({ ...address, city: e.target.value})} className="rounded border border-BLACK shadow-lg text-center" type="text" name="city" id="city" placeholder="city" />
+                  <input onChange={(e) => setAddress({ ...address, state: e.target.value})} className="rounded border border-BLACK shadow-lg text-center" type="text" name="state" id="state" placeholder="state" />         
+                </div>
+              </div>
+          </h1>
+          {authenticated ? (
+            <div className="flex flex-col m-auto">
+              <button
+                className="text-BLACK border-BLACK border w-[50vw] md:w-[20vw] bg-WHITE rounded m-auto justify-center text-center text-BACKGROUND items-center flex hover:opacity-90 hover:border-BLACK hover:shadow-lg"
+                onClick={() => OrderHandle.sendOrder()}
+              >
+                Create Order
+              </button>
+              <div className="text-WHITE w-full">
+                Delivering to
+                <div className="bg-WHITE h-[3vh] text-BLACK rounded text-center">
+                  {address.houseNumber} {address.street} {address.city} {address.state}                
+                </div>
+                {error}
+              </div>
+            </div>          
+          ) : (
+            <div className="text-WHITE mt-[auto] mb-[auto] ml-[1em] h-[50px] w-[full] text-center flex justify-center items-center rounded-lg bg-BACKGROUND text-[0.8em]">
+              Please Create an account and log in to create an order
+            </div>
+          )}
+
+        </div>
+
       </div>
-      <div className="w-[90%] m-auto text-white flex flex-wrap justify-center mb-20">
+      <div className="w-full md:w-[80%] h-full m-auto text-white flex flex-wrap justify-center mb-20">
         {currentItems.length > 0 ? (
           currentItems.map((item: CartItem, index: number) => (
             <div

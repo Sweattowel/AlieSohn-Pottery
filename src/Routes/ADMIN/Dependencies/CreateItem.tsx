@@ -113,28 +113,28 @@ function CreateItem() {
                 Create store Item
                 </h1>
                 <div className=" w-[40vw] h-[80%] m-auto text-center">
-                    <h1 className="bg-BACKGROUND rounded text-WHITE w-[50%] m-auto mt-2">
-                        Item ItemName
+                    <h1 className="bg-BACKGROUND rounded text-WHITE w-[80%] md:w-[50%] h-[2rem] m-auto mt-2">
+                      Name
                     </h1>
                     <Input
                         value={item.ItemName}
                         onChange={(e) => handleInputChange("ItemName", e.target.value)}
                     />
-                    <h1 className="bg-BACKGROUND rounded text-WHITE w-[50%] m-auto mt-2">
-                        Item Description
+                    <h1 className="bg-BACKGROUND rounded text-WHITE w-[80%] md:w-[50%] h-[2rem] m-auto mt-2">
+                      Description
                     </h1>
                     <Input
                         value={item.description}
                         onChange={(e) => handleInputChange("description", e.target.value)}
                     />
-                    <h1 className="bg-BACKGROUND rounded text-WHITE w-[50%] m-auto mt-2">
-                        Item Price
+                    <h1 className="bg-BACKGROUND rounded text-WHITE w-[80%] md:w-[50%] h-[2rem] m-auto mt-2">
+                      Price
                     </h1>
                     <Input
                         value={item.price}
                         onChange={(e) => handleInputChange("price", e.target.value)}
                     />
-                    <h1>Item Picture</h1>
+                    <h1>Picture</h1>
                     <Input type="file" onChange={handleFileChange} />
                     <br />
                     <button

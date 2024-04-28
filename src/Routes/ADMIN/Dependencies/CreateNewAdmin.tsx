@@ -177,9 +177,10 @@ useEffect(() => {
                     >
                         ADMIN LOGIN
                     </button>
-                    <div className="w-[60%] m-auto text-center rounded bg-BACKGROUND h-[12vh]">
-                        {adminAttempts}
-                        <br />
+                    <div className="w-[60%] m-auto text-center rounded bg-BACKGROUND h-[3vh] mb-1">
+                        {adminAttempts} Attempts left
+                    </div>
+                    <div className="w-[60%] m-auto text-center rounded bg-BACKGROUND h-[3vh]">
                         {error || <div>Please enter details</div>}
                     </div>
                 </div>

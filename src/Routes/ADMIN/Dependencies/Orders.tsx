@@ -57,7 +57,7 @@ function Orders() {
         }
       };
     // COMPLETE ORDER
-    static adjustOrder = async (orderID: number, NewItemState: number) => 
+    static adjustOrder = async (orderID: number, NewItemState: number, itemID: number) => 
       {
         const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
         const storedToken = getToken(choice);
@@ -74,6 +74,7 @@ function Orders() {
             userID: selectedCustomer,
             orderID: orderID,
             NewItemState: NewItemState,
+            ItemID: itemID
           },       
           {
             headers: {
@@ -250,28 +251,64 @@ function Orders() {
                 .map((order: any, index: number) => (
                   <div
                     key={index}
-                    className="flex bg-BACKGROUND w-full rounded mt-1 mb-2 justify-center items-center"
+                    className="flex items-center  justify-center text-center md:flex-row flex-col bg-BACKGROUND w-full h-[12rem] md:h-[3rem] rounded mt-1 mb-2 justify-center items-center"
                   >
-                    <h1 className="w-[20%]">
+                    <h1 className="w-full md:w-[20%]">
                       <>Item : {order.itemID}</>
                       <br />
                       <>Order {order.orderID}</>{" "}
                     </h1>
-                    <h1 className="w-[20%]">{order.itemName} </h1>
-                    <h1 className="w-[20%]">{order.completed ? "SUCC" : "NOT"} </h1>
-                    <button
-                        onClick={async () => {
-                          const newState = order.itemState >= 3 ? 0 : order.itemState + 1;
-                          await OrderHandle.adjustOrder(order.orderID, newState);
-                          OrderHandle.getOrders();
-                      }}
-                      className="w-[25%] bg-WHITE text-BACKGROUND border border-BLACK h-full w-[25%] shadow-lg hover:opacity-60 rounded"
-                    >
+                    <h1 className="w-full md:w-[25%]">{order.itemName} </h1>
+                    
+                    <div className="w-full md:w-[25%] bg-WHITE text-BACKGROUND border border-BLACK h-[80%]shadow-lg hover:opacity-60 rounded text-center justify-center items-center flex">
                       {order.itemState == 0 || order.itemState > 3 ? ("ERROR") : ("")}
                       {order.itemState == 1 ? ("PENDING") : ("")}
                       {order.itemState == 2 ? ("COMPLETE") : ("")}
                       {order.itemState == 3 ? ("DELETED") : ("")}
+                    </div>
+                    <div className="flex flex-col md:flex-row h-[50%] w-full md:w-[25%] ml-1">
+                      <button
+                        onClick={async () => {
+                          if (order.itemState === 0) return
+                          await OrderHandle.adjustOrder(order.orderID, 0, order.itemID);
+                          OrderHandle.getOrders();
+                        }}
+                        className="text-[0.5rem] bg-WHITE text-BLACK border-BLACK border h-full w-[80%] m-auto md:w-[25%] rounded shadow-lg"
+                    >
+                      REMOVE
                     </button>
+                    <button
+                        onClick={async () => {
+                          if (order.itemState === 1) return
+                          await OrderHandle.adjustOrder(order.orderID, 1, order.itemID);
+                          OrderHandle.getOrders();
+                        }}
+                        className="text-[0.5rem] bg-WHITE text-BLACK border-BLACK border h-full w-[80%] m-auto md:w-[25%] rounded shadow-lg"
+                    >
+                      PEND
+                    </button>
+                    <button
+                        onClick={async () => {
+                          if (order.itemState === 2) return
+                          await OrderHandle.adjustOrder(order.orderID, 2, order.itemID);
+                          OrderHandle.getOrders();
+                        }}
+                        className="text-[0.5rem] bg-WHITE text-BLACK border-BLACK border h-full w-[80%] m-auto md:w-[25%] rounded shadow-lg"
+                    >
+                      COMP
+                    </button>
+                    <button
+                        onClick={async () => {
+                          if (order.itemState === 3) return
+                          await OrderHandle.adjustOrder(order.orderID, 3, order.itemID);
+                          OrderHandle.getOrders();
+                        }}
+                        className="text-[0.5rem] bg-WHITE text-BLACK border-BLACK border h-full w-[80%] m-auto md:w-[25%] rounded shadow-lg"
+                    >
+                      DEL
+                    </button>
+                    </div>
+                    
                   </div>
                 ))
             : null}

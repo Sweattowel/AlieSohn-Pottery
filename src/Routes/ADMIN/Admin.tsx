@@ -18,22 +18,22 @@ function Admin() {
   ] = useMyContext();
 
   return (
-    <>
+    <div className="mt-[20%] md:mt-0">
       {superAuthenticated ? (
-        <div className="flex h-[165vh] w-[80%] m-auto">
+        <div className="flex h-[165vh] w-[100%] m-auto">
           <div className="w-[50%] mr-2">
             <CreateItem />
             <Removeitem />
             <CreateNewAdmin />
           </div>
-          <div className="border-l border-BLACK">
+          <div className="w-[50%] ">
             <Orders />
           </div>
         </div>
       ) : (
         <>NO ACCESS</>
       )}
-    </>
+    </div>
   );
 }
 
