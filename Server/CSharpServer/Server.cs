@@ -187,7 +187,7 @@ namespace Server
                     }
                 }
                 PreGetStorage.Brochure = brochure;
-                Console.WriteLine("Brochure set")
+                Console.WriteLine("Brochure set");
             }
             catch (MySqlException ex)
             {
@@ -967,7 +967,11 @@ namespace Server.Controllers
         {
             try
             {
-                if (order == null) return StatusCode(404, "Missing Parameters")
+                if (order == null) 
+                {
+                    return StatusCode(404, "Missing Parameters");
+                };
+
                 Console.WriteLine("Received createOrder request, verifying token");
                 string authorizationHeader = HttpContext.Request.Headers["Authorization"];
                 if (string.IsNullOrEmpty(authorizationHeader))
@@ -990,10 +994,10 @@ namespace Server.Controllers
                 }
 
                 string queryStatement = "INSERT INTO orders (userName, userID, itemID, orderDate) VALUES (@UserName, @UserID, @ItemID, @OrderDate)";
-                string UpdateStatement = "UPDATE storeItems SET itemState = 2 WHERE itemID = @ItemID"
-                string CheckStateMent = "SELECT * FROM storeItems WHERE itemID = @ItemID AND itemState != 0"
+                string UpdateStatement = "UPDATE storeItems SET itemState = 2 WHERE itemID = @ItemID";
+                string CheckStateMent = "SELECT * FROM storeItems WHERE itemID = @ItemID AND itemState != 0";
                 string connectionString = ConnectionString.GetConnectionString();
-                List<SeenItem> SeenItems= new List<SeenItem>
+                List<SeenItem> SeenItems= new List<SeenItem>();
 
 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -1004,21 +1008,21 @@ namespace Server.Controllers
                     {
                         using (MySqlCommand command = new MySqlCommand(CheckStateMent, connection))
                         {
-                            command.Parameters.AddWithValue("@ItemID", itemID)
+                            command.Parameters.AddWithValue("@ItemID", itemID);
                             MySqlDataReader reader = command.ExecuteReader();
 
                             while (reader.Read())
                             {
                                 BrochureItem item = new BrochureItem
                                 {
-                                    ItemID = reader.GetInt32(reader.GetOrdinal("itemID")),
+                                    ItemID = reader.GetInt32(reader.GetOrdinal("itemID"));
                                 };
                                 SeenItems.Add(item);
                             }
                             reader.Close();
                             if (SeenItem.Length > 0)
                             {   
-                                return StatusCode(409, SeenItems)
+                                return StatusCode(409, SeenItems);
                             }
                         } 
                     }
