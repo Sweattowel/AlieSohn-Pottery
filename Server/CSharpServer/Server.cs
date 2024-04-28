@@ -1139,6 +1139,7 @@ namespace Server.Controllers
             public int NewItemState { get; set; }
             public int orderID { get; set; }
             public int userID { get; set; }
+            public int ItemID { get; set; }
         }
         [HttpPost]
         public async Task<ActionResult> UpdateOrder([FromBody] ChosenOrder OrderDetails)
