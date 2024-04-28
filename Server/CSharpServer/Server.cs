@@ -130,7 +130,7 @@ namespace Server
         public decimal ItemPrice { get; set; }
         public string ImagePath { get; set; }
         public string ItemDescription { get; set; }
-        public string itemState { get; set; }
+        public int itemState { get; set; }
     }
     // method for getting database variables
     public class ConnectionString
