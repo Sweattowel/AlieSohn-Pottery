@@ -69,6 +69,7 @@ function StoreFront() {
               
               if (response.status === 200) {
                 setAllItemscart(response.data);
+                console.log(response.data)
               } else if (response.status === 404) {
                 console.log("No items available to purchase");
               } else {

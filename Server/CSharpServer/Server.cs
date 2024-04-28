@@ -995,7 +995,7 @@ namespace Server.Controllers
                 }
 
                 string queryStatement = "INSERT INTO orders (userName, userID, itemID, orderDate) VALUES (@UserName, @UserID, @ItemID, @OrderDate)";
-                string UpdateStatement = "UPDATE storeItems SET itemState = 2 WHERE itemID = @ItemID";
+                string UpdateStatement = "UPDATE storeItems SET itemState = 1 WHERE itemID = @ItemID";
                 string CheckStateMent = "SELECT * FROM storeItems WHERE itemID = @ItemID AND itemState != 0";
                 string connectionString = ConnectionString.GetConnectionString();
                 List<SeenItem> SeenItems= new List<SeenItem>();
