@@ -960,8 +960,8 @@ namespace Server.Controllers
     {
         private class SeenItem
         {
-            public int ItemID { get; set};
-        };
+            public int ItemID { get; set; }
+        }
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] Order order)
         {
@@ -1044,9 +1044,9 @@ namespace Server.Controllers
 
                         }
                     }
-                    DatabaseUtilities.CreateStoreListings();
-                    return Ok();
                 }
+                DatabaseUtilities.CreateStoreListings();
+                return Ok();                
             }
             catch (Exception ex)
             {
