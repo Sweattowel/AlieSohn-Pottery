@@ -994,7 +994,7 @@ namespace Server.Controllers
                     return BadRequest("Invalid input data");
                 }
 
-                string queryStatement = "INSERT INTO orders (userName, userID, itemID, orderDate) VALUES (@UserName, @UserID, @ItemID, @OrderDate)";
+                string queryStatement = "INSERT INTO orders (userName, userID, itemID, orderDate, itemState) VALUES (@UserName, @UserID, @ItemID, @OrderDate, 1)";
                 string UpdateStatement = "UPDATE storeItems SET itemState = 1 WHERE itemID = @ItemID";
                 string CheckStateMent = "SELECT * FROM storeItems WHERE itemID = @ItemID AND itemState != 0";
                 string connectionString = ConnectionString.GetConnectionString();
@@ -1129,7 +1129,7 @@ namespace Server.Controllers
             }
         }
     }
-    // COMPLETE ORDER
+    // ADJUST ORDER
     [Route("/api/adjustOrder")]
     [ApiController]
     public class UpdateOrderController : ControllerBase
