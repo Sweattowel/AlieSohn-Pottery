@@ -129,43 +129,39 @@ export default function UserAccount() {
           <div className="w-[25%] text-center border-r border-BLACK">STATUS</div>
           <div className="w-[25%] text-center border-r border-BLACK">PLACED</div>
         </div>
-        {authenticated && !superAuthenticated
-          ? orders
-              .slice(
-                (currentOrdersPage - 1) * ordersPerPage,
-                currentOrdersPage * ordersPerPage
-              )
-              .map((order: any, index: number) => (
-                <div
-                  key={index}
-                  className={
-                    !order.completed
-                      ? "m-2 flex text-white justify-center text-center hover:opacity-90 hover:text-BLACK"
-                      : "opacity-60 m-2 flex  text-white justify-center text-center"
-                  }
-                >
-                  <h1 className="bg-BACKGROUND text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
-                    {order.itemID}{" "}
-                  </h1>
-                  <h1 className="bg-BACKGROUND text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
-                    {order.itemName}{" "}
-                  </h1>
-                  <h1 className="bg-BACKGROUND text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
-                    {order.itemStatus == 0 || order.itemStatus > 3 ? "ERROR" : ""}
-                    {order.itemStatus == 1 ? "PENDING" : ""}
-                    {order.itemStatus == 2 ? "COMPLETE" : ""}
-                    {order.itemStatus == 3 ? "DELETED" : ""}
-                  </h1>
-                  {order.orderDate ? (
-                    <h1 className="bg-BACKGROUND text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
-                      {order.orderDate.split('T')[0]}
+          {authenticated && !superAuthenticated
+            ? orders
+                .slice(
+                  (currentOrdersPage - 1) * ordersPerPage,
+                  currentOrdersPage * ordersPerPage
+                )
+                .map((order: any, index: number) => (
+                  <div
+                    key={index}
+                    className={`${order.itemState === 2 ? "opacity-80" : ""} text-BLACK shadow-lg rounded  bg-WHITE flex justify-between mt-1 mb-1`}
+                  >
+                    <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
+                      {order.itemID}{" "}
                     </h1>
-                  ) : (
-                    <div className="bg-BACKGROUND w-[0%] text-[0.7rem] md:text-lg"></div>
-                  )}
-                </div>
-              ))
-          : null}
+                    <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
+                      {order.itemName}{" "}
+                    </h1>
+                    <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
+                      {order.itemState == 0 || order.itemState > 3 ? ("ERROR") : ("")}
+                      {order.itemState == 1 ? ("PENDING") : ("")}
+                      {order.itemState == 2 ? ("COMPLETE") : ("")}
+                      {order.itemState == 3 ? ("DELETED") : ("")}
+                    </h1>
+                    {order.orderDate ? (
+                      <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
+                        {order.orderDate.split('T')[0]}
+                      </h1>
+                    ) : (
+                      <div className="w-[0%] text-[0.7rem] md:text-lg"></div>
+                    )}
+                  </div>
+                ))
+            : null}          
       </div>
     </div>
   );

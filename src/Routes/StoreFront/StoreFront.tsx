@@ -31,7 +31,7 @@ function StoreFront() {
   ] = useMyContext();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemCount, setItemCount] = useState(0);
-  const itemsPerPage = 8;
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10)
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
     newPage: number
@@ -69,7 +69,6 @@ function StoreFront() {
               
               if (response.status === 200) {
                 setAllItemscart(response.data);
-                console.log(response.data)
               } else if (response.status === 404) {
                 console.log("No items available to purchase");
               } else {
@@ -87,7 +86,6 @@ function StoreFront() {
           {
             const newIDS: number[] = JSON.parse(localStorage.getItem(`BOUGHTIDS${userID}`) || '[]')
             setIDS(newIDS)
-            console.log(newIDS)
           } catch (error) {
             console.log(error)
           }
@@ -193,7 +191,21 @@ function StoreFront() {
 
   return (
     <div className="m-auto text-white flex flex-wrap justify-center mb-20  mt-[20%] md:mt-0">
-      
+      <div className="text-WHITE bg-BACKGROUND rounded-lg shadow-lg w-[80%] flex justify-evenly items-center h-[2rem] mt-2">
+        Items Per Page: 
+        <div className="w-[50%] flex justify-evenly text-BACKGROUND text-WHITE">
+          <button onClick={() => setItemsPerPage(5)} className={`${itemsPerPage == 5 ? "opacity-60" : ""} border-BLACK border shadow-lg w-[20%] rounded`}>
+            5
+          </button>
+          <button onClick={() => setItemsPerPage(10)} className={`${itemsPerPage == 10 ? "opacity-60" : ""} border-BLACK border shadow-lg w-[20%] rounded`}>
+            10
+          </button>
+          <button onClick={() => setItemsPerPage(15)} className={`${itemsPerPage == 15 ? "opacity-60" : ""} border-BLACK border shadow-lg w-[20%] rounded`}>
+            15
+          </button>          
+        </div>
+
+      </div>
       <motion.ul 
         className="container w-full flex flex-wrap justify-center"
         variants={container}
@@ -215,7 +227,7 @@ function StoreFront() {
               </div>
 
               <img
-                className={`${item.itemState !== 0 ? 'opacity-70' : ''}w-full border-BLACK border-b border-t h-[60%] md:h-[80%] bg-WHITE`}
+                className={`${item.itemState !== 0 ? 'opacity-70' : ''}m-auto w-full border-BLACK border-b border-t h-[60%] md:h-[80%] bg-WHITE`}
                 src={url.resolve(serverAddress, item.imagePath)}
                 alt={item.itemName}
                 onError={() =>
@@ -224,38 +236,33 @@ function StoreFront() {
               />
               <div className="mb-2 text-center text-WHITE border-b w-[80%] m-auto">Price: ${item.itemPrice}</div>
               <div className="relative">
-                <button
-                  className={
-                    clickedItemIndex === index
-                      ? "shadow-lg text-BACKGROUND flex m-auto bg-WHITE mt-2 justify-center text-BLACK text-center w-[80%] rounded opacity-70 border-b-2 border-l-2 border border-BLACK hover:shadow-lg"
-                      : "shadow-lg text-BACKGROUND flex m-auto bg-WHITE mt-2 justify-center text-center w-[80%] rounded hover:text-BLACK hover:opacity-90 border-b-2 border-l-2 border border-BLACK hover:shadow-lg"
-                  }
-                  onClick={() => {
-                    addToCart(
-                      item.itemID,
-                      item.itemName,
-                      item.itemPrice,
-                      item.imagePath,
-                      item.itemDescription
-                    );
-                    setClickedItemIndex(index);
-                    setConfirmationMessages(prev => [...prev, { index, id: Date.now() }]);
-                    setTimeout(() => {
-                      setConfirmationMessages(prev => {
-                        const filteredMessages = prev.filter(msg => msg.id !== prev[0]?.id);
-                        return filteredMessages;
-                      });
-                    }, 2000);
-                  }}
-                >
                   {IDS.includes(item.itemID) || cart.includes(item.itemID) || item.itemState !== 0 ? 
-                  <>
-                  </> 
-                    : 
-                  <>
-                    Add to cart
-                  </>}
-                </button>
+                      <div className={`bg-WHITE text-BACKGROUND h-full w-[80%] rounded shadow-lg border border-BLACK m-auto flex justify-center opacity-80 z-0`}>
+                        ITEM PENDING
+                      </div> :            
+                      <button
+                        className={`hover:opacity-90 bg-WHITE text-BACKGROUND h-full w-[80%] rounded shadow-lg border border-BLACK m-auto flex justify-center z-1`}
+                        onClick={() => {
+                          addToCart(
+                            item.itemID,
+                            item.itemName,
+                            item.itemPrice,
+                            item.imagePath,
+                            item.itemDescription
+                          );
+                          setClickedItemIndex(index);
+                          setConfirmationMessages(prev => [...prev, { index, id: Date.now() }]);
+                          setTimeout(() => {
+                            setConfirmationMessages(prev => {
+                              const filteredMessages = prev.filter(msg => msg.id !== prev[0]?.id);
+                              return filteredMessages;
+                            });
+                          }, 2000);
+                        }}
+                      >
+                        ADD TO CART
+                    </button>
+                  }
                 {confirmationMessages.map((msg, i) => {
                   return msg.index === index && (
                     <div key={msg.id} className="absolute top-0 right-0 text-WHITE p-1 rounded animate-floatAway">
@@ -296,39 +303,22 @@ function StoreFront() {
 
       <AnimatePresence>
         {selectedStoreItem.itemID !== -1 && (
-          <motion.div 
-            layoutId={`${selectedStoreItem.itemID}`}
-            className="w-full h-full fixed top-0 left-0 bg-WHITE bg-opacity-60"
-            onClick={(e) => {
-              if (e.target === e.currentTarget) {
-                setSelectedStoreItem({
-                  itemID: -1,
-                  itemName: "",
-                  itemPrice: 0,
-                  imagePath: "",
-                  itemDescription: "",
-                  itemState: 0
-                })                
-              }
-
-            }}
-          >
             <motion.div 
-              className="bg-BACKGROUND p-4 rounded shadow-lg text-WHITE fixed top-10 left-[20%] w-[60%] z-50"
+              className="bg-BACKGROUND p-4 rounded shadow-lg text-WHITE fixed top-[10vh] md:top-[10vh] m-auto max-w-[80%] z-10"
               style={{
                 opacity: '100'
               }}
             >        
-              <img alt={`${selectedStoreItem.imagePath}`} className="md:w-[80%] m-auto border-BLACK border  max-h-[60vh] md:h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
+              <img alt={`${selectedStoreItem.imagePath}`} className="m-auto border-BLACK border  max-h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
               <motion.h2 className="justify-center w-[80%] m-auto flex items-center text-2xl border-b border-BLACK">
                 {selectedStoreItem.itemName}
               </motion.h2>
-              <motion.h5 className="justify-center w-[80%] m-auto flex items-center">
+              <motion.h5 className="justify-center w-[80%] m-auto flex items-center text-center">
                 {selectedStoreItem.itemDescription}
               </motion.h5>
 
               <motion.button 
-                className="flex rounded bg-WHITE text-BACKGROUND border border-BLACK shadow-lg justify-center m-auto w-[20%] hover:opacity-90" 
+                className="flex rounded bg-WHITE text-BACKGROUND border border-BLACK shadow-lg justify-center m-auto w-[60%] md:w-[20%] hover:opacity-90" 
                 onClick={() => setSelectedStoreItem({
                   itemID: -1,
                   itemName: "",
@@ -341,7 +331,6 @@ function StoreFront() {
                 Close
               </motion.button>            
 
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

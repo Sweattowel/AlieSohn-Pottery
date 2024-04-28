@@ -1130,13 +1130,13 @@ namespace Server.Controllers
         }
     }
     // COMPLETE ORDER
-    [Route("/api/completeOrder")]
+    [Route("/api/adjustOrder")]
     [ApiController]
     public class UpdateOrderController : ControllerBase
     {
         public class ChosenOrder
         {
-            public int itemState { get; set; }
+            public int NewItemState { get; set; }
             public int orderID { get; set; }
             public int userID { get; set; }
         }
@@ -1160,7 +1160,7 @@ namespace Server.Controllers
                     return StatusCode(401, "Unauthorized");
                 }
 
-                string queryStatement = "UPDATE orders SET itemState = @Completed WHERE orderID = @OrderID AND userID = @UserID";
+                string queryStatement = "UPDATE orders SET itemState = @NewItemState WHERE orderID = @OrderID AND userID = @UserID";
                 string connectionString = ConnectionString.GetConnectionString();
                 
                 using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -1169,7 +1169,7 @@ namespace Server.Controllers
 
                     using (MySqlCommand command = new MySqlCommand(queryStatement, connection))
                     {
-                        command.Parameters.AddWithValue("@Completed", OrderDetails.itemState);
+                        command.Parameters.AddWithValue("@NewItemState", OrderDetails.NewItemState);
                         command.Parameters.AddWithValue("@OrderID", OrderDetails.orderID);
                         command.Parameters.AddWithValue("@UserID", OrderDetails.userID);
 

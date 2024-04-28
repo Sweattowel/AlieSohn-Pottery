@@ -41,7 +41,7 @@ function MobileNavigation(){
       };
 
     return (
-        <div className="flex flex-row fixed top-0 left-0 w-full">
+        <div className="flex flex-row fixed top-0 left-0 w-full z-20">
             <div className="w-[70%] text-xl bg-BACKGROUND ">
                 <h1 className="font-serif h-[8vh] md:h-[5vh] rounded w-full text-center flex items-center justify-center text-[2rem] md:text-[3rem] text-WHITE ">
                     AlieSohn

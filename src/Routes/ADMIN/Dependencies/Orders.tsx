@@ -57,9 +57,11 @@ function Orders() {
         }
       };
     // COMPLETE ORDER
-    static completeOrder = async (orderID: number, decision: number) => 
+    static adjustOrder = async (orderID: number, NewItemState: number) => 
       {
-        const storedToken = localStorage.getItem('sutoken');
+        const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+        const storedToken = getToken(choice);
+        
         if (!storedToken){
           console.log('No authorization found');
           return;
@@ -68,10 +70,10 @@ function Orders() {
           if (!selectedCustomer) {
             return;
           }
-          const response = await axios.post(`${serverAddress}/api/completeOrder`, {
+          const response = await axios.post(`${serverAddress}/api/adjustOrder`, {
             userID: selectedCustomer,
             orderID: orderID,
-            itemState: decision,
+            NewItemState: NewItemState,
           },       
           {
             headers: {
@@ -79,9 +81,7 @@ function Orders() {
             }
           });
           if (response.status === 200) {
-            decision
-              ? console.log("Successfully completed order")
-              : console.log("Successfully rewrote order");
+            console.log("Successfully adjusted order to ", NewItemState)
             OrderHandle.getOrders();
           } else {
             console.log("Failed to set post");
@@ -265,16 +265,17 @@ function Orders() {
                     <h1 className="w-[20%]">{order.completed ? "SUCC" : "NOT"} </h1>
                     <button
                       onClick={() => {
-                        OrderHandle.completeOrder(
+                        OrderHandle.adjustOrder(
                           order.orderID,
-                          order.itemState == 1 ? 2 : 1
+                          order.itemState == 3 ? order.itemState++ : 0
                         );
                       }}
-                      className="w-[25%] bg-WHITE text-BACKGROUND border border-BLACK h-full w-[25%] shadow-lg hover:opacity-60"
+                      className="w-[25%] bg-WHITE text-BACKGROUND border border-BLACK h-full w-[25%] shadow-lg hover:opacity-60 rounded"
                     >
-                      {order.completed ? 
-                      <CheckIcon /> : 
-                      <ClearIcon />}
+                      {order.itemState == 0 || order.itemState > 3 ? ("ERROR") : ("")}
+                      {order.itemState == 1 ? ("PENDING") : ("")}
+                      {order.itemState == 2 ? ("COMPLETE") : ("")}
+                      {order.itemState == 3 ? ("DELETED") : ("")}
                     </button>
                   </div>
                 ))

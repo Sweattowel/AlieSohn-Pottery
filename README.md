@@ -20,6 +20,8 @@ COMPLETE Put tokens into cookies over localStorage
 COMPLETE Switch to class based programming for ease of organisation A̢͉͍͙͇͌̔̄͝ǘ̷̠̥̳̮̜͜g̸͙͓͎͍̟̟̐̉̇̍͊͆͝h̵͔͉̰̬͑͋͝u̵̹̳̜̳͕͌̃̅͊g̸͚̗͍̦̞͚͋͑̂̆̍̈́͆͜h̶̢̗̮͙̖͖̓͗̓̍̏̒̊̔̕
     Addit:
         Wasnt that bad actually :D
+UNCOMPLETE Implement and Learn websocket to update items whenever other users make a purchase0
+///////////////////////////////////////////////
 Feedback TODO List:
 
 COMPLETE Implement Responsive Design: Optimize design for various screen sizes and devices.
@@ -51,9 +53,9 @@ COMPLETE Refurbish JWT to use cookies or an interceptor which will update the to
 COMPLETE port server to C# as recommended/suggested by Chris
 COMPLETE Improve mobile design by using hamburger Setup for the navigation over the tab option
 COMPLETE implement additional SQL checks to ensure sanitation 
-
+///////////////////////////////////////////////
 Client adjustment of goals and scope:
-UNCOMPLETE Adjust storeFront to be a oneitem one customer deal as items will not be produced in any quantity whatsoever
+COMPLETE Adjust storeFront to be a oneitem one customer deal as items will not be produced in any quantity whatsoever
     Addit:
         Adjust storeItems to use 3 states, open, pending, and bought which will adjust how they are presented
         Remove buying multiples of items, no longer necessary can be used to make things beautiful
@@ -67,3 +69,6 @@ DESIGN CHANGES:
     UNCOMPLETE Improve overall design and make the page look far more inviting i.e. maybe some image on the sidebar that can scroll nicely
         Addit:
             Want to add but am hesitant as it may end up looking like a boomers plate, need to make it look nice in some way that i dont yet know, brush up on UI/UX
+    COMPLETE Add itemsperpage button 1/10 items per page
+    COMPLETE Fix image width on storeItems
+    UNCOMPLETE Delivery information add to purchase
