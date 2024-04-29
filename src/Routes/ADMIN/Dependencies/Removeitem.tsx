@@ -3,17 +3,20 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../../Context/ContextProvider";
 
-interface storeItem {
+interface storeItem
+{
   itemID: number;
   itemName: string;
   itemPrice: number;
   imagePath: string;
   itemDescription: string;
 }
-interface RemoveItemProps {
+interface RemoveItemProps
+{
   storeItemID: number;
 }
-function Removeitem() {
+function Removeitem()
+{
   const [
     ,
     ,
@@ -41,13 +44,15 @@ function Removeitem() {
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
     newPage: number
-  ) => {
+  ) =>
+  {
     setCurrentPage(newPage);
   };
   // StoreItemHandle
   class StoreItemHandle
   {
-    static collectStoreItems = async () => {
+    static collectStoreItems = async () =>
+    {
       try {
         const response = await axios.get<storeItem[]>(
           `${serverAddress}/api/storeItems`
@@ -66,14 +71,15 @@ function Removeitem() {
       }
     };
 
-    static removeStoreItems = async ({ storeItemID }: RemoveItemProps) => {
+    static removeStoreItems = async ({ storeItemID }: RemoveItemProps) =>
+    {
       if (locked) {
         return;
       }
       const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
       const storedToken = getToken(choice);
-      
-      if (!storedToken){
+
+      if (!storedToken) {
         console.log('No authorization found');
         return;
       }
@@ -97,13 +103,13 @@ function Removeitem() {
       } catch (error) {
         console.log(error);
       }
-    };    
+    };
   }
   // TOKEN HANDLE
   function getToken(choice: string) 
   {
     if (choice === 'Null') return
-    
+
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].trim();
@@ -114,68 +120,69 @@ function Removeitem() {
     return null;
   }
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     StoreItemHandle.collectStoreItems();
   }, []);
   ///////////////////////////////////////////////////////////////////
   return (
     <div className="flex flex-col md:flex-row justify-center items-center m-auto">
       {superAuthenticated ? (
-      <div className="w-[40vw] h-[60vh] bg-WHITE text-WHITE">
-      <div className="h-full mb-20">
-        <h1 className="bg-BACKGROUND rounded text-WHITE text-center w-[100%] m-auto mb-2 h-[30px]">
-          Remove store Item
-        </h1>
-        <button
-          className={locked ? 'w-full text-BACKGROUND bg-BLACK border-BLACK border' : 'w-full text-BACKGROUND bg-WHITE border-BLACK border shadow-lg rounded'}
-          onClick={() => setLocked(!locked)}
-        >
-          {locked ? "LOCKED" : "UNLOCKED"}
-        </button>
-        <div
-          className={
-            !locked
-              ? "text-WHITE w-[80%] h-[70%] m-auto text-center mt-2"
-              : "opacity-60 text-BLACK w-[80%] h-[70%] m-auto text-center mt-2"
-          }
-        >
-          {currentItems.map((item: storeItem, index: number) => (
-            <div key={index} className="bg-BACKGROUND m-auto flex flex-col md:flex-row items-center mb-1 text-[0.7rem] text-WHITE rounded border-b-2 border-BLACK hover:text-BLACK">
-              <div className=" rounded justify-center flex w-full md:w-[20%] h-full align-middle ">
-                ID: {item.itemID}
-              </div>
-              <div className="w-[50%]">{item.itemName}</div>
-              {locked ? (
-                <button className="border border-BLACK hover:text-BLACK hover:opacity-60 bg-WHITE shadow-lg text-BACKGROUND w-full rounded-r">
-                  Unlock to remove
-                </button>
-              ) : (
-                <button
-                  className="border border-BLACK hover:text-BLACK hover:opacity-60 bg-WHITE shadow-lg text-BACKGROUND w-full rounded-r"
-                  onClick={() => StoreItemHandle.removeStoreItems({ storeItemID: item.itemID })}
-                >
-                  Remove Item from store
-                </button>
-              )}
+        <div className="w-[40vw] h-[60vh] bg-WHITE text-WHITE">
+          <div className="h-full mb-20">
+            <h1 className="bg-BACKGROUND rounded text-WHITE text-center w-[100%] m-auto mb-2 h-[30px]">
+              Remove store Item
+            </h1>
+            <button
+              className={locked ? 'w-full text-BACKGROUND bg-BLACK border-BLACK border' : 'w-full text-BACKGROUND bg-WHITE border-BLACK border shadow-lg rounded'}
+              onClick={() => setLocked(!locked)}
+            >
+              {locked ? "LOCKED" : "UNLOCKED"}
+            </button>
+            <div
+              className={
+                !locked
+                  ? "text-WHITE w-[80%] h-[70%] m-auto text-center mt-2"
+                  : "opacity-60 text-BLACK w-[80%] h-[70%] m-auto text-center mt-2"
+              }
+            >
+              {currentItems.map((item: storeItem, index: number) => (
+                <div key={index} className="bg-BACKGROUND m-auto flex flex-col md:flex-row items-center mb-1 text-[0.7rem] text-WHITE rounded border-b-2 border-BLACK hover:text-BLACK">
+                  <div className=" rounded justify-center flex w-full md:w-[20%] h-full align-middle ">
+                    ID: {item.itemID}
+                  </div>
+                  <div className="w-[50%]">{item.itemName}</div>
+                  {locked ? (
+                    <button className="border border-BLACK hover:text-BLACK hover:opacity-60 bg-WHITE shadow-lg text-BACKGROUND w-full rounded-r">
+                      Unlock to remove
+                    </button>
+                  ) : (
+                    <button
+                      className="border border-BLACK hover:text-BLACK hover:opacity-60 bg-WHITE shadow-lg text-BACKGROUND w-full rounded-r"
+                      onClick={() => StoreItemHandle.removeStoreItems({ storeItemID: item.itemID })}
+                    >
+                      Remove Item from store
+                    </button>
+                  )}
+                </div>
+              ))}
+              <Pagination
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                }}
+                count={Math.ceil(itemCount / itemsPerPage)}
+                page={currentPage}
+                onChange={handleChangePage}
+                variant="outlined"
+              />
             </div>
-          ))}
-          <Pagination
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "100%",
-            }}
-            count={Math.ceil(itemCount / itemsPerPage)}
-            page={currentPage}
-            onChange={handleChangePage}
-            variant="outlined"
-          />
-        </div>
-      </div>
-    </div>) : (<div className="bg-BACKGROUND text-center">no access</div>)}
+          </div>
+        </div>) : (<div className="bg-BACKGROUND text-center">no access</div>)}
     </div>
-    
+
   );
 }
 

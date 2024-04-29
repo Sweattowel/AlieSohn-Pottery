@@ -3,7 +3,8 @@ import UserAccount from "./UserAccount";
 import UserDelete from "./UserDelete";
 import { useMyContext } from "../../Context/ContextProvider";
 
-export default function UserHandle() {
+export default function UserHandle()
+{
     const [
         ,
         ,
@@ -15,15 +16,15 @@ export default function UserHandle() {
         ,
         ,
         ,
-      ] = useMyContext();
-      
+    ] = useMyContext();
+
     return (
         <div className="flex">
-            { authenticated && 
-            <>
-                <UserAccount />
-                <UserDelete />            
-            </>
+            {authenticated &&
+                <>
+                    <UserAccount />
+                    <UserDelete />
+                </>
             }
         </div>
     )

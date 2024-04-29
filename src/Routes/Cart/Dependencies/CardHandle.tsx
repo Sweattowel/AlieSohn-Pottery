@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 
-interface Props {
+interface Props
+{
     onConfirm: () => void;
     onCancel: () => void;
 }
 
-const CardHandle: React.FC<Props> = ({ onConfirm, onCancel }) => {
+const CardHandle: React.FC<Props> = ({ onConfirm, onCancel }) =>
+{
     const [termAgreement, setTermAgreement] = useState<boolean>(false);
     const [cardNumber, setCardNumber] = useState<string>("");
     const [expirationDate, setExpirationDate] = useState<string>("");
     const [cvv, setCvv] = useState<string>("");
     const [message, setMessage] = useState<string>("");
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) =>
+    {
         e.preventDefault();
 
         // Mocking the transaction process
@@ -77,9 +80,9 @@ const CardHandle: React.FC<Props> = ({ onConfirm, onCancel }) => {
                             CANCEL
                         </button>
                     </form>
-                    {message && <p>{message}</p>}     
+                    {message && <p>{message}</p>}
                     <button onClick={() => setTermAgreement(false)} className="text-center border border-BLACK w-40 rounded shadow-lg mt-20">I DISAGREE</button>
-                </div>       
+                </div>
             ) : (
                 <div className="bg-WHITE h-[50%] text-WHITE fixed w-[30%] border border-BLACK">
                     <h1 className="bg-BACKGROUND text-center text-[1.5rem] border-b border-WHITE">
@@ -91,7 +94,7 @@ const CardHandle: React.FC<Props> = ({ onConfirm, onCancel }) => {
                     <button onClick={() => setTermAgreement(true)} className="bg-BACKGROUND m-auto flex justify-center text-center border border-BLACK w-40 rounded shadow-lg">I AGREE</button>
                 </div>
             )}
-        
+
         </div>
     );
 }

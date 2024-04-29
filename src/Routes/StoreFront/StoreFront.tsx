@@ -7,7 +7,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import './Dependencies/StoreFront.css'
 import { AnimatePresence, motion } from 'framer-motion'
 
-interface storeItem {
+interface storeItem
+{
   itemID: number;
   itemName: string;
   itemPrice: number;
@@ -16,7 +17,8 @@ interface storeItem {
   itemState: number
 }
 
-function StoreFront() {
+function StoreFront()
+{
   const [
     allItems,
     setAllItemscart,
@@ -35,7 +37,8 @@ function StoreFront() {
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
     newPage: number
-  ) => {
+  ) =>
+  {
     setCurrentPage(newPage);
   };
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -54,42 +57,39 @@ function StoreFront() {
     itemState: 0
   });
   const [confirmationMessages, setConfirmationMessages] = useState<{ index: number; id: number }[]>([]);
-  const [ IDS, setIDS ] = useState<number[]>([])
+  const [IDS, setIDS] = useState<number[]>([])
 
   class StoreItemHandle 
   {
-      // COLLECT STORE ITEMS
-      static collectStoreItems = async () => 
-      {
-          try 
-          {
-              const response = await axios.get<storeItem[]>(
-                `${serverAddress}/api/storeItems`
-              );
-              
-              if (response.status === 200) {
-                setAllItemscart(response.data);
-              } else if (response.status === 404) {
-                console.log("No items available to purchase");
-              } else {
-                console.log("Internal Server Error");
-              }
-          } catch (error) 
-          {
-              console.log(error);
-          }
-      };    
-      // COLLECT BOUGHT IDS
-      static collectIDS = async () => 
-      {
-          try 
-          {
-            const newIDS: number[] = JSON.parse(localStorage.getItem(`BOUGHTIDS${userID}`) || '[]')
-            setIDS(newIDS)
-          } catch (error) {
-            console.log(error)
-          }
+    // COLLECT STORE ITEMS
+    static collectStoreItems = async () => 
+    {
+      try {
+        const response = await axios.get<storeItem[]>(
+          `${serverAddress}/api/storeItems`
+        );
+
+        if (response.status === 200) {
+          setAllItemscart(response.data);
+        } else if (response.status === 404) {
+          console.log("No items available to purchase");
+        } else {
+          console.log("Internal Server Error");
+        }
+      } catch (error) {
+        console.log(error);
       }
+    };
+    // COLLECT BOUGHT IDS
+    static collectIDS = async () => 
+    {
+      try {
+        const newIDS: number[] = JSON.parse(localStorage.getItem(`BOUGHTIDS${userID}`) || '[]')
+        setIDS(newIDS)
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 
 
@@ -99,7 +99,8 @@ function StoreFront() {
     itemPrice: number,
     imagePath: string,
     itemDescription: string
-  ) {
+  )
+  {
     const existingItem = cart.find((item) => item.itemID === itemID);
     if (existingItem) {
       return
@@ -135,21 +136,23 @@ function StoreFront() {
     let totalCount = 0;
     let totalPrice = 0;
 
-    cart.forEach((item) => {
+    cart.forEach((item) =>
+    {
       totalCount += 1;
       totalPrice += item.itemPrice;
     });
 
     setCount(totalCount);
     setTotalPrice(totalPrice);
-    if (cart.length === 0){
+    if (cart.length === 0) {
       StoreItemHandle.collectStoreItems();
     }
   }, [cart]);
 
- useEffect(() => 
+  useEffect(() => 
   {
-    const handleScroll = () => {
+    const handleScroll = () =>
+    {
       setSelectedStoreItem({
         itemID: -1,
         itemName: "",
@@ -162,11 +165,12 @@ function StoreFront() {
 
     window.addEventListener("scroll", handleScroll);
 
-    return () => {
+    return () =>
+    {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  
+
   ///////////////////////////////////////////
 
   const container = {
@@ -180,7 +184,7 @@ function StoreFront() {
       }
     }
   };
-  
+
   const itemded = {
     hidden: { y: 20, opacity: 0 },
     visible: {
@@ -192,7 +196,7 @@ function StoreFront() {
   return (
     <div className="m-auto text-white flex flex-wrap justify-center mb-20  mt-[20%] md:mt-0">
       <div className="text-WHITE bg-BACKGROUND rounded-lg shadow-lg w-[80%] flex justify-evenly items-center h-[2rem] mt-2">
-        Items Per Page: 
+        Items Per Page:
         <div className="w-[50%] flex justify-evenly text-BACKGROUND text-WHITE">
           <button onClick={() => setItemsPerPage(5)} className={`${itemsPerPage == 5 ? "opacity-60" : ""} border-BLACK border shadow-lg w-[20%] rounded`}>
             5
@@ -202,11 +206,11 @@ function StoreFront() {
           </button>
           <button onClick={() => setItemsPerPage(15)} className={`${itemsPerPage == 15 ? "opacity-60" : ""} border-BLACK border shadow-lg w-[20%] rounded`}>
             15
-          </button>          
+          </button>
         </div>
 
       </div>
-      <motion.ul 
+      <motion.ul
         className="container w-full flex flex-wrap justify-center"
         variants={container}
         initial="hidden"
@@ -217,10 +221,10 @@ function StoreFront() {
             <motion.div key={index} layoutId={`${item.itemID}`} className="item text-BLACK w-[19vw] h-[40vh] md:h-[60vh] min-w-40 m-2 bg-BACKGROUND rounded hover:shadow-2xl" variants={itemded} whileHover={{ scale: 1.1, zIndex: 10 }} >
               <div className="flex items-center font-serif text-[1em] bg-BACKGROUND rounded text-WHITE h-[13%] md:h-[5%]">
                 <span className="relative left-2 hover:opacity-90">
-                  <InfoIcon               
+                  <InfoIcon
                     onClick={() => setSelectedStoreItem(item)}
                   />
-                </span>            
+                </span>
                 <div className="flex-grow text-center justify-center items-center flex">
                   {item.itemName}
                 </div>
@@ -236,37 +240,41 @@ function StoreFront() {
               />
               <div className="mb-2 text-center text-WHITE border-b w-[80%] m-auto">Price: ${item.itemPrice}</div>
               <div className="relative">
-                  {IDS.includes(item.itemID) || cart.includes(item.itemID) || item.itemState !== 0 ? 
-                      <div className={`bg-WHITE text-BACKGROUND h-full w-[80%] rounded shadow-lg border border-BLACK m-auto flex justify-center opacity-80 z-0`}>
-                        ITEM PENDING
-                      </div> :            
-                      <button
-                        className={`hover:opacity-90 bg-WHITE text-BACKGROUND h-full w-[80%] rounded shadow-lg border border-BLACK m-auto flex justify-center z-1`}
-                        onClick={() => {
-                          addToCart(
-                            item.itemID,
-                            item.itemName,
-                            item.itemPrice,
-                            item.imagePath,
-                            item.itemDescription
-                          );
-                          setClickedItemIndex(index);
-                          setConfirmationMessages(prev => [...prev, { index, id: Date.now() }]);
-                          setTimeout(() => {
-                            setConfirmationMessages(prev => {
-                              const filteredMessages = prev.filter(msg => msg.id !== prev[0]?.id);
-                              return filteredMessages;
-                            });
-                          }, 2000);
-                        }}
-                      >
-                        ADD TO CART
-                    </button>
-                  }
-                {confirmationMessages.map((msg, i) => {
+                {IDS.includes(item.itemID) || cart.includes(item.itemID) || item.itemState !== 0 ?
+                  <div className={`bg-WHITE text-BACKGROUND h-full w-[80%] rounded shadow-lg border border-BLACK m-auto flex justify-center opacity-80 z-0`}>
+                    ITEM PENDING
+                  </div> :
+                  <button
+                    className={`hover:opacity-90 bg-WHITE text-BACKGROUND h-full w-[80%] rounded shadow-lg border border-BLACK m-auto flex justify-center z-1`}
+                    onClick={() =>
+                    {
+                      addToCart(
+                        item.itemID,
+                        item.itemName,
+                        item.itemPrice,
+                        item.imagePath,
+                        item.itemDescription
+                      );
+                      setClickedItemIndex(index);
+                      setConfirmationMessages(prev => [...prev, { index, id: Date.now() }]);
+                      setTimeout(() =>
+                      {
+                        setConfirmationMessages(prev =>
+                        {
+                          const filteredMessages = prev.filter(msg => msg.id !== prev[0]?.id);
+                          return filteredMessages;
+                        });
+                      }, 2000);
+                    }}
+                  >
+                    ADD TO CART
+                  </button>
+                }
+                {confirmationMessages.map((msg, i) =>
+                {
                   return msg.index === index && (
                     <div key={msg.id} className="absolute top-0 right-0 text-WHITE p-1 rounded animate-floatAway">
-                      +{item.itemName} 
+                      +{item.itemName}
                     </div>
                   );
                 })}
@@ -303,33 +311,33 @@ function StoreFront() {
 
       <AnimatePresence>
         {selectedStoreItem.itemID !== -1 && (
-            <motion.div 
-              className="bg-BACKGROUND p-4 rounded shadow-lg text-WHITE fixed top-[10vh] md:top-[10vh] m-auto max-w-[80%] z-10"
-              style={{
-                opacity: '100'
-              }}
-            >        
-              <img alt={`${selectedStoreItem.imagePath}`} className="m-auto border-BLACK border  max-h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
-              <motion.h2 className="justify-center w-[80%] m-auto flex items-center text-2xl border-b border-BLACK">
-                {selectedStoreItem.itemName}
-              </motion.h2>
-              <motion.h5 className="justify-center w-[80%] m-auto flex items-center text-center">
-                {selectedStoreItem.itemDescription}
-              </motion.h5>
+          <motion.div
+            className="bg-BACKGROUND p-4 rounded shadow-lg text-WHITE fixed top-[10vh] md:top-[10vh] m-auto max-w-[80%] z-10"
+            style={{
+              opacity: '100'
+            }}
+          >
+            <img alt={`${selectedStoreItem.imagePath}`} className="m-auto border-BLACK border  max-h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
+            <motion.h2 className="justify-center w-[80%] m-auto flex items-center text-2xl border-b border-BLACK">
+              {selectedStoreItem.itemName}
+            </motion.h2>
+            <motion.h5 className="justify-center w-[80%] m-auto flex items-center text-center">
+              {selectedStoreItem.itemDescription}
+            </motion.h5>
 
-              <motion.button 
-                className="flex rounded bg-WHITE text-BACKGROUND border border-BLACK shadow-lg justify-center m-auto w-[60%] md:w-[20%] hover:opacity-90" 
-                onClick={() => setSelectedStoreItem({
-                  itemID: -1,
-                  itemName: "",
-                  itemPrice: 0,
-                  imagePath: "",
-                  itemDescription: "",
-                  itemState: 0
-                })}
-              >
-                Close
-              </motion.button>            
+            <motion.button
+              className="flex rounded bg-WHITE text-BACKGROUND border border-BLACK shadow-lg justify-center m-auto w-[60%] md:w-[20%] hover:opacity-90"
+              onClick={() => setSelectedStoreItem({
+                itemID: -1,
+                itemName: "",
+                itemPrice: 0,
+                imagePath: "",
+                itemDescription: "",
+                itemState: 0
+              })}
+            >
+              Close
+            </motion.button>
 
           </motion.div>
         )}

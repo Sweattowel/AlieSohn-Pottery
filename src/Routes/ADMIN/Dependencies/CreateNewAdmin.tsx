@@ -2,7 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../../Context/ContextProvider";
 
-export default function CreateNewAdmin() {
+export default function CreateNewAdmin()
+{
   const [
     ,
     ,
@@ -24,7 +25,8 @@ export default function CreateNewAdmin() {
   const [userNameAttempt, setUserNameAttempt] = useState<string>("");
   const [passWordAttempt, setPassWordAttempt] = useState<string>("");
   // HANDLE LOGIN
-  const superLogin = async () => {
+  const superLogin = async () =>
+  {
     if (adminAttempts === 0) {
       setError("Notifying cyberpolice");
       return;
@@ -55,7 +57,8 @@ export default function CreateNewAdmin() {
     }
   };
   // HANDLE LOGIN
-  const createAdmin = async () => {
+  const createAdmin = async () =>
+  {
     if (userName === "" || passWord === "") {
       setError('please enter details')
       console.log("Please finish entering details")
@@ -63,17 +66,17 @@ export default function CreateNewAdmin() {
     }
     const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
     const storedToken = getToken(choice);
-    
-    if (!storedToken){
+
+    if (!storedToken) {
       console.log('No authorization found');
       return;
     }
     try {
       const response = await axios.post(
         `${serverAddress}/api/adminRegistration`,
-        { 
+        {
           UserName: userName,
-          Password: passWord 
+          Password: passWord
         },
         {
           headers: {
@@ -87,7 +90,7 @@ export default function CreateNewAdmin() {
         setUserNameAttempt('')
         setNewPassWordName('')
         setCheck(false)
-      } else if (response.status === 400){
+      } else if (response.status === 400) {
         setError('Bad input, please adjust')
         console.log('Failed to create admin')
       }
@@ -100,7 +103,7 @@ export default function CreateNewAdmin() {
   function getToken(choice: string) 
   {
     if (choice === 'Null') return
-    
+
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].trim();
@@ -110,85 +113,86 @@ export default function CreateNewAdmin() {
     }
     return null;
   }
-// USEEFFECT
-useEffect(() => {
-  console.log(userName, passWord)
-}, [userName, passWord])
+  // USEEFFECT
+  useEffect(() =>
+  {
+    console.log(userName, passWord)
+  }, [userName, passWord])
 
   return (
     <div>
-        {superAuthenticated ? (
-            check ? (
-                <div className="w-full text-WHITE justify-center items-center border rounded mb-10">
-                    <h1 className="m-auto flex justify-center bg-BACKGROUND mb-1 rounded">
-                        CREATE NEW ADMIN
-                    </h1>
-                    <div className="m-auto w-[80%] flex justify-center bg-BACKGROUND rounded">
-                        NewAdminName:
-                    </div>
-                    <input
-                        value={userName}
-                        onChange={(e) => setNewUserName(e.target.value)}
-                        className="text-BLACK m-auto w-[60%] flex justify-center border border-BLACK mt-1 mb-1"
-                    />
-                    <div className="m-auto w-[80%] flex justify-center bg-BACKGROUND rounded">
-                        NewAdminPass:
-                    </div>
-                    <input
-                        value={passWord}
-                        type="password"
-                        onChange={(e) => setNewPassWordName(e.target.value)}
-                        className="text-BLACK m-auto w-[60%] flex justify-center border border-BLACK mt-1 mb-1"
-                    />
-                    <button
-                        className="shadow-lg bg-BACKGROUND m-auto flex w-[60%] text-center items-center justify-center hover:opacity-90 hover:text-BLACK mb-2 rounded"
-                        onClick={() => createAdmin()}
-                    >
-                        SEND REQUEST
-                    </button>
-                </div>
-            ) : (
-                <div className="w-full text-WHITE justify-center items-center border rounded mb-10 ">
-                    <h1 className="m-auto flex text-center justify-center bg-BACKGROUND mb-1 rounded">
-                        CREATE NEW ADMIN
-                        <br />
-                        you must log in first to create any admins
-                    </h1>
-                    <div className="m-auto w-[80%] flex justify-center bg-BACKGROUND rounded">
-                        AdminName
-                    </div>
-                    <input
-                        value={userNameAttempt}
-                        onChange={(e) => setUserNameAttempt(e.target.value)}
-                        className="text-BLACK m-auto w-[60%] flex justify-center border border-BLACK mt-1 mb-1"
-                    />
-                    <div className="m-auto w-[80%] flex justify-center bg-BACKGROUND rounded">
-                        AdminPass:
-                    </div>
-                    <input
-                        value={passWordAttempt}
-                        type="password"
-                        onChange={(e) => setPassWordAttempt(e.target.value)}
-                        className="text-BLACK m-auto w-[60%] flex justify-center border border-BLACK mt-1 mb-1"
-                    />
-                    <button
-                        className="shadow-lg bg-BACKGROUND m-auto flex w-[60%] border border-BLACK text-center items-center justify-center hover:opacity-90 hover:text-BLACK mb-2 rounded"
-                        onClick={() => superLogin()}
-                    >
-                        ADMIN LOGIN
-                    </button>
-                    <div className="w-[60%] m-auto text-center rounded bg-BACKGROUND h-[3vh] mb-1">
-                        {adminAttempts} Attempts left
-                    </div>
-                    <div className="w-[60%] m-auto text-center rounded bg-BACKGROUND h-[3vh]">
-                        {error || <div>Please enter details</div>}
-                    </div>
-                </div>
-            )
+      {superAuthenticated ? (
+        check ? (
+          <div className="w-full text-WHITE justify-center items-center border rounded mb-10">
+            <h1 className="m-auto flex justify-center bg-BACKGROUND mb-1 rounded">
+              CREATE NEW ADMIN
+            </h1>
+            <div className="m-auto w-[80%] flex justify-center bg-BACKGROUND rounded">
+              NewAdminName:
+            </div>
+            <input
+              value={userName}
+              onChange={(e) => setNewUserName(e.target.value)}
+              className="text-BLACK m-auto w-[60%] flex justify-center border border-BLACK mt-1 mb-1"
+            />
+            <div className="m-auto w-[80%] flex justify-center bg-BACKGROUND rounded">
+              NewAdminPass:
+            </div>
+            <input
+              value={passWord}
+              type="password"
+              onChange={(e) => setNewPassWordName(e.target.value)}
+              className="text-BLACK m-auto w-[60%] flex justify-center border border-BLACK mt-1 mb-1"
+            />
+            <button
+              className="shadow-lg bg-BACKGROUND m-auto flex w-[60%] text-center items-center justify-center hover:opacity-90 hover:text-BLACK mb-2 rounded"
+              onClick={() => createAdmin()}
+            >
+              SEND REQUEST
+            </button>
+          </div>
         ) : (
-            <div className="bg-BACKGROUND text-center">No access</div>
-        )}
+          <div className="w-full text-WHITE justify-center items-center border rounded mb-10 ">
+            <h1 className="m-auto flex text-center justify-center bg-BACKGROUND mb-1 rounded">
+              CREATE NEW ADMIN
+              <br />
+              you must log in first to create any admins
+            </h1>
+            <div className="m-auto w-[80%] flex justify-center bg-BACKGROUND rounded">
+              AdminName
+            </div>
+            <input
+              value={userNameAttempt}
+              onChange={(e) => setUserNameAttempt(e.target.value)}
+              className="text-BLACK m-auto w-[60%] flex justify-center border border-BLACK mt-1 mb-1"
+            />
+            <div className="m-auto w-[80%] flex justify-center bg-BACKGROUND rounded">
+              AdminPass:
+            </div>
+            <input
+              value={passWordAttempt}
+              type="password"
+              onChange={(e) => setPassWordAttempt(e.target.value)}
+              className="text-BLACK m-auto w-[60%] flex justify-center border border-BLACK mt-1 mb-1"
+            />
+            <button
+              className="shadow-lg bg-BACKGROUND m-auto flex w-[60%] border border-BLACK text-center items-center justify-center hover:opacity-90 hover:text-BLACK mb-2 rounded"
+              onClick={() => superLogin()}
+            >
+              ADMIN LOGIN
+            </button>
+            <div className="w-[60%] m-auto text-center rounded bg-BACKGROUND h-[3vh] mb-1">
+              {adminAttempts} Attempts left
+            </div>
+            <div className="w-[60%] m-auto text-center rounded bg-BACKGROUND h-[3vh]">
+              {error || <div>Please enter details</div>}
+            </div>
+          </div>
+        )
+      ) : (
+        <div className="bg-BACKGROUND text-center">No access</div>
+      )}
     </div>
-);
+  );
 
 }

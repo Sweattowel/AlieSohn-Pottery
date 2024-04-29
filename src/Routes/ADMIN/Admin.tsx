@@ -5,7 +5,8 @@ import { useMyContext } from "../../Context/ContextProvider";
 import Removeitem from "./Dependencies/Removeitem";
 import CreateNewAdmin from "./Dependencies/CreateNewAdmin";
 
-function Admin() {
+function Admin()
+{
   const [
     cart,
     setCart,

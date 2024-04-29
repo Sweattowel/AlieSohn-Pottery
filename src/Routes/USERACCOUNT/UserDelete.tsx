@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useMyContext } from "../../Context/ContextProvider";
 import axios from "axios";
 
-export default function UserDelete() {
+export default function UserDelete()
+{
   const [
     ,
     ,
@@ -23,21 +24,18 @@ export default function UserDelete() {
 
   async function deleteAccount() 
   {
-    if (!userID || !userName) 
-    {
+    if (!userID || !userName) {
       return;
     }
     const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
     const storedToken = getToken(choice);
 
-    if (!storedToken)
-    {
+    if (!storedToken) {
       console.log('No authorization found');
       return;
     }
 
-    if (!authenticated) 
-    {
+    if (!authenticated) {
       return;
     }
 
@@ -45,12 +43,12 @@ export default function UserDelete() {
       const response = await axios.post(`${serverAddress}/api/deleteAccount/${userID}`, {
         userID: userID,
         userName: userName,
-      }, 
-      {
-        headers: {
-          authorization: `Bearer ${storedToken}`
+      },
+        {
+          headers: {
+            authorization: `Bearer ${storedToken}`
+          }
         }
-      }
       );
 
       if (response.status === 200) {
@@ -66,9 +64,10 @@ export default function UserDelete() {
     }
   }
 
-  function getToken(choice: string) {
+  function getToken(choice: string)
+  {
     if (choice === 'Null') return
-    
+
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].trim();

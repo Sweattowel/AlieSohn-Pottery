@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useMyContext } from "../../Context/ContextProvider";
 import axios from "axios";
-import {  Pagination } from "@mui/material";
+import { Pagination } from "@mui/material";
 
-export default function UserAccount() {
+export default function UserAccount()
+{
   const serverAddress = process.env.REACT_APP_SERVER_ADDRESS;
   const [
     ,
@@ -30,28 +31,28 @@ export default function UserAccount() {
     // GET ORDERS
     static getOrders = async () => 
     {
-        const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
-        const storedToken = getToken(choice);
-        
-        try {
-            const response = await axios.get(`${serverAddress}/api/orders/${userID}`, {
-                headers: {
-                    Authorization: `Bearer ${storedToken}`
-                }
-            });
-            if (response.status === 200) {
-                const data = response.data;
-                setOrders(data); 
-                setOrderCount(data.length);
-            } else if (response.status === 404) {
-                console.log("No orders to collect");
-            } else if (response.status === 401) {
-                console.log('Unauthorized')
-            }
-        } catch (error) {
-            console.log(error);
+      const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+      const storedToken = getToken(choice);
+
+      try {
+        const response = await axios.get(`${serverAddress}/api/orders/${userID}`, {
+          headers: {
+            Authorization: `Bearer ${storedToken}`
+          }
+        });
+        if (response.status === 200) {
+          const data = response.data;
+          setOrders(data);
+          setOrderCount(data.length);
+        } else if (response.status === 404) {
+          console.log("No orders to collect");
+        } else if (response.status === 401) {
+          console.log('Unauthorized')
         }
-    }; 
+      } catch (error) {
+        console.log(error);
+      }
+    };
     // CHANGE ORDER ORDERING
     static sortDate = (choice: any) => 
     {
@@ -68,12 +69,13 @@ export default function UserAccount() {
             new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
         ));
       }
-    };       
+    };
     // PAGINATION
     static handleChangeOrdersPage = (
       event: React.ChangeEvent<unknown>,
       newPage: number
-    ) => {
+    ) =>
+    {
       setCurrentOrdersPage(newPage);
     };
   }
@@ -81,7 +83,7 @@ export default function UserAccount() {
   function getToken(choice: string) 
   {
     if (choice === 'Null') return
-    
+
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].trim();
@@ -109,8 +111,8 @@ export default function UserAccount() {
           Group by?
         </div>
         <div className="rounded-b w-[50%] m-auto text-WHITE mt-1 mb-1 flex justify-center items-center">
-            <button className={ groupSettingChoice === 1 ? "bg-BACKGROUND w-[50%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(1)} >DESC</button>
-            <button className={ groupSettingChoice === 2 ? "bg-BACKGROUND w-[50%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(2)} >ASC</button>          
+          <button className={groupSettingChoice === 1 ? "bg-BACKGROUND w-[50%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(1)} >DESC</button>
+          <button className={groupSettingChoice === 2 ? "bg-BACKGROUND w-[50%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(2)} >ASC</button>
         </div>
         <Pagination
           style={{
@@ -129,39 +131,39 @@ export default function UserAccount() {
           <div className="w-[25%] text-center border-r border-BLACK">STATUS</div>
           <div className="w-[25%] text-center border-r border-BLACK">PLACED</div>
         </div>
-          {authenticated && !superAuthenticated
-            ? orders
-                .slice(
-                  (currentOrdersPage - 1) * ordersPerPage,
-                  currentOrdersPage * ordersPerPage
-                )
-                .map((order: any, index: number) => (
-                  <div
-                    key={index}
-                    className={`${order.itemState === 2 ? "opacity-80" : ""} text-BLACK shadow-lg rounded  bg-WHITE flex justify-between mt-1 mb-1`}
-                  >
-                    <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
-                      {order.itemID}{" "}
-                    </h1>
-                    <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
-                      {order.itemName}{" "}
-                    </h1>
-                    <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
-                      {order.itemState == 0 || order.itemState > 3 ? ("ERROR") : ("")}
-                      {order.itemState == 1 ? ("PENDING") : ("")}
-                      {order.itemState == 2 ? ("COMPLETE") : ("")}
-                      {order.itemState == 3 ? ("DELETED") : ("")}
-                    </h1>
-                    {order.orderDate ? (
-                      <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
-                        {order.orderDate.split('T')[0]}
-                      </h1>
-                    ) : (
-                      <div className="w-[0%] text-[0.7rem] md:text-lg"></div>
-                    )}
-                  </div>
-                ))
-            : null}          
+        {authenticated && !superAuthenticated
+          ? orders
+            .slice(
+              (currentOrdersPage - 1) * ordersPerPage,
+              currentOrdersPage * ordersPerPage
+            )
+            .map((order: any, index: number) => (
+              <div
+                key={index}
+                className={`${order.itemState === 2 ? "opacity-80" : ""} text-BLACK shadow-lg rounded  bg-WHITE flex justify-between mt-1 mb-1`}
+              >
+                <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
+                  {order.itemID}{" "}
+                </h1>
+                <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
+                  {order.itemName}{" "}
+                </h1>
+                <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
+                  {order.itemState == 0 || order.itemState > 3 ? ("ERROR") : ("")}
+                  {order.itemState == 1 ? ("PENDING") : ("")}
+                  {order.itemState == 2 ? ("COMPLETE") : ("")}
+                  {order.itemState == 3 ? ("DELETED") : ("")}
+                </h1>
+                {order.orderDate ? (
+                  <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
+                    {order.orderDate.split('T')[0]}
+                  </h1>
+                ) : (
+                  <div className="w-[0%] text-[0.7rem] md:text-lg"></div>
+                )}
+              </div>
+            ))
+          : null}
       </div>
     </div>
   );

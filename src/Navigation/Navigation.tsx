@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMyContext } from "../Context/ContextProvider";
 
-function Navigation() {
+function Navigation()
+{
   const [
     ,
     ,
@@ -19,7 +20,7 @@ function Navigation() {
 
   const [page, setPage] = useState(1);
 
-  
+
   return (
     <nav className="m-auto h-[5vh] flex bg-BACKGROUND border-BLACK border-b-2 w-full bg-60 rounded-b">
       <div className="flex  w-full mb-2">
@@ -34,8 +35,9 @@ function Navigation() {
               <Link to={`/MyAccount/${userID}`}>
                 <button
                   className={`text-${page === 1 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
-    
-                  onClick={() => {
+
+                  onClick={() =>
+                  {
                     setPage(1);
                   }}
                 >
@@ -49,7 +51,8 @@ function Navigation() {
               <Link to="/ADMIN">
                 <button
                   className={`text-${page === 2 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
-                  onClick={() => {
+                  onClick={() =>
+                  {
                     setPage(2);
                   }}
                 >
@@ -62,7 +65,8 @@ function Navigation() {
             <Link to="/">
               <button
                 className={`text-${page === 3 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
-                onClick={() => {
+                onClick={() =>
+                {
                   setPage(3);
                 }}
               >
@@ -74,7 +78,8 @@ function Navigation() {
             <Link to="/StoreFront">
               <button
                 className={`text-${page === 4 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
-                onClick={() => {
+                onClick={() =>
+                {
                   setPage(4);
                 }}
               >
@@ -86,7 +91,8 @@ function Navigation() {
             <Link to="/Cart">
               <button
                 className={`text-${page === 5 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
-                onClick={() => {
+                onClick={() =>
+                {
                   setPage(5);
                 }}
               >

@@ -3,7 +3,8 @@ import { useMyContext } from "../../../Context/ContextProvider";
 import axios from "axios";
 import { Pagination } from "@mui/material";
 
-function Orders() {
+function Orders()
+{
   const [orders, setOrders] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [selectedCustomer, setSelectedCustomer] = useState<number>(-1);
@@ -30,67 +31,67 @@ function Orders() {
   {
     // GET ORDERS
     static getOrders = async () => 
-      {
-        const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
-        const storedToken = getToken(choice);
-        
-        if (!storedToken){
-            console.log('No authorization found');
-            return;
+    {
+      const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+      const storedToken = getToken(choice);
+
+      if (!storedToken) {
+        console.log('No authorization found');
+        return;
+      }
+      console.log('Getting orders')
+      try {
+        const response = await axios.get(`${serverAddress}/api/orders/${selectedCustomer}`, {
+          headers: {
+            Authorization: `Bearer ${storedToken}`
+          }
+        });
+        if (response.status === 200) {
+          const data = response.data;
+          console.log(data)
+          setOrders(data);
+        } else if (response.status === 404) {
+          console.log("No orders to collect");
         }
-        console.log('Getting orders')
-        try {
-            const response = await axios.get(`${serverAddress}/api/orders/${selectedCustomer}`, {
-                headers: {
-                    Authorization: `Bearer ${storedToken}`
-                }
-            });
-            if (response.status === 200) {
-                const data = response.data;
-                console.log(data)
-                setOrders(data);
-            } else if (response.status === 404) {
-                console.log("No orders to collect");
-            }
-        } catch (error) {
-            console.log(error);
-        }
-      };
+      } catch (error) {
+        console.log(error);
+      }
+    };
     // COMPLETE ORDER
     static adjustOrder = async (orderID: number, NewItemState: number, itemID: number) => 
-      {
-        const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
-        const storedToken = getToken(choice);
-        
-        if (!storedToken){
-          console.log('No authorization found');
+    {
+      const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
+      const storedToken = getToken(choice);
+
+      if (!storedToken) {
+        console.log('No authorization found');
+        return;
+      }
+      try {
+        if (!selectedCustomer) {
           return;
         }
-        try {
-          if (!selectedCustomer) {
-            return;
-          }
-          const response = await axios.post(`${serverAddress}/api/adjustOrder`, {
-            userID: selectedCustomer,
-            orderID: orderID,
-            NewItemState: NewItemState,
-            ItemID: itemID
-          },       
+        const response = await axios.post(`${serverAddress}/api/adjustOrder`, {
+          userID: selectedCustomer,
+          orderID: orderID,
+          NewItemState: NewItemState,
+          ItemID: itemID
+        },
           {
             headers: {
               authorization: `Bearer ${storedToken}`
             }
           });
-          if (response.status === 200) {
-            console.log("Successfully adjusted order to ", NewItemState)
-            OrderHandle.getOrders();
-          } else {
-            console.log("Failed to set post");
-          }
-        } catch (error) {
-          console.log(error);
+        if (response.status === 200) {
+          console.log("Successfully adjusted order to ", NewItemState)
+          OrderHandle.getOrders();
+        } else {
+          console.log("Failed to set post");
         }
-      };    
+      } catch (error) {
+        console.log(error);
+      }
+    };
   }
 
 
@@ -98,18 +99,18 @@ function Orders() {
   {
     const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
     const storedToken = getToken(choice);
-    
-    if (!storedToken){
+
+    if (!storedToken) {
       console.log('No authorization found');
       return;
     }
     try {
-      const response = await axios.post(`${serverAddress}/api/getUsers`, {},        
-      {
-        headers: {
-          Authorization: `Bearer ${storedToken}`
-        }
-      });
+      const response = await axios.post(`${serverAddress}/api/getUsers`, {},
+        {
+          headers: {
+            Authorization: `Bearer ${storedToken}`
+          }
+        });
       if (response.status === 200) {
         setUsers(response.data);
       } else {
@@ -126,14 +127,16 @@ function Orders() {
     static handleChangeUsersPage = (
       event: React.ChangeEvent<unknown>,
       newPage: number
-    ) => {
+    ) =>
+    {
       setCurrentUsersPage(newPage);
-    };  
+    };
 
     static handleChangeOrdersPage = (
       event: React.ChangeEvent<unknown>,
       newPage: number
-    ) => {
+    ) =>
+    {
       setCurrentOrdersPage(newPage);
     };
   }
@@ -141,7 +144,7 @@ function Orders() {
   function getToken(choice: string) 
   {
     if (choice === 'Null') return
-    
+
     const cookies = document.cookie.split(';');
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i].trim();
@@ -153,26 +156,30 @@ function Orders() {
   }
 
   //////////////////////////////////////
-  useEffect(() => {
+  useEffect(() =>
+  {
     if (selectedCustomer !== -1) {
       OrderHandle.getOrders();
     }
     setCurrentOrdersPage(1);
   }, [selectedCustomer]);
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     getUsers();
   }, []);
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     //console.log("Orders:", orders);
     if (orders) {
       //console.log("Orders length:", orders.length);
       setOrderCount(orders.length);
     }
   }, [orders, currentOrdersPage]);
-  
-  useEffect(() => {
+
+  useEffect(() =>
+  {
     //console.log("Users:", users);
     if (users) {
       //console.log("Users length:", users.length);
@@ -183,7 +190,7 @@ function Orders() {
   return (
     <div>
       {superAuthenticated ? (
-          <div className="w-[40vw] h-full bg-WHITE text-WHITE mt-0.5 ml-0.5">
+        <div className="w-[40vw] h-full bg-WHITE text-WHITE mt-0.5 ml-0.5">
           <h1 className="bg-BACKGROUND text-center rounded mb-2 text-white h-[30px]">
             Orders
           </h1>
@@ -241,76 +248,80 @@ function Orders() {
               variant="outlined"
             />
           )}
-    
+
           {selectedCustomer !== -1
             ? orders
-                .slice(
-                  (currentOrdersPage - 1) * ordersPerPage,
-                  currentOrdersPage * ordersPerPage
-                )
-                .map((order: any, index: number) => (
-                  <div
-                    key={index}
-                    className="flex items-center  justify-center text-center md:flex-row flex-col bg-BACKGROUND w-full h-[12rem] md:h-[3rem] rounded mt-1 mb-2 justify-center items-center"
-                  >
-                    <h1 className="w-full md:w-[20%]">
-                      <>Item : {order.itemID}</>
-                      <br />
-                      <>Order {order.orderID}</>{" "}
-                    </h1>
-                    <h1 className="w-full md:w-[25%]">{order.itemName} </h1>
-                    
-                    <div className="w-full md:w-[25%] bg-WHITE text-BACKGROUND border border-BLACK h-[80%]shadow-lg hover:opacity-60 rounded text-center justify-center items-center flex">
-                      {order.itemState == 0 || order.itemState > 3 ? ("ERROR") : ("")}
-                      {order.itemState == 1 ? ("PENDING") : ("")}
-                      {order.itemState == 2 ? ("COMPLETE") : ("")}
-                      {order.itemState == 3 ? ("DELETED") : ("")}
-                    </div>
-                    <div className="flex flex-col md:flex-row h-[50%] w-full md:w-[25%] ml-1">
-                      <button
-                        onClick={async () => {
-                          if (order.itemState === 0) return
-                          await OrderHandle.adjustOrder(order.orderID, 0, order.itemID);
-                          OrderHandle.getOrders();
-                        }}
-                        className="text-[0.5rem] bg-WHITE text-BLACK border-BLACK border h-full w-[80%] m-auto md:w-[25%] rounded shadow-lg"
+              .slice(
+                (currentOrdersPage - 1) * ordersPerPage,
+                currentOrdersPage * ordersPerPage
+              )
+              .map((order: any, index: number) => (
+                <div
+                  key={index}
+                  className="flex items-center  justify-center text-center md:flex-row flex-col bg-BACKGROUND w-full h-[12rem] md:h-[3rem] rounded mt-1 mb-2 justify-center items-center"
+                >
+                  <h1 className="w-full md:w-[20%]">
+                    <>Item : {order.itemID}</>
+                    <br />
+                    <>Order {order.orderID}</>{" "}
+                  </h1>
+                  <h1 className="w-full md:w-[25%]">{order.itemName} </h1>
+
+                  <div className="w-full md:w-[25%] bg-WHITE text-BACKGROUND border border-BLACK h-[80%]shadow-lg hover:opacity-60 rounded text-center justify-center items-center flex">
+                    {order.itemState == 0 || order.itemState > 3 ? ("ERROR") : ("")}
+                    {order.itemState == 1 ? ("PENDING") : ("")}
+                    {order.itemState == 2 ? ("COMPLETE") : ("")}
+                    {order.itemState == 3 ? ("DELETED") : ("")}
+                  </div>
+                  <div className="flex flex-col md:flex-row h-[50%] w-full md:w-[25%] ml-1">
+                    <button
+                      onClick={async () =>
+                      {
+                        if (order.itemState === 0) return
+                        await OrderHandle.adjustOrder(order.orderID, 0, order.itemID);
+                        OrderHandle.getOrders();
+                      }}
+                      className="text-[0.5rem] bg-WHITE text-BLACK border-BLACK border h-full w-[80%] m-auto md:w-[25%] rounded shadow-lg"
                     >
                       REMOVE
                     </button>
                     <button
-                        onClick={async () => {
-                          if (order.itemState === 1) return
-                          await OrderHandle.adjustOrder(order.orderID, 1, order.itemID);
-                          OrderHandle.getOrders();
-                        }}
-                        className="text-[0.5rem] bg-WHITE text-BLACK border-BLACK border h-full w-[80%] m-auto md:w-[25%] rounded shadow-lg"
+                      onClick={async () =>
+                      {
+                        if (order.itemState === 1) return
+                        await OrderHandle.adjustOrder(order.orderID, 1, order.itemID);
+                        OrderHandle.getOrders();
+                      }}
+                      className="text-[0.5rem] bg-WHITE text-BLACK border-BLACK border h-full w-[80%] m-auto md:w-[25%] rounded shadow-lg"
                     >
                       PEND
                     </button>
                     <button
-                        onClick={async () => {
-                          if (order.itemState === 2) return
-                          await OrderHandle.adjustOrder(order.orderID, 2, order.itemID);
-                          OrderHandle.getOrders();
-                        }}
-                        className="text-[0.5rem] bg-WHITE text-BLACK border-BLACK border h-full w-[80%] m-auto md:w-[25%] rounded shadow-lg"
+                      onClick={async () =>
+                      {
+                        if (order.itemState === 2) return
+                        await OrderHandle.adjustOrder(order.orderID, 2, order.itemID);
+                        OrderHandle.getOrders();
+                      }}
+                      className="text-[0.5rem] bg-WHITE text-BLACK border-BLACK border h-full w-[80%] m-auto md:w-[25%] rounded shadow-lg"
                     >
                       COMP
                     </button>
                     <button
-                        onClick={async () => {
-                          if (order.itemState === 3) return
-                          await OrderHandle.adjustOrder(order.orderID, 3, order.itemID);
-                          OrderHandle.getOrders();
-                        }}
-                        className="text-[0.5rem] bg-WHITE text-BLACK border-BLACK border h-full w-[80%] m-auto md:w-[25%] rounded shadow-lg"
+                      onClick={async () =>
+                      {
+                        if (order.itemState === 3) return
+                        await OrderHandle.adjustOrder(order.orderID, 3, order.itemID);
+                        OrderHandle.getOrders();
+                      }}
+                      className="text-[0.5rem] bg-WHITE text-BLACK border-BLACK border h-full w-[80%] m-auto md:w-[25%] rounded shadow-lg"
                     >
                       DEL
                     </button>
-                    </div>
-                    
                   </div>
-                ))
+
+                </div>
+              ))
             : null}
         </div>
       ) : (
@@ -319,7 +330,7 @@ function Orders() {
         </div>
       )}
     </div>
-    
+
   );
 }
 

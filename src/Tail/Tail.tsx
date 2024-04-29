@@ -3,7 +3,8 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useMyContext } from "../Context/ContextProvider";
 
-function Tail() {
+function Tail()
+{
   const [
     ,
     ,
@@ -28,14 +29,16 @@ function Tail() {
   const [registrationAttempts, setRegistrationAttempts] = useState<number>(4);
   const [error, setError] = useState<string>("");
 
-  class LoginHandle {
+  class LoginHandle
+  {
     // REGULAR LOGIN
-    static Login = async () => {
-      if (attempts ===0) {
+    static Login = async () =>
+    {
+      if (attempts === 0) {
         setError("Out of attempts");
         //return
       }
-      if (userNameAttempt ==="" || passWordAttempt ==="") {
+      if (userNameAttempt === "" || passWordAttempt === "") {
         setError("Please finish inputting details");
         return;
       }
@@ -52,7 +55,7 @@ function Tail() {
           setWantLogin(false);
           setUserNameAttempt("");
           setPassWordAttempt("");
-          TokenHandle.SetToken('token',response.data.token)
+          TokenHandle.SetToken('token', response.data.token)
           console.log("Logged in successfully");
         } else {
           setError("Failed to log in");
@@ -63,12 +66,14 @@ function Tail() {
       }
     };
     // SUPER LOGIN
-    static superLogin = async () => {
-      if (adminAttempts ===0) {
+    static superLogin = async () =>
+    {
+      if (adminAttempts === 0) 
+      {
         setError("Notifying cyberpolice");
         //return;
       }
-      if (userNameAttempt ==="" || passWordAttempt ==="") {
+      if (userNameAttempt === "" || passWordAttempt === "") {
         setError("Please finish inputting details");
         return;
       }
@@ -80,7 +85,8 @@ function Tail() {
             PassWord: passWordAttempt,
           }
         );
-        if (ResponseSir.status === 200) {
+        if (ResponseSir.status === 200) 
+        {
           setAuthenticated(true);
           setSuperAuthenticated(true);
           setUserID(-ResponseSir.data.adminID);
@@ -98,7 +104,8 @@ function Tail() {
       }
     };
     // LOGOUT HANDLE
-    static logOut = () => {
+    static logOut = () =>
+    {
       setAuthenticated(false);
       setSuperAuthenticated(false);
       setUserID(-1);
@@ -110,10 +117,12 @@ function Tail() {
     };
   }
 
-  class RegisterHandle {
+  class RegisterHandle
+  {
     // REGISTER
-    static register = async () => {
-      if (userNameAttempt ==="" || passWordAttempt ==="") {
+    static register = async () =>
+    {
+      if (userNameAttempt === "" || passWordAttempt === "") {
         setError(`Please finish inputting details`);
         return;
       }
@@ -142,12 +151,13 @@ function Tail() {
     };
   }
 
-  class TokenHandle {
+  class TokenHandle
+  {
     // GET TOKEN FROM COOKIES
     static getToken(choice: string) 
     {
-      if (choice ==='Null') return
-      
+      if (choice === 'Null') return
+
       const cookies = document.cookie.split(';');
       console.log(cookies)
       for (let i = 0; i < cookies.length; i++) {
@@ -159,7 +169,8 @@ function Tail() {
       return null;
     }
     // REFRESH TOKEN IF NEEDED
-    static GetRefreshToken = async (tokenType: string) => {
+    static GetRefreshToken = async (tokenType: string) =>
+    {
       const storedToken = this.getToken(tokenType)
       console.log(storedToken)
       console.log(userID, userName, 'Here')
@@ -167,7 +178,7 @@ function Tail() {
         console.log("No authorization found");
         return;
       }
-      
+
       const response = await axios.post(
         `${serverAddress}/api/TokenRefresh`,
         {
@@ -189,17 +200,20 @@ function Tail() {
       }
     };
     // COOKIE HANDLE
-    static SetToken( choice: string, cookie: string) {
+    static SetToken(choice: string, cookie: string)
+    {
       const expirationDate = new Date();
       // Set cookie to expire in one hour
-      expirationDate.setTime(expirationDate.getTime() + (60 * 60 * 1000)); 
+      expirationDate.setTime(expirationDate.getTime() + (60 * 60 * 1000));
       document.cookie = `${choice}=${cookie}; expires=${expirationDate.toUTCString()}; path=/`;
     }
   }
 
   /////////////////////////////////////
-  useEffect(() => {
-    const refreshToken = async () => {
+  useEffect(() =>
+  {
+    const refreshToken = async () =>
+    {
       if (!authenticated && !superAuthenticated) return;
       if (!userID || !userName) return;
       try {
@@ -233,7 +247,8 @@ function Tail() {
     return () => clearInterval(intervalId);
   }, [authenticated, superAuthenticated]);
 
-  useEffect(() => {
+  useEffect(() =>
+  {
     setPassWordAttempt("");
     setUserNameAttempt("");
   }, [wantLogin]);
@@ -257,7 +272,8 @@ function Tail() {
             <Input
               className="mb-10"
               onChange={(e) => setPassWordAttempt(e.target.value)}
-              onKeyDown={(e) => {
+              onKeyDown={(e) =>
+              {
                 if (e.key === "Enter") {
                   LoginHandle.Login();
                 }
