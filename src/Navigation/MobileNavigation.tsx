@@ -20,7 +20,7 @@ function MobileNavigation()
         ,
     ] = useMyContext();
     const [page, setPage] = useState(1);
-    const [wanted, setWanted] = useState(false)
+    const [wanted, setWanted] = useState(false) 
     const container = {
         hidden: { opacity: 1, scale: 0 },
         visible: {
