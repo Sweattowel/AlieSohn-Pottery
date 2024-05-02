@@ -1,3 +1,25 @@
+Purpose:
+    Create a full stack ecommerce application for the purposes of selling pottery
+    Use a red colour scheme as designated by "Client"
+    Ensure proper security measures are undertaken
+    Design a proper UI/UX experience
+    Learn as much as possible
+    Write Two Server scripts in JS and C#
+
+    Languages:
+        JS, TS and C#
+
+    Technology:
+        React, tailwind CSS, Multer, dotnet, node.JS, Bcrypt, JWT, Material UI, Framer-motion, Prettier
+
+    Challenges:
+        Updating the website as Client wants changed
+        Ensuring sanitation
+        Learning C# 
+        Maintaining style across pc and mobile platforms
+        Ensuring Proper LOA designation
+        
+
 Self TODO LIST:
 
 COMPLETE FALSE credit card authentication
