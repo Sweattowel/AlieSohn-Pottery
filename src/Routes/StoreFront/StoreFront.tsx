@@ -194,17 +194,21 @@ function StoreFront()
   };
 
   return (
-    <div className="m-auto text-white flex flex-wrap justify-center mb-20  mt-[20%] md:mt-0">
-      <div className="text-WHITE bg-BACKGROUND rounded-lg shadow-lg w-[80%] flex justify-evenly items-center h-[2rem] mt-2">
+    <div className="m-auto text-LIGHT flex flex-wrap justify-center mb-20  mt-[20%] md:mt-0 bg-LIGHT">
+      <div className="w-[95%] h-full bg-WHITE flex flex-col justify-evenly items-center">
+        <h1 className=" w-[90%] bg-DARK text-center text-[2rem] rounded mt-2">
+          Our items
+        </h1>
+      <div className="text-WHITE bg-HIGHLIGHT rounded-lg shadow-lg w-[80%] flex justify-evenly items-center h-[2rem] mt-2">
         Items Per Page:
-        <div className="w-[50%] flex justify-evenly text-BACKGROUND text-WHITE">
-          <button onClick={() => setItemsPerPage(5)} className={`${itemsPerPage == 5 ? "opacity-60" : ""} border-BLACK border shadow-lg w-[20%] rounded`}>
+        <div className="w-[50%] flex justify-evenly text-LIGHT">
+          <button onClick={() => setItemsPerPage(5)} className={`${itemsPerPage == 5 ? "opacity-60" : ""} border-DARK border shadow-lg w-[20%] rounded`}>
             5
           </button>
-          <button onClick={() => setItemsPerPage(10)} className={`${itemsPerPage == 10 ? "opacity-60" : ""} border-BLACK border shadow-lg w-[20%] rounded`}>
+          <button onClick={() => setItemsPerPage(10)} className={`${itemsPerPage == 10 ? "opacity-60" : ""} border-DARK border shadow-lg w-[20%] rounded`}>
             10
           </button>
-          <button onClick={() => setItemsPerPage(15)} className={`${itemsPerPage == 15 ? "opacity-60" : ""} border-BLACK border shadow-lg w-[20%] rounded`}>
+          <button onClick={() => setItemsPerPage(15)} className={`${itemsPerPage == 15 ? "opacity-60" : ""} border-DARK border shadow-lg w-[20%] rounded`}>
             15
           </button>
         </div>
@@ -218,8 +222,8 @@ function StoreFront()
       >
         {currentItems.length > 0 ? (
           currentItems.map((item: storeItem, index: number) => (
-            <motion.div key={index} layoutId={`${item.itemID}`} className="item text-BLACK w-[19vw] h-[40vh] md:h-[60vh] min-w-40 m-2 bg-BACKGROUND rounded hover:shadow-2xl" variants={itemded} whileHover={{ scale: 1.1, zIndex: 10 }} >
-              <div className="flex items-center font-serif text-[1em] bg-BACKGROUND rounded text-WHITE h-[13%] md:h-[5%]">
+            <motion.div key={index} layoutId={`${item.itemID}`} className="bg-WHITE item text-DARK w-[19vw] h-[40vh] md:h-[60vh] min-w-40 m-2 shadow-lg text-DARK rounded hover:shadow-2xl z-10" variants={itemded} whileHover={{ scale: 1.1, zIndex: 20 }} >
+              <div className="flex items-center font-serif text-[1em] rounded h-[13%] md:h-[5%]">
                 <span className="relative left-2 hover:opacity-90">
                   <InfoIcon
                     onClick={() => setSelectedStoreItem(item)}
@@ -231,21 +235,21 @@ function StoreFront()
               </div>
 
               <img
-                className={`${item.itemState !== 0 ? 'opacity-70' : ''}m-auto w-full border-BLACK border-b border-t h-[60%] md:h-[80%] bg-WHITE`}
+                className={`${item.itemState !== 0 ? 'opacity-70' : ''}m-auto w-full border-DARK border-b border-t h-[60%] md:h-[80%] bg-WHITE`}
                 src={url.resolve(serverAddress, item.imagePath)}
                 alt={item.itemName}
                 onError={() =>
                   console.error(`Image not found: ${item.imagePath}`)
                 }
               />
-              <div className="mb-2 text-center text-WHITE border-b w-[80%] m-auto">Price: ${item.itemPrice}</div>
+              <div className="mb-2 text-center text-DARK border-b w-[80%] m-auto">Price: ${item.itemPrice}</div>
               <div className="relative">
                 {IDS.includes(item.itemID) || cart.includes(item.itemID) || item.itemState !== 0 ?
-                  <div className={`bg-WHITE text-BACKGROUND h-full w-[80%] rounded shadow-lg border border-BLACK m-auto flex justify-center opacity-80 z-0`}>
+                  <div className={`bg-WHITE text-HIGHLIGHT h-full w-[80%] rounded shadow-lg border border-DARK m-auto flex justify-center opacity-80 z-0`}>
                     ITEM PENDING
                   </div> :
                   <button
-                    className={`hover:opacity-90 bg-WHITE text-BACKGROUND h-full w-[80%] rounded shadow-lg border border-BLACK m-auto flex justify-center z-1`}
+                    className={`hover:opacity-90 bg-WHITE text-HIGHLIGHT h-full w-[80%] rounded shadow-lg border border-DARK m-auto flex justify-center z-1`}
                     onClick={() =>
                     {
                       addToCart(
@@ -273,7 +277,7 @@ function StoreFront()
                 {confirmationMessages.map((msg, i) =>
                 {
                   return msg.index === index && (
-                    <div key={msg.id} className="absolute top-0 right-0 text-WHITE p-1 rounded animate-floatAway">
+                    <div key={msg.id} className="absolute top-0 right-0 text-DARK p-1 rounded animate-floatAway">
                       +{item.itemName}
                     </div>
                   );
@@ -282,15 +286,13 @@ function StoreFront()
             </motion.div>
           ))
         ) : (
-          <h1 className="mt-5 mb-5 bg-blue-800 rounded w-[100vw] h-[80%] flex justify-center text-center">
-            <div className="mt-[15%]">
-              Store offline // experiencing difficulties please try again later
-            </div>
+          <h1 className="mt-5 mb-5 bg-blue-800 rounded w-[100vw] h-[80%] flex justify-center items-center text-center bg-DARK text-HIGHLIGHT text-[1.5rem]">
+            Store offline // experiencing difficulties please try again later  
           </h1>
         )}
       </motion.ul>
       <div className="flex  m-auto mt-10 w-[60vw] h-[6vh]  text-center rounded  text-WHITE text-[0.7em] justify-center items-center">
-        <div className="bg-BACKGROUND rounded w-[20vw]">
+        <div className="bg-HIGHLIGHT rounded w-[20vw]">
           Current Items in cart:
           <br />
           {count} item/s
@@ -312,13 +314,13 @@ function StoreFront()
       <AnimatePresence>
         {selectedStoreItem.itemID !== -1 && (
           <motion.div
-            className="bg-BACKGROUND p-4 rounded shadow-lg text-WHITE fixed top-[10vh] md:top-[10vh] m-auto max-w-[80%] z-10"
+            className="bg-HIGHLIGHT p-4 rounded shadow-lg text-WHITE fixed top-[10vh] md:top-[10vh] m-auto max-w-[80%] z-10"
             style={{
               opacity: '100'
             }}
           >
-            <img alt={`${selectedStoreItem.imagePath}`} className="m-auto border-BLACK border  max-h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
-            <motion.h2 className="justify-center w-[80%] m-auto flex items-center text-2xl border-b border-BLACK">
+            <img alt={`${selectedStoreItem.imagePath}`} className="m-auto border-DARK border  max-h-[70vh] bg-WHITE" src={url.resolve(serverAddress, selectedStoreItem.imagePath)} />
+            <motion.h2 className="justify-center w-[80%] m-auto flex items-center text-2xl border-b border-DARK">
               {selectedStoreItem.itemName}
             </motion.h2>
             <motion.h5 className="justify-center w-[80%] m-auto flex items-center text-center">
@@ -326,7 +328,7 @@ function StoreFront()
             </motion.h5>
 
             <motion.button
-              className="flex rounded bg-WHITE text-BACKGROUND border border-BLACK shadow-lg justify-center m-auto w-[60%] md:w-[20%] hover:opacity-90"
+              className="flex rounded bg-WHITE text-HIGHLIGHT border border-DARK shadow-lg justify-center m-auto w-[60%] md:w-[20%] hover:opacity-90"
               onClick={() => setSelectedStoreItem({
                 itemID: -1,
                 itemName: "",
@@ -343,7 +345,7 @@ function StoreFront()
         )}
       </AnimatePresence>
 
-
+      </div>
     </div>
   );
 }

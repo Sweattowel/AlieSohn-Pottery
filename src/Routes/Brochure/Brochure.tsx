@@ -93,141 +93,83 @@ function Brochure()
   });
 
   return (
-    <div className="md:h-[250vh] h-[300vh] flex flex-col justify-between md:mt-0 mt-[25%]  w-full">
-      <div className="h-[70vh] flex items-center justify-center text-BLACK w-[90vw] m-auto">
-        <div className="md:w-[70%] w-full h-full shadow-lg flex md:flex-row flex-col rounded-lg text-center">
+    <div className="md:h-full h-full flex flex-col justify-evenly bg-LIGHT w-full">
+      <div className="h-full flex flex-col items-center justify-center bg-WHITE text-LIGHT w-[90vw] m-auto">
+        
+        <div className="mt-10 md:w-[90%] w-full h-[50%] shadow-lg flex md:flex-row flex-col rounded-lg text-center bg-DARK">
           <img src="https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1714003200&semt=sph"
             alt="Profile Picture"
-            className="md:w-[50%] w-[80%] h-[60%] md:ml-5 m-auto flex justify-center items-center rounded-lg "
+            className="h-[60%] md:ml-5 m-auto flex justify-center items-center rounded-lg "
           />
           <div className="flex flex-col items-center justify-center h-[70%] m-auto">
-            <h2 className="font-serif text-2xl text-BACKGROUND">
-              ABOUT ME
-            </h2>
-            <div className="m-auto w-[80%]">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magnam accusantium necessitatibus voluptas consequatur sint, veniam excepturi at quos itaque sequi molestiae unde cum delectus eius iusto fugiat reprehenderit quaerat sapiente.
-            </div>
-            <h2 className="font-serif text-2xl text-BACKGROUND">
-              EMAIL
-            </h2>
-            <div className="m-auto w-[80%]">
-              test@test@fakemail.com.au
-            </div>
-            <h2 className="font-serif text-2xl text-BACKGROUND">
-              PH
-            </h2>
-            <div className="m-auto w-[80%]">
-              000 000 000
-            </div>
+              <h2 className="font-serif text-2xl text-HIGHLIGHT bg-LIGHT rounded p-2 w-[60%]">
+                ABOUT US
+              </h2>
+              <div className="m-auto w-[80%]">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magnam accusantium necessitatibus voluptas consequatur sint, veniam excepturi at quos itaque sequi molestiae unde cum delectus eius iusto fugiat reprehenderit quaerat sapiente.
+              </div>
+              <h2 className="font-serif text-2xl text-HIGHLIGHT bg-LIGHT rounded p-2 w-[60%]">
+                EMAIL
+              </h2>
+              <div className="m-auto w-[80%]">
+                test@test@fakemail.com.au
+              </div>
+              <h2 className="font-serif text-2xl text-HIGHLIGHT bg-LIGHT rounded p-2 w-[60%]">
+                PH
+              </h2>
+              <div className="m-auto w-[80%]">
+                000 000 000
+              </div>
           </div>
         </div>
-      </div>
-      <div className="w-full md:h-[70vh] h-[130vh] flex flex-col justify-evenly">
-        {reviews.map((review: any, index: number) => (
-          <div key={index} className=" md:mb-0 mb-2 md:w-[50%] w-[80%] md:h-40 h-70 m-auto flex md:flex-row flex-col shadow-lg rounded-lg bg-BACKGROUND text-WHITE">
-            <div className="flex items-center">
+
+        <div className="h-[100vh] w-[90%] m-auto mt-5">
+          <h1 className="font-serif text-[2em] border-BLACK bg-HIGHLIGHT rounded text-WHITE h-[5vh] h-[10vh] items-center justify-center flex">
+            Our Unique Selection
+          </h1>
+          <Slider {...settings}>
+            {brochure.map((item: StoreItem, index: number) => item.imagePath && (
+              <motion.div key={index} className="border-BLACK text-center m-auto flex mt-5 p-10 pt-20 pb-20" whileHover={{ scale: 1.2 }}>
+                <img
+                  key={item.itemID}
+                  src={url.resolve(serverAddress, item.imagePath)}
+                  alt={item.itemName}
+                  className="h-[45vh] max-h-[500px] w-[90%] md:w-[80%] m-auto"
+                />
+                <div className="text-BLACK w-[90%] md:w-[80%] m-auto">
+                  <h1 className="text-[1.5em] text-WHITE h-[8vh] font-serif bg-HIGHLIGHT rounded-b-lg justify-center items-center flex">
+                    {item.itemName}
+                  </h1>
+                  <div>${item.itemPrice} </div>
+                </div>
+              </motion.div>
+            ))}
+          </Slider>
+        </div>   
+        
+        <div className="bg-LIGHT  shadow-lg w-[80%] h-full m-auto justify-evenly flex flex-col text-DARK divide-y mb-20">
+            <h1 className="w-[80%] text-HIGHLIGHT text-center text-[2rem] m-auto ">
+              Our customers wanted to say
+            </h1>
+          {reviews.map((review: any, index: number) => (
+            <div key={index} className="w-[80%] h-[2%] m-auto flex md:flex-row flex-col p-2 rounded justify-evenly items-center">
               <img src="https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1714003200&semt=sph"
                 alt="Profile Picture"
-                className="w-[90%] h-[90%] m-auto flex justify-center  rounded-lg "
+                className="rounded-full ring ring-HIGHLIGHT  h-[10vh]"
               />
-            </div>
-            <div className="w-full flex-col flex justify-evenly mt-2">
-              <div className="font-bold text-lg font-serif justify-evenly flex ">
-                {review.reviewer}
-                <Rating name="half-rating-read" defaultValue={review.rating} precision={0.5} readOnly />
-              </div>
-              <div className="w-[80%] m-auto flex md:text-[0.8rem] text-[0.65rem]">
+              <div className="w-[60%] md:w-[50%] h-[50%] text-center flex flex-col justify-center items-center">
+                <div className="text-[1.5rem] text-HIGHLIGHT">
+                  {review.reviewer}
+                  <Rating name="half-rating-read" defaultValue={review.rating} precision={0.5} readOnly />
+                </div>         
                 {review.reviewText}
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-      <div className="h-[100vh] w-[80%] m-auto ">
-        <h1 className="font-serif text-[2em] border-BLACK bg-BACKGROUND rounded text-WHITE h-[5vh] h-[10vh] items-center justify-center flex">
-          Our Unique Selection
-        </h1>
-        <Slider {...settings}>
-          {brochure.map((item: StoreItem, index: number) => item.imagePath && (
-            <motion.div key={index} className="border-BLACK text-center m-auto flex mt-5 p-10 pt-20 pb-20" whileHover={{ scale: 1.2 }}>
-              <img
-                key={item.itemID}
-                src={url.resolve(serverAddress, item.imagePath)}
-                alt={item.itemName}
-                className="h-[45vh] max-h-[500px] w-[90%] md:w-[80%] m-auto"
-              />
-              <div className="text-BLACK w-[90%] md:w-[80%] m-auto">
-                <h1 className="text-[1.5em] text-WHITE h-[8vh] font-serif bg-BACKGROUND rounded-b-lg justify-center items-center flex">
-                  {item.itemName}
-                </h1>
-                <div>${item.itemPrice} </div>
-              </div>
-            </motion.div>
           ))}
-        </Slider>
+        </div>             
       </div>
     </div>
-
   );
 }
 
 export default Brochure;
-/**
- 
-
-<div className="text-BLACK h-[150vh] w-[90vw] m-auto text-center mt-[50vh] md:mt-0">
-      <div className="md:flex-row flex-col flex mt-20 items-center justify-center h-[70vh] border border-BLACK">
-
-        <div className="md:w-[50%] w-full h-[80%] items-center flex md:mt-0 mt-40 md:mb-0 mb-20 border-black border">
-          <div className="w-full h-full flex flex-col justify-evenly">
-            {reviews.map((review: any, index: number) => (
-              <div key={index} className=" w-[90%] h-40 m-auto flex flex shadow-lg rounded-lg bg-BACKGROUND text-WHITE mb-2 md:mb-0">     
-                <div className="flex items-center">             
-                  <img src="https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1714003200&semt=sph" 
-                  alt="Profile Picture" 
-                  className="w-[90%] h-[90%] m-auto flex justify-center  rounded-lg " 
-                  />
-                </div>
-                <div className="w-full flex-col flex justify-evenly mt-2">
-                  <div className="font-bold text-lg font-serif justify-evenly flex ">
-                    {review.reviewer}
-                    <Rating name="half-rating-read" defaultValue={review.rating} precision={0.5} readOnly />
-                  </div>
-                  
-                  <div className="w-[80%] m-auto flex md:text-[0.8rem] text-[0.65rem]">
-                    {review.reviewText}
-                  </div>                  
-                </div>                
-
-              </div>
-            ))}          
-          </div>          
-        </div>
-      </div>
-      <div className="border border-BLACK">
-        <h1 className="font-serif text-[2em] md:mt-[10vh] mt-[40vh] mb-8 border-BLACK bg-BACKGROUND rounded text-WHITE h-[5vh] h-[10vh] items-center justify-center flex">
-          Our Unique Selection
-        </h1>
-        <Slider {...settings}>
-          {brochure.map((item: StoreItem, index: number) => (
-            <motion.div key={index} className="border-BLACK text-center m-auto flex mt-5 p-10 pt-20 pb-20" whileHover={{scale: 1.2}}>
-              <img
-                key={item.itemID}
-                src={url.resolve(serverAddress, item.imagePath)}
-                alt={item.itemName}
-                className="h-[45vh] max-h-[500px] w-[90%] md:w-[80%] m-auto"
-              />
-              <div className="text-BLACK w-[90%] md:w-[80%] m-auto">
-                <h1 className="text-[1.5em] text-WHITE h-[8vh] font-serif bg-BACKGROUND rounded-b-lg justify-center items-center flex">
-                  {item.itemName}
-                </h1>
-                <div>${item.itemPrice} </div>
-                <div className="text-sm">{item.orderCount} Orders</div>
-              </div>
-            </motion.div>
-          ))}
-        </Slider>        
-      </div>
-
-    </div>
- */

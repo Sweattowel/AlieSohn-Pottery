@@ -261,16 +261,22 @@ function Tail()
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-WHITE fixed bottom-[20%] rounded-lg border-black border-2 text-center justify-center w-[80%] h-[60%] text-BLACK opacity-100"
+            className="bg-WHITE fixed bottom-[20%] rounded-lg border-black border-2 text-center justify-center md:w-[25%] w-[80%] h-[60%] text-BLACK opacity-100"
           >
-            <h1 className="text-2xl border-b-2 border-black bg-BACKGROUND rounded-t">
-              LOGIN MENU
-            </h1>
-            <h1 className="mt-10">UserName</h1>
-            <Input onChange={(e) => setUserNameAttempt(e.target.value)} />
+            <div className="flex flex-row justify-evenly items-center mt-[4%]">
+              <h1 className="w-[75%] text-[2rem] rounded-t text-HIGHLIGHT font-serif ">
+                Sign in
+              </h1>
+              <button onClick={() => {setWantLogin(false)}} className="w-[15%] text-HIGHLIGHT hover:bg-LIGHT ring ring-1 rounded">
+                X
+              </button>              
+            </div>
+
+            <h1 className="mt-10 bg-">UserName</h1>
+            <Input className=" bg-LIGHT " onChange={(e) => setUserNameAttempt(e.target.value)} />
             <h1 className="mt-10">PassWord</h1>
             <Input
-              className="mb-10"
+              className="mb-10 bg-LIGHT"
               onChange={(e) => setPassWordAttempt(e.target.value)}
               onKeyDown={(e) =>
               {
@@ -283,24 +289,27 @@ function Tail()
             <br />
             <button
               onClick={() => LoginHandle.Login()}
-              className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 mb-4 justify-center text-center text-WHITE w-[40%] rounded"
+              className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-HIGHLIGHT mt-2 mb-4 justify-center text-center text-WHITE w-[40%] rounded"
             >
               Login
             </button>
             <button
               onClick={() => LoginHandle.superLogin()}
-              className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[40%] rounded"
+              className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-HIGHLIGHT mt-2 justify-center text-center text-WHITE w-[40%] rounded"
             >
               Admin
             </button>
             <br />
-            <br />
-            <button
-              onClick={() => RegisterHandle.register()}
-              className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-BACKGROUND mt-2 justify-center text-center text-WHITE w-[60%] text-2xl rounded"
-            >
+            <p>
+              Dont have an account? : 
+              <button
+                onClick={() => RegisterHandle.register()}
+                className="hover:bg-HIGHLIGHT hover:opacity-90 bg-DARK text-LIGHT ml-1 p-1 rounded"
+              >
               Register
             </button>
+            </p>
+            
             {error.length > 0 ? (
               <div className="mt-10 font-bold">{error}</div>
             ) : null}
@@ -317,14 +326,14 @@ function Tail()
           {authenticated || superAuthenticated ? (
             <button
               onClick={() => LoginHandle.logOut()}
-              className="bg-WHITE font-bold border border-BLACK w-[15%] rounded text-BACKGROUND hover:opacity-70 shadow-lg"
+              className="bg-WHITE font-bold border border-BLACK w-[15%] rounded text-HIGHLIGHT hover:opacity-70 shadow-lg"
             >
               Log out
             </button>
           ) : (
             <button
               onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
-              className="bg-WHITE font-bold border border-BLACK w-[15%] rounded text-BACKGROUND hover:opacity-70 shadow-lg"
+              className="bg-WHITE font-bold border border-BLACK w-[15%] rounded text-HIGHLIGHT hover:opacity-70 shadow-lg"
             >
               Login
             </button>

@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useMyContext } from "../Context/ContextProvider";
 
 function Navigation()
@@ -18,92 +18,42 @@ function Navigation()
     setSuperAuthenticated,
   ] = useMyContext();
 
-  const [page, setPage] = useState(1);
-
+  const location = useLocation();
 
   return (
-    <nav className="m-auto h-[5vh] flex bg-BACKGROUND border-BLACK border-b-2 w-full bg-60 rounded-b">
-      <div className="flex  w-full mb-2">
-        <div className="w-[50%] m-auto   text-xl">
-          <h1 className="font-serif h-[8vh] md:h-[5vh] rounded w-[25vw] mr-3 text-center flex items-center justify-center text-[2rem] md:text-[2rem] text-WHITE ">
-            AlieSohn
-          </h1>
-        </div>
-        <ul className="flex space-x-1 h-full w-[80vw] justify-center items-center text-[0.6em]">
+    <nav className="h-[5vh] flex flex-row justify-evenly items-center bg-DARK text-LIGHT w-full">
+        <h1 className="font-serif h-[80%] rounded w-[20%] text-center flex items-center justify-center text-[2rem] text-HIGHLIGHT bg-LIGHT ">
+          AlieSohn
+        </h1>
+        <ul className="flex flex-row w-[60%] justify-evenly items-center text-center">
           {authenticated && !superAuthenticated ? (
-            <li>
-              <Link to={`/MyAccount/${userID}`}>
-                <button
-                  className={`text-${page === 1 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
-
-                  onClick={() =>
-                  {
-                    setPage(1);
-                  }}
-                >
-                  My Account
-                </button>
-              </Link>
-            </li>
+            <NavItem to={`/MyAccount/${userID}`} currentPathname={location.pathname}><button>My Account</button></NavItem>
           ) : null}
           {superAuthenticated ? (
-            <li>
-              <Link to="/ADMIN">
-                <button
-                  className={`text-${page === 2 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
-                  onClick={() =>
-                  {
-                    setPage(2);
-                  }}
-                >
-                  Admin
-                </button>
-              </Link>
-            </li>
+            <NavItem to="/ADMIN" currentPathname={location.pathname}><button>Admin</button></NavItem>
           ) : null}
-          <li>
-            <Link to="/">
-              <button
-                className={`text-${page === 3 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
-                onClick={() =>
-                {
-                  setPage(3);
-                }}
-              >
-                Brochure
-              </button>
-            </Link>
-          </li>
-          <li>
-            <Link to="/StoreFront">
-              <button
-                className={`text-${page === 4 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
-                onClick={() =>
-                {
-                  setPage(4);
-                }}
-              >
-                Store Front
-              </button>
-            </Link>
-          </li>
-          <li>
-            <Link to="/Cart">
-              <button
-                className={`text-${page === 5 ? 'BLACK' : 'WHITE'} h-[8vh] md:w-[13vw] w-[15vw] md:h-[5vh] text-base md:text-l hover:text-BLACK`}
-                onClick={() =>
-                {
-                  setPage(5);
-                }}
-              >
-                CART
-              </button>
-            </Link>
-          </li>
+            <NavItem to="/" currentPathname={location.pathname}><button>Brochure</button></NavItem>
+            <NavItem to="/StoreFront" currentPathname={location.pathname}><button>Store Front</button></NavItem>
+            <NavItem to="/Cart" currentPathname={location.pathname}><button>CART</button></NavItem>
         </ul>
-      </div>
     </nav>
   );
 }
 
 export default Navigation;
+
+// Individual NavItems Assist in creating a nice user experience
+function NavItem({ to, children, currentPathname }: { to: string, children: React.ReactNode, currentPathname: string })
+{
+  const isActive = currentPathname === to;
+
+  const linkClass = isActive ? "bg-HIGHLIGHT" : "";
+
+  return (
+    <li className={`${linkClass} rounded p-2 `}>
+      <Link to={to}>
+        <button>{children}</button>
+      </Link>
+    </li>
+  );
+}

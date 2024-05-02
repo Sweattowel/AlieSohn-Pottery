@@ -100,32 +100,33 @@ export default function UserAccount()
   }, []);
 
   return (
-    <div className="w-[55%] m-auto h-[120vh] text-WHITE rounded-lg justify-center">
-      <div className="bg-WHITE py-2 justify-center">
+    <div className="w-[55%] m-auto h-[120vh] text-LIGHT rounded-lg justify-center mt-2">
+      <div className="bg-DARK py-2 justify-center">
         <h1 className="justify-center text-center w-[50%] m-auto rounded font-serif text-2xl">
-          <div className="bg-BACKGROUND rounded-t">
+          <div className="bg-HIGHLIGHT rounded-t">
             User: {userName || "N/a"} History
           </div>
         </h1>
-        <div className="rounded-b w-[50%] m-auto bg-BACKGROUND text-WHITE mt-1 mb-1 flex justify-center items-center">
+        <div className="rounded-b w-[50%] m-auto bg-HIGHLIGHT text-LIGHT mt-1 mb-1 flex justify-center items-center">
           Group by?
         </div>
-        <div className="rounded-b w-[50%] m-auto text-WHITE mt-1 mb-1 flex justify-center items-center">
-          <button className={groupSettingChoice === 1 ? "bg-BACKGROUND w-[50%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(1)} >DESC</button>
-          <button className={groupSettingChoice === 2 ? "bg-BACKGROUND w-[50%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-BACKGROUND w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(2)} >ASC</button>
+        <div className="rounded-b w-[50%] m-auto text-LIGHT mt-1 mb-1 flex justify-center items-center">
+          <button className={groupSettingChoice === 1 ? "bg-HIGHLIGHT w-[50%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-HIGHLIGHT w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(1)} >DESC</button>
+          <button className={groupSettingChoice === 2 ? "bg-HIGHLIGHT w-[50%] opacity-90 hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg" : "bg-HIGHLIGHT w-[33%] hover:opacity-80 hover:text-BLACK border-BLACK border shadow-lg"} onClick={() => OrderHandle.sortDate(2)} >ASC</button>
         </div>
         <Pagination
           style={{
             justifyContent: "center",
             display: "flex",
             alignContent: "center",
+            color: 'white'
           }}
           count={Math.ceil(orderCount / ordersPerPage)}
           page={currentOrdersPage}
           onChange={OrderHandle.handleChangeOrdersPage}
           variant="outlined"
         />
-        <div className="m-2 bg-BACKGROUND flex flex-grow flex-row text-[0.7rem] md:text-lg border-b border-BLACK">
+        <div className="m-2 bg-HIGHLIGHT flex flex-grow flex-row text-[0.7rem] md:text-lg border-b border-BLACK">
           <div className="w-[25%] text-center border-r border-BLACK">ITEM ID</div>
           <div className="w-[25%] text-center border-r border-BLACK">NAME</div>
           <div className="w-[25%] text-center border-r border-BLACK">STATUS</div>
@@ -140,7 +141,7 @@ export default function UserAccount()
             .map((order: any, index: number) => (
               <div
                 key={index}
-                className={`${order.itemState === 2 ? "opacity-80" : ""} text-BLACK shadow-lg rounded  bg-WHITE flex justify-between mt-1 mb-1`}
+                className={`${order.itemState === 2 ? "opacity-80" : ""} text-BLACK shadow-lg rounded  bg-LIGHT flex justify-between mt-1 mb-1`}
               >
                 <h1 className="text-center items-center justify-center flex w-[25%] text-[0.7rem] md:text-lg">
                   {order.itemID}{" "}
