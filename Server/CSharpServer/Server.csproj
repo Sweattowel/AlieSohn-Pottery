@@ -9,7 +9,7 @@
     <ItemGroup>
         <PackageReference Include="DotNetEnv" Version="3.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.App" Version="6.0.0" />
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.15.1" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.34.0" />
         <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="6.15.1" />
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
         <PackageReference Include="MySql.Data" Version="8.0.28" />
