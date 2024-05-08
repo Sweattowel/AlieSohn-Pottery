@@ -21,7 +21,7 @@ function StoreFront()
 {
   const [
     allItems,
-    setAllItemscart,
+    setAllItems,
     cart,
     setCart,
     userID,
@@ -31,6 +31,7 @@ function StoreFront()
     ,
     ,
   ] = useMyContext();
+  const [displayItems, setDisplayitems] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemCount, setItemCount] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10)
@@ -43,7 +44,7 @@ function StoreFront()
   };
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = allItems.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = displayItems.slice(indexOfFirstItem, indexOfLastItem);
   const [count, setCount] = useState<number>(0); //count of all items for use in left hand information
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const serverAddress = `${process.env.REACT_APP_SERVER_ADDRESS}`;
@@ -58,6 +59,7 @@ function StoreFront()
   });
   const [confirmationMessages, setConfirmationMessages] = useState<{ index: number; id: number }[]>([]);
   const [IDS, setIDS] = useState<number[]>([])
+  const [ searchQuery, setSearchQuery ] = useState<string>("")
 
   class StoreItemHandle 
   {
@@ -70,7 +72,8 @@ function StoreFront()
         );
 
         if (response.status === 200) {
-          setAllItemscart(response.data);
+          setAllItems(response.data);
+          setDisplayitems(response.data)
         } else if (response.status === 404) {
           console.log("No items available to purchase");
         } else {
@@ -193,9 +196,17 @@ function StoreFront()
     }
   };
 
+  useEffect(() => {
+    setDisplayitems(
+      displayItems.filter((item) => {
+        return item.itemName !== searchQuery
+      })      
+    )
+
+  },[searchQuery])
   return (
-    <div className="w-full h-[100vh] text-WHITE flex flex-wrap justify-center mt-[5vh] md:mt-[0vh] bg-gradient-to-br from-GREY via-BLACK to-GREY">
-        <h1 className=" w-[90%] text-center text-[2rem] rounded mt-[5vh]">
+    <section className="w-full h-[100vh] text-BLACK flex flex-wrap justify-center mt-[5vh] md:mt-[0vh] bg-gradient-to-b from-GREY to-WHITE">
+        <h1 className=" w-[90%] text-center text-[2rem] rounded mt-[10vh]">
           Our items
         </h1>
       <div className="text-BLACK bg-WHITE rounded-lg shadow-lg w-[80%] flex justify-evenly items-center h-[3rem] mt-2">
@@ -211,7 +222,10 @@ function StoreFront()
             15
           </button>
         </div>
-
+        <div>
+          Search:
+        </div>
+        <input onChange={(e) => setSearchQuery(e.target.value)} placeholder="Enter search" className="border" type="search" />
       </div>
       <motion.ul
         className="container w-full h-[50vh] flex flex-wrap justify-center"
@@ -289,8 +303,10 @@ function StoreFront()
             Store offline // experiencing difficulties please try again later  
           </h1>
         )}
+
+        
       </motion.ul>
-      <div className="flex  m-auto mt-10 w-[60vw] h-[6vh]  text-center rounded  text-BLACK text-[0.8em] justify-center items-center">
+      <section className="flex  m-auto mt-10 w-[60vw] h-[6vh]  text-center rounded  text-BLACK text-[0.8em] justify-center items-center">
         <div className="bg-GREY rounded w-[20vw]">
           Current Items in cart:
           <br />
@@ -308,12 +324,12 @@ function StoreFront()
           onChange={handleChangePage}
           variant="outlined"
         />
-      </div>
+      </section>
 
       <AnimatePresence>
         {selectedStoreItem.itemID !== -1 && (
           <motion.div
-            className="bg-GREY p-4 rounded shadow-lg text-WHITE fixed top-[10vh] md:top-[10vh] m-auto max-w-[80%] z-10"
+            className="bg-GREY p-4 rounded shadow-lg text-BLACK fixed top-[10vh] md:top-[10vh] m-auto max-w-[80%] z-10"
             style={{
               opacity: '100'
             }}
@@ -343,7 +359,7 @@ function StoreFront()
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </section>
   );
 }
 

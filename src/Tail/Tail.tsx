@@ -2,6 +2,7 @@ import { Input } from "@mui/material";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useMyContext } from "../Context/ContextProvider";
+import { Link } from "react-router-dom";
 
 function Tail()
 {
@@ -317,22 +318,81 @@ function Tail()
         </div>
       ) : null}
 
-      <div className="w-[10%] ml-[85vw] text-center text-[0.7rem] justify-center mt-2 fixed bottom-0 text-WHITE z-10">
-        <div className="w-[125px] text-center mb-2 rounded justify-center w-full">
+      <div className="w-full h-[50vh] text-center text-[0.8rem] justify-center items-center flex md:flex-row flex-col text-BLACK">
+        <div className="md:w-[50%] w-full h-[50vh] text-center justify-center items-center bg-GREY">
+
+          <div className="h-[50%] flex flex-col justify-center ">
+            <h1 className="text-[1.2rem]">
+              Visit
+            </h1>
+            <ul className="flex flex-col w-full justify-evenly items-center text-center">
+              {authenticated && !superAuthenticated && (
+                <li>
+                  <Link className="hover:border-b" to={`/MyAccount/${userID}`}>My Account</Link>
+                </li>
+              )}
+              {superAuthenticated && (
+                <li>
+                  <Link className="hover:border-b" to="/ADMIN">Admin</Link>
+                </li>
+              )}
+              <li>
+                <Link className="hover:border-b" to="/">Brochure</Link>
+              </li>
+              <li>
+                <Link className="hover:border-b" to="/StoreFront">Store Front</Link>
+              </li>
+              <li>
+                <Link className="hover:border-b" to="/Cart">CART</Link>
+              </li>
+
+            </ul>            
+          </div>
+
+          <div className="h-[50%] flex flex-col justify-center">
+            <h1 className="text-[1.2rem]">
+              Contact
+            </h1>
+            <div>
+
+            </div>
+            <div>
+              Want more like this? see my Portfolio 
+              <br />
+              
+              <a className="hover:border-b hover:opacity-80 bg-GREY w-full p-1" href="https://thomas-moloney-portfolio.vercel.app/">Here</a>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="md:w-[50%] w-full h-[50vh] flex text-center justify-center items-center bg-GREY">
           {authenticated || superAuthenticated ? (
             <button
               onClick={() => LoginHandle.logOut()}
-              className="font-bold border border-RED w-[15%]rounded  hover:opacity-70 shadow-lg"
+              className="font-bold w-[15%] rounded hover:border-b"
             >
               Log out
             </button>
           ) : (
-            <button
-              onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
-              className="font-bold border border-RED w-[80%] ml-auto rounded  hover:opacity-70 shadow-lg"
-            >
-              Login
-            </button>
+            <section className="w-[25%] h-[20%] flex flex-col justify-evenly">
+              <h2>
+                Account:
+              </h2>
+              <button
+                onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
+                className="h-[20%] w-[50%] ml-[50%] hover:border-b "
+              >
+                Login
+              </button>
+              <button
+                onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
+                className="h-[20%] w-[50%] ml-[50%] hover:border-b"
+              >
+                Register
+              </button>              
+            </section>
+
           )}
         </div>
       </div>

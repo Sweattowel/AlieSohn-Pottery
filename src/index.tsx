@@ -28,8 +28,9 @@ if (rootElement) {
             <Route path="/StoreFront" Component={StoreFront}/>
             <Route path="/Cart" Component={Cart}/>            
           </Routes>
+        <Tail />  
         </Router>
-        <Tail />
+        
       </ContextProvider>
     </React.StrictMode>,
     rootElement

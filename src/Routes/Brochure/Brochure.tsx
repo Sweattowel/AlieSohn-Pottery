@@ -93,16 +93,16 @@ function Brochure()
   });
 
   return (
-    <div className="md:h-full h-full flex flex-col justify-evenly bg-gradient-to-br from-GREY via-BLACK to-GREY w-full shadow-inner">
+    <div className="md:h-full h-full flex flex-col justify-evenly bg-gradient-to-b from-GREY to-WHITE w-full shadow-inner">
         
-        <div className="w-full h-[90vh] flex md:flex-row flex-col text-center">
-          <img src="https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1714003200&semt=sph"
+        <div className="w-full h-[100vh] flex text-center mt-[5vh]">
+          <img src="https://m.atostogoskaime.lt/data/gallery/large/puodininkyste_16_.jpg"
             alt="Profile Picture"
-            className="h-[60%] md:ml-5 m-auto flex justify-center items-center rounded-lg "
+            className="w-full h-full"
           />
 
-          <div className="flex flex-col items-center h-[70%] m-auto">
-              <h2 className="font-serif text-[3rem] text-WHITE rounded p-2 w-[60%]">
+          <div className="absolute right-10 bottom-10 flex flex-col items-center h-[70%] w-[50%] text-WHITE bg-transparent backdrop-brightness-50 m-auto z-1">
+              <h2 className="font-serif text-[3rem] rounded p-2 w-[60%]">
                 ABOUT US
               </h2>
               <div className="m-auto w-[60%]">
@@ -124,8 +124,8 @@ function Brochure()
         </div>
 
         {brochure.length > 0 && (
-          <div className="h-[90vh] w-full">
-            <h1 className="font-serif text-[2em] border-BLACK text-WHITE h-[5vh] h-[10vh] items-center justify-center flex">
+          <div className="h-[95vh] w-full">
+            <h1 className="font-serif text-[2em] border-BLACK text-BLACK h-[5vh] h-[10vh] items-center justify-center flex">
               Our Unique Selection
             </h1>
             <Slider {...settings}>
@@ -138,7 +138,7 @@ function Brochure()
                     className="h-[45vh] max-h-[500px] w-[90%] md:w-[80%] m-auto"
                   />
                   <div className="text-BLACK w-[90%] md:w-[80%] m-auto">
-                    <h1 className="text-[1.5em] text-WHITE h-[8vh] font-serif bg-GREY rounded-b-lg justify-center items-center flex">
+                    <h1 className="text-[1.5em] text-BLACK h-[8vh] font-serif bg-GREY rounded-b-lg justify-center items-center flex">
                       {item.itemName}
                     </h1>
                     <div>${item.itemPrice} </div>
@@ -150,19 +150,22 @@ function Brochure()
                   
         )}
 
-        <div className="w-full h-[90vh] justify-evenly flex flex-col text-WHITE divide-y pb-20">
-            <h1 className="w-[80%] text-WHITE text-center text-[2rem] m-auto ">
+        <div className="w-full md:h-[95vh] h-[95vh] justify-evenly flex flex-col text-BLACK divide-y ">
+            <h1 className="w-[80%] text-BLACK text-center text-[2rem] m-auto ">
               Our customers wanted to say
             </h1>
           {reviews.map((review: any, index: number) => (
-            <div key={index} className="w-[80%] h-[2%] m-auto flex md:flex-row flex-col p-2 rounded justify-evenly items-center">
+            <div key={index} className={`w-[80%] h-[30vh] m-auto flex ${ index % 2 !== 0 ? "md:flex-row-reverse" : "md:flex-row"}  flex-col p-2 rounded justify-evenly items-center`}>
               <img src="https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1714003200&semt=sph"
                 alt="Profile Picture"
-                className="rounded-full ring ring-GREY  h-[10vh]"
+                className="rounded-full ring ring-GREY  md:h-[10vh]"
               />
-              <div className="w-[60%] md:w-[50%] h-[30%] text-center flex flex-col justify-center items-center">
-                <div className="text-[1.5rem] text-WHITE">
-                  {review.reviewer}
+              <div className="w-[60%] md:w-[50%] h-[100%] text-center flex flex-col justify-center items-center">
+                <div className="text-[1.5rem] text-BLACK text-bold flex flex-row items-center justify-evenly bg-GREY rounded w-full">
+                  <p>
+                    {review.reviewer}
+                  </p>
+                  
                   <Rating name="half-rating-read" defaultValue={review.rating} precision={0.5} readOnly />
                 </div>  
                 <div className="mt-[2vh]">

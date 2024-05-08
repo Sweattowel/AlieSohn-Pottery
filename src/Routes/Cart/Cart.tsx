@@ -232,15 +232,15 @@ function Cart()
 
   ///////////////////////////////////////////////////////////////////
   return (
-    <div className='w-full h-full md:mt-0 mt-[5vh] bg-gradient-to-br from-GREY via-BLACK to-GREY text-BLACK'>
+    <div className='w-full h-full md:mt-0 mt-[5vh] bg-gradient-to-b from-GREY to-WHITE'>
       <div className='h-[8vh]'>
         {/* Fucking move cunt */}
       </div>
-        <h1 className='text-[2rem] text-center w-[60%] m-auto mb-5 text-WHITE font-serif'>
+        <h1 className='text-[2rem] text-center w-[60%] m-auto mb-5 text-BLACK font-serif'>
           My Cart
         </h1>
-        <div className='flex md:flex-row flex-col shadow-lg w-full h-full justify-evenly mb-5'>
-          <div className='md:w-[40%] w-full h-full shadow-lg'>
+        <div className='flex md:flex-row flex-col w-full h-full justify-evenly mb-5'>
+          <div className='md:w-[40%] w-full h-full'>
             <h1 className='text-BLACK bg-GREY rounded text-[1.5rem] w-full text-center'>
               Your items:
             </h1>
@@ -285,16 +285,16 @@ function Cart()
               ))}
             </div>
           </div>
-          <div className='md:w-[40%] w-full h-full shadow-lg text-center rounded'>
+          <div className='md:w-[40%] w-full h-full text-center rounded'>
             <div>
-              <div className="text-WHITE">
+              <div className="text-BLACK">
                 Enter Delivery location
                 <div className="rounded h-[12vh] flex flex-col justify-center items-center text-BLACK">
                   <input
                     onChange={(e) =>
                       setAddress({ ...address, houseNumber: e.target.value })
                     }
-                    className="rounded border border-BLACK shadow-lg text-center"
+                    className="rounded border border-BLACK text-center"
                     type="text"
                     name="houseNumber"
                     id="houseNumber"
@@ -304,7 +304,7 @@ function Cart()
                     onChange={(e) =>
                       setAddress({ ...address, street: e.target.value })
                     }
-                    className="rounded border border-BLACK shadow-lg text-center"
+                    className="rounded border border-BLACK text-center"
                     type="text"
                     name="street"
                     id="street"
@@ -342,7 +342,7 @@ function Cart()
                 >
                   Create Order
                 </button>
-                <div className="text-WHITE w-full">
+                <div className="text-BLACKw-full">
                   Delivering to
                   <div className="bg-WHITE h-[3vh] w-[80%] mb-2 m-auto text-BLACK rounded text-center">
                     {address.houseNumber} {address.street} {address.city}{' '}

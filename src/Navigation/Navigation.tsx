@@ -21,8 +21,8 @@ function Navigation()
   const location = useLocation();
 
   return (
-    <nav className=" fixed h-[5vh] max-h-[5vh] flex flex-row justify-evenly items-center text-WHITE w-full shadow-xl">
-        <h1 className="font-serif h-[80%] rounded w-[20%] text-center flex items-center justify-center text-[2rem] text-WHITE italic">
+    <nav className="bg-WHITE fixed h-[5vh] max-h-[5vh] flex flex-row justify-evenly items-center text-BLACK w-full shadow-xl z-10">
+        <h1 className="font-serif h-[80%] rounded w-[20%] text-center flex items-center justify-center text-[2rem] italic">
           AlieSohn
         </h1>
         <ul className="flex flex-row w-[60%] justify-evenly items-center text-center">
@@ -47,10 +47,10 @@ function NavItem({ to, children, currentPathname }: { to: string, children: Reac
 {
   const isActive = currentPathname === to;
 
-  const linkClass = isActive ? "bg-RED text-WHITE" : "";
+  const linkClass = isActive ? "bg-GREY" : "";
 
   return (
-    <li className={`${linkClass} rounded p-2 hover:bg-RED`}>
+    <li className={`${linkClass} rounded p-2 hover:bg-GREY`}>
       <Link to={to}>
         <button>{children}</button>
       </Link>
