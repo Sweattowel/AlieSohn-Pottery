@@ -123,7 +123,7 @@ export default function CreateNewAdmin()
     <div>
       {superAuthenticated ? (
         check ? (
-          <div className="w-full text-WHITE justify-center items-center border rounded mb-10">
+          <div className="w-[40vw] m-auto text-BLACK bg-WHITE justify-center items-center mt-10 shadow-lg md:text-[1rem] text-[0.7rem]">
             <h1 className="m-auto flex justify-center bg-BACKGROUND mb-1 rounded">
               CREATE NEW ADMIN
             </h1>
@@ -152,7 +152,7 @@ export default function CreateNewAdmin()
             </button>
           </div>
         ) : (
-          <div className="w-full text-WHITE justify-center items-center border rounded mb-10 ">
+          <div className="w-[40vw] m-auto text-BLACK bg-WHITE justify-center items-center mt-10 shadow-lg md:text-[1rem] text-[0.7rem]">
             <h1 className="m-auto flex text-center justify-center bg-BACKGROUND mb-1 rounded">
               CREATE NEW ADMIN
               <br />
@@ -181,10 +181,10 @@ export default function CreateNewAdmin()
             >
               ADMIN LOGIN
             </button>
-            <div className="w-[60%] m-auto text-center rounded bg-BACKGROUND h-[3vh] mb-1">
+            <div className="w-[60%] m-auto text-center rounded bg-BACKGROUND h-[5vh] mb-1">
               {adminAttempts} Attempts left
             </div>
-            <div className="w-[60%] m-auto text-center rounded bg-BACKGROUND h-[3vh]">
+            <div className="w-[60%] m-auto text-center rounded bg-BACKGROUND h-[5vh]">
               {error || <div>Please enter details</div>}
             </div>
           </div>

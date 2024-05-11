@@ -29,7 +29,7 @@ const CardHandle: React.FC<Props> = ({ onConfirm, onCancel }) =>
     };
 
     return (
-        <div className="bg-WHITE h-[50%] text-WHITE fixed w-[30%] border border-BLACK">
+        <div className="bg-WHITE h-[50%] text-WHITE fixed left-[30vw] right-[30vw] w-[40vw] top-[20vh] border border-BLACK">
             {termAgreement ? (
                 <div className="text-BLACK text-center ">
                     <h2 className="bg-BACKGROUND font-serif text-[1.3rem] mb-2 text-WHITE">FAKE Transaction</h2>
@@ -84,14 +84,14 @@ const CardHandle: React.FC<Props> = ({ onConfirm, onCancel }) =>
                     <button onClick={() => setTermAgreement(false)} className="text-center border border-BLACK w-40 rounded shadow-lg mt-20">I DISAGREE</button>
                 </div>
             ) : (
-                <div className="bg-WHITE h-[50%] text-WHITE fixed w-[30%] border border-BLACK">
+                <div className="bg-WHITE h-[50%] text-WHITE fixed w-[40vw] border border-BLACK">
                     <h1 className="bg-BACKGROUND text-center text-[1.5rem] border-b border-WHITE">
                         AGREEMENT
                     </h1>
                     <div className="text-BLACK flex text-center justify-center items-center mb-20">
                         By continuing you acknowledge that this is not a real transaction, that should you enter any data in here, you agree that there has been adequate warning TO NOT enter any sensitive info and that any harm occured is your responsibility
                     </div>
-                    <button onClick={() => setTermAgreement(true)} className="bg-BACKGROUND m-auto flex justify-center text-center border border-BLACK w-40 rounded shadow-lg">I AGREE</button>
+                    <button onClick={() => setTermAgreement(true)} className="bg-BACKGROUND m-auto flex justify-center text-center text-BLACK border border-BLACK w-40 rounded shadow-lg">I AGREE</button>
                 </div>
             )}
 

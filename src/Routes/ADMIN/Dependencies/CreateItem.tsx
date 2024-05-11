@@ -112,27 +112,27 @@ function CreateItem()
   return (
     <div>
       {superAuthenticated ? (
-        <div className="ml-auto w-[40vw] h-[50vh] bg-WHITE text-WHITE m-auto">
-          <div className="mr-auto h-full border-r-1 border-l-2 border-t-2">
+        <div className="ml-auto w-[40vw] h-[50vh] bg-WHITE text-BLACK m-auto">
+          <div className="mr-auto h-full shadow-lg">
             <h1 className="text-center bg-SELECTED border-black mb-2 text-white h-[30px] rounded">
               Create store Item
             </h1>
             <div className=" w-[40vw] h-[80%] m-auto text-center">
-              <h1 className="bg-BACKGROUND rounded text-WHITE w-[80%] md:w-[50%] h-[2rem] m-auto mt-2">
+              <h1 className="bg-BACKGROUND rounded text-BLACK w-[80%] md:w-[50%] h-[2rem] m-auto mt-2">
                 Name
               </h1>
               <Input
                 value={item.ItemName}
                 onChange={(e) => handleInputChange("ItemName", e.target.value)}
               />
-              <h1 className="bg-BACKGROUND rounded text-WHITE w-[80%] md:w-[50%] h-[2rem] m-auto mt-2">
+              <h1 className="bg-BACKGROUND rounded text-BLACK w-[80%] md:w-[50%] h-[2rem] m-auto mt-2">
                 Description
               </h1>
               <Input
                 value={item.description}
                 onChange={(e) => handleInputChange("description", e.target.value)}
               />
-              <h1 className="bg-BACKGROUND rounded text-WHITE w-[80%] md:w-[50%] h-[2rem] m-auto mt-2">
+              <h1 className="bg-BACKGROUND rounded text-BLACK w-[80%] md:w-[50%] h-[2rem] m-auto mt-2">
                 Price
               </h1>
               <Input
@@ -143,7 +143,7 @@ function CreateItem()
               <Input type="file" onChange={handleFileChange} />
               <br />
               <button
-                className="border-b-2 border-l-2 border border-BLACK bg-WHITE text-BACKGROUND w-[60%] rounded mt-4 hover:opacity-60 shadow-lg"
+                className="border-b-2 border-l-2 border border-BLACK bg-WHITE text-BLACK w-[60%] rounded mt-4 hover:opacity-60 shadow-lg"
                 onClick={createStoreItem}
               >
                 Create Item

@@ -42,8 +42,8 @@ Self TODO LIST:
     COMPLETE Switch to class based programming for ease of organisation A̢͉͍͙͇͌̔̄͝ǘ̷̠̥̳̮̜͜g̸͙͓͎͍̟̟̐̉̇̍͊͆͝h̵͔͉̰̬͑͋͝u̵̹̳̜̳͕͌̃̅͊g̸͚̗͍̦̞͚͋͑̂̆̍̈́͆͜h̶̢̗̮͙̖͖̓͗̓̍̏̒̊̔̕
         Addit:
             Wasnt that bad actually :D
-    UNCOMPLETE Implement and Learn websocket to update items whenever other users make a purchase0
-
+    COMPLETE Redo Styling to fit earthy colours
+ 
 Feedback TODO List:
 
     COMPLETE Implement Responsive Design: Optimize design for various screen sizes and devices.
@@ -94,4 +94,25 @@ Client adjustment of goals and scope:
                 Want to add but am hesitant as it may end up looking like a boomers plate, need to make it look nice in some way that i dont yet know, brush up on UI/UX
         COMPLETE Add itemsperpage button 1/10 items per page
         COMPLETE Fix image width on storeItems
-        UNCOMPLETE Delivery information add to purchase
+        COMPLETE Delivery information add to purchase
+
+    Failed
+      Implement and Learn websocket to update items whenever other users make a purchase
+        Decided it was too complex to use on an old project, need to design with this in mind
+      Implement login/RegistrationPage
+      Implement login saving
+        Decided this would also go best into a page with its design being inclusive
+    Success
+        Massively changed thoughprocess when it comes to designing the page
+        Learned how to use C#
+        JWT tokens and authentication in a seamless process
+        Encryption learned
+        Class based programming and organising
+        Thought process regarding when and when not to make into a component 
+        level up in
+            tailwind, JS/TS, C# API design, security, functionality
+        Personal rating
+            6/10
+            using an actual scale where 5 is average instead of bad i do not believe this is bad however some of the code within the tail is messy and hard to understand, my use of divs to too much and i need to change this for code readability, the site went through alot of redesigned but i still think it could look better, not a designer and might be getting over critical here. Context is overly used need to use localStorage/session storage etc instead to avoid bloating the context, login should have been a seperate page maybe but the registration needed to be  again, bloat
+        Final thoughts:
+            imagine self rating this hard

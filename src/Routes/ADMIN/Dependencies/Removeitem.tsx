@@ -128,13 +128,13 @@ function Removeitem()
   return (
     <div className="flex flex-col md:flex-row justify-center items-center m-auto">
       {superAuthenticated ? (
-        <div className="w-[40vw] h-[60vh] bg-WHITE text-WHITE">
+        <div className="w-[40vw] h-[60vh] bg-WHITE text-BLACK shadow-lg">
           <div className="h-full mb-20">
-            <h1 className="bg-BACKGROUND rounded text-WHITE text-center w-[100%] m-auto mb-2 h-[30px]">
+            <h1 className="bg-BACKGROUND rounded text-BLACK text-center w-[100%] m-auto mb-2 h-[30px]">
               Remove store Item
             </h1>
             <button
-              className={locked ? 'w-full text-BACKGROUND bg-BLACK border-BLACK border' : 'w-full text-BACKGROUND bg-WHITE border-BLACK border shadow-lg rounded'}
+              className={locked ? 'w-full text-WHITE bg-BLACK border-BLACK border' : 'w-full text-BACKGROUND bg-WHITE border-BLACK border shadow-lg rounded'}
               onClick={() => setLocked(!locked)}
             >
               {locked ? "LOCKED" : "UNLOCKED"}
@@ -142,12 +142,12 @@ function Removeitem()
             <div
               className={
                 !locked
-                  ? "text-WHITE w-[80%] h-[70%] m-auto text-center mt-2"
+                  ? "text-BLACK w-[80%] h-[70%] m-auto text-center mt-2"
                   : "opacity-60 text-BLACK w-[80%] h-[70%] m-auto text-center mt-2"
               }
             >
               {currentItems.map((item: storeItem, index: number) => (
-                <div key={index} className="bg-BACKGROUND m-auto flex flex-col md:flex-row items-center mb-1 text-[0.7rem] text-WHITE rounded border-b-2 border-BLACK hover:text-BLACK">
+                <div key={index} className="bg-BACKGROUND m-auto flex flex-col md:flex-row items-center mb-1 text-[0.7rem] text-BLACK rounded border-b-2 border-BLACK hover:text-BLACK">
                   <div className=" rounded justify-center flex w-full md:w-[20%] h-full align-middle ">
                     ID: {item.itemID}
                   </div>

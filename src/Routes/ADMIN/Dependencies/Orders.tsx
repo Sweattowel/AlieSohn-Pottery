@@ -22,7 +22,7 @@ function Orders()
   const usersPerPage = 6;
   const [currentUsersPage, setCurrentUsersPage] = useState(1);
   const [userCount, setUserCount] = useState(0);
-  const ordersPerPage = 8;
+  const ordersPerPage = window.innerWidth > 768 ? 8 : 6;
   const [currentOrdersPage, setCurrentOrdersPage] = useState(1);
   const [orderCount, setOrderCount] = useState(0);
 
@@ -190,7 +190,7 @@ function Orders()
   return (
     <div>
       {superAuthenticated ? (
-        <div className="w-[40vw] h-full bg-WHITE text-WHITE mt-0.5 ml-0.5">
+        <div className="w-[40vw] h-full bg-WHITE text-BLACK mt-0.5 ml-0.5">
           <h1 className="bg-BACKGROUND text-center rounded mb-2 text-white h-[30px]">
             Orders
           </h1>
@@ -267,7 +267,7 @@ function Orders()
                   </h1>
                   <h1 className="w-full md:w-[25%]">{order.itemName} </h1>
 
-                  <div className="w-full md:w-[25%] bg-WHITE text-BACKGROUND border border-BLACK h-[80%]shadow-lg hover:opacity-60 rounded text-center justify-center items-center flex">
+                  <div className="w-full md:w-[25%] bg-WHITE text-BACKGROUND h-[80%]shadow-lg hover:opacity-60 rounded text-center justify-center items-center flex">
                     {order.itemState == 0 || order.itemState > 3 ? ("ERROR") : ("")}
                     {order.itemState == 1 ? ("PENDING") : ("")}
                     {order.itemState == 2 ? ("COMPLETE") : ("")}

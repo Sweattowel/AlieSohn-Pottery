@@ -100,7 +100,7 @@ export default function UserAccount()
   }, []);
 
   return (
-    <div className="w-[55%] m-auto h-[120vh] text-LIGHT rounded-lg justify-center mt-2">
+    <div className="w-[55%] m-auto h-[120vh] text-BLACK rounded-lg justify-center mt-2 bg-WHITE">
       <div className="bg-DARK py-2 justify-center">
         <h1 className="justify-center text-center w-[50%] m-auto rounded font-serif text-2xl">
           <div className="bg-HIGHLIGHT rounded-t">

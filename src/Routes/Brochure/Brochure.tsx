@@ -95,20 +95,20 @@ function Brochure()
   return (
     <div className="md:h-full h-full flex flex-col justify-evenly bg-gradient-to-b from-GREY to-WHITE w-full shadow-inner">
         
-        <div className="w-full h-[100vh] flex text-center mt-[5vh]">
+        <div className="w-full md:h-[100vh] h-[50vh] flex text-center mt-[5vh]">
           <img src="https://m.atostogoskaime.lt/data/gallery/large/puodininkyste_16_.jpg"
             alt="Profile Picture"
-            className="w-full h-full"
+            className="w-full md:h-full"
           />
 
-          <div className="absolute right-10 bottom-10 flex flex-col items-center h-[70%] w-[50%] text-WHITE bg-transparent backdrop-brightness-50 m-auto z-1">
-              <h2 className="font-serif text-[3rem] rounded p-2 w-[60%]">
+          <div className="absolute right-10 md:bottom-10 top-[7vh] flex flex-col items-center md:h-[70%] h-[45%] w-[50%] text-WHITE text-[0.7rem] bg-transparent backdrop-brightness-50 m-auto z-1">
+              <h2 className="font-serif text-[2rem] rounded p-2 w-[60%]">
                 ABOUT US
               </h2>
-              <div className="m-auto w-[60%]">
+              <div className="m-auto md:w-[60%] w-[90%] ">
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magnam accusantium necessitatibus voluptas consequatur sint, veniam excepturi at quos itaque sequi molestiae unde cum delectus eius iusto fugiat reprehenderit quaerat sapiente.
               </div>
-              <h2 className="font-serif text-2xl rounded p-2 w-[60%]">
+              <h2 className="font-serif text-2xl rounded p-2 md:w-[60%]">
                 EMAIL
               </h2>
               <div className="m-auto w-[80%]">
@@ -124,7 +124,7 @@ function Brochure()
         </div>
 
         {brochure.length > 0 && (
-          <div className="h-[95vh] w-full">
+          <div className="h-[95vh] w-[90%] m-auto">
             <h1 className="font-serif text-[2em] border-BLACK text-BLACK h-[5vh] h-[10vh] items-center justify-center flex">
               Our Unique Selection
             </h1>
@@ -150,18 +150,18 @@ function Brochure()
                   
         )}
 
-        <div className="w-full md:h-[95vh] h-[95vh] justify-evenly flex flex-col text-BLACK divide-y ">
+        <div className="w-full md:h-[95vh] h-full justify-evenly flex flex-col text-BLACK divide-y ">
             <h1 className="w-[80%] text-BLACK text-center text-[2rem] m-auto ">
               Our customers wanted to say
             </h1>
           {reviews.map((review: any, index: number) => (
-            <div key={index} className={`w-[80%] h-[30vh] m-auto flex ${ index % 2 !== 0 ? "md:flex-row-reverse" : "md:flex-row"}  flex-col p-2 rounded justify-evenly items-center`}>
+            <div key={index} className={`w-[80%] md:h-[30vh] h-[80vh] m-auto flex ${ index % 2 !== 0 ? "md:flex-row-reverse" : "md:flex-row"}  flex-col p-2 rounded justify-evenly items-center`}>
               <img src="https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?size=626&ext=jpg&ga=GA1.1.1224184972.1714003200&semt=sph"
                 alt="Profile Picture"
                 className="rounded-full ring ring-GREY  md:h-[10vh]"
               />
               <div className="w-[60%] md:w-[50%] h-[100%] text-center flex flex-col justify-center items-center">
-                <div className="text-[1.5rem] text-BLACK text-bold flex flex-row items-center justify-evenly bg-GREY rounded w-full">
+                <div className="text-[1.5rem] text-BLACK text-bold flex flex-row items-center justify-evenly md:bg-GREY rounded w-full">
                   <p>
                     {review.reviewer}
                   </p>

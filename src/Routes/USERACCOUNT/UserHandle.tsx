@@ -19,15 +19,14 @@ export default function UserHandle()
     ] = useMyContext();
 
     return (
-        <div className="flex flex-col bg-LIGHT">
-            <div className="bg-WHITE h-full w-[90%] flex m-auto">
-                {!authenticated &&
+        <div className="flex bg-gradient-to-b from-GREY to-WHITE h-full w-full">
+
+                {authenticated &&
                     <>
                         <UserAccount />
                         <UserDelete />
                     </>
                 }                
-            </div>
 
         </div>
     )

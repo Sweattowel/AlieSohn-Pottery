@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useMyContext } from '../../Context/ContextProvider';
-import { Pagination } from '@mui/material';
+import { Card, Pagination } from '@mui/material';
 import url from 'url';
 import axios from 'axios';
 import CardHandle from './Dependencies/CardHandle';
-import InfoIcon from '@mui/icons-material/Info';
 import './Dependencies/Cart.css';
-import { AnimatePresence, motion } from 'framer-motion';
+
 
 interface CartItem
 {
@@ -44,13 +43,7 @@ function Cart()
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = cart.slice(indexOfFirstItem, indexOfLastItem);
-  const [selectedStoreItem, setSelectedStoreItem] = useState({
-    itemID: -1,
-    itemName: '',
-    itemPrice: 0,
-    imagePath: '',
-    itemDescription: '',
-  });
+
   const [confirmationMessages, setConfirmationMessages] = useState<
     { index: number; id: number; type: string }[]
   >([]);
@@ -155,6 +148,7 @@ function Cart()
         setError('Invalid address');
         return;
       }
+      setError('')
       setShowCardHandle(true);
     };
     // END PAYMENT
@@ -163,31 +157,16 @@ function Cart()
       setShowCardHandle(false); // Hide card handling component on confirmation
       OrderHandle.createOrder(); // Proceed with creating the order
     };
+    static handleCardCancel = () => 
+    {
+      setShowCardHandle(false)
+      setError("Order Cancelled")
+    }
   }
 
   // CART HANDLE
   class CartHandle
   {
-    // INCREMENTS ARE REDUNDANT AS DEFINED BY NEW REQUIREMENTS
-    /*/ INCREMENT ITEMCOUNT BY 1
-    static increment = (id: number) => {
-      setCart((prevItems) =>
-        prevItems.map((item, i) =>
-          item.itemID === id ? { ...item, itemCount: item.itemCount + 1 } : item
-        )
-      );
-    };
-    // DECREMENT ITEMCOUNT BY 1
-    static decrement = (id: number) => {
-      setCart((prevItems) =>
-        prevItems.map((item, i) =>
-          item.itemID === id
-            ? { ...item, itemCount: Math.max(1, item.itemCount - 1) }
-            : item
-        )
-      );
-    };
-    */
     // REMOVE ITEM FROM CART IN FULL
     static removeFromCart(id: number)
     {
@@ -233,6 +212,10 @@ function Cart()
   ///////////////////////////////////////////////////////////////////
   return (
     <div className='w-full h-full md:mt-0 mt-[5vh] bg-gradient-to-b from-GREY to-WHITE'>
+      {showCardHandle &&
+        <CardHandle onCancel={OrderHandle.handleCardCancel} onConfirm={OrderHandle.handleCardConfirm} />      
+      }
+
       <div className='h-[8vh]'>
         {/* Fucking move cunt */}
       </div>
@@ -241,7 +224,7 @@ function Cart()
         </h1>
         <div className='flex md:flex-row flex-col w-full h-full justify-evenly mb-5'>
           <div className='md:w-[40%] w-full h-full'>
-            <h1 className='text-BLACK bg-GREY rounded text-[1.5rem] w-full text-center'>
+            <h1 className='text-BLACK bg-WHITE shadow-lg rounded text-[1.5rem] w-full text-center'>
               Your items:
             </h1>
             <div className='divide-y text-BLACK h-[100vh]'>
@@ -271,7 +254,7 @@ function Cart()
                             2000,
                           );
                         }}
-                        className="border rounded bg-BLACK mr-1 hover:opacity-90 flex-grow shadow-lg border border-BLACK p-2"
+                        className="border rounded mr-1 hover:opacity-90 flex-grow hover:shadow-lg border border-BLACK p-2"
                       >
                         {conflicts.includes(item.itemID) ? (
                           <>Please Remove</>
@@ -283,12 +266,22 @@ function Cart()
                   </div>
                 </div>
               ))}
+              <div>
+                {currentItems.length === 0 ? (
+                  <h1 className='text-[1.5rem] text-center mt-10'>
+                    Please visit our store to fill out your cart
+                  </h1>
+                ) : (null)}
+              </div>
             </div>
           </div>
-          <div className='md:w-[40%] w-full h-full text-center rounded'>
+          <div className='md:w-[40%] w-full h-[40vh] text-center rounded bg-WHITE shadow-lg'>
             <div>
               <div className="text-BLACK">
-                Enter Delivery location
+                <h2 className='text-[1.5rem]'>
+                  Enter Delivery location
+                </h2>
+
                 <div className="rounded h-[12vh] flex flex-col justify-center items-center text-BLACK">
                   <input
                     onChange={(e) =>
@@ -337,12 +330,12 @@ function Cart()
             {authenticated ? (
               <div className="flex flex-col m-auto">
                 <button
-                  className="text-BLACK border-BLACK border w-[50vw] md:w-[20vw] bg-WHITE rounded m-auto justify-center text-center text-GREY items-center flex hover:opacity-90 hover:border-BLACK hover:shadow-lg"
+                  className="text-BLACK border-BLACK border w-[50vw] md:w-[20vw] bg-WHITE rounded m-auto justify-center text-center text-BLACK items-center flex hover:opacity-90 hover:border-BLACK hover:shadow-lg"
                   onClick={() => OrderHandle.sendOrder()}
                 >
                   Create Order
                 </button>
-                <div className="text-BLACKw-full">
+                <div className="text-BLACK w-full">
                   Delivering to
                   <div className="bg-WHITE h-[3vh] w-[80%] mb-2 m-auto text-BLACK rounded text-center">
                     {address.houseNumber} {address.street} {address.city}{' '}
@@ -352,7 +345,7 @@ function Cart()
                 </div>
               </div>
             ) : (
-              <div className="text-BLACK m-auto mb-2 h-full w-[80%] text-center flex justify-center items-center rounded-lg bg-GREY text-[0.8em]">
+              <div className="text-BLACK m-4 w-[95%] text-center flex justify-center items-center rounded-lg bg-GREY text-[0.8em]">
                 Please Create an account and log in to create an order
               </div>
             )}

@@ -79,13 +79,13 @@ export default function UserDelete()
   }
 
   return (
-    <div className="w-[30%] ml-auto mr-auto mt-2 h-[20vh] space-y-2">
-      <h1 className="bg-HIGHLIGHT text-center rounded">
+    <div className="w-[30%] ml-auto mr-auto mt-[10vh] h-[20vh] space-y-2 bg-WHITE text-BLACK shadow-lg rounded">
+      <h1 className="text-center rounded">
         Delete your account?
       </h1>
       {locked ? (
         <button className="bg-HIGHLIGHT w-[80%] m-auto flex text-center justify-center rounded border border-BLACK opacity-60 hover:opacity-50">
-          DELETE
+          Unlock to delete
         </button>
       ) : (
         <button
@@ -99,14 +99,14 @@ export default function UserDelete()
         {locked ? (
           <button
             onClick={() => setLocked(!locked)}
-            className="bg-WHITE text-HIGHLIGHT shadow-lg w-[80%] m-auto flex text-center justify-center rounded border border-BLACK hover:opacity-40"
+            className="bg-WHITE text-BLACK shadow-lg w-[80%] m-auto flex text-center justify-center rounded border border-BLACK hover:opacity-40"
           >
             LOCKED
           </button>
         ) : (
           <button
             onClick={() => setLocked(!locked)}
-            className="bg-BLACK text-HIGHLIGHT shadow-lg w-[100%] m-auto flex text-center justify-center rounded border border-BLACK hover:opacity-40"
+            className="bg-BLACK text-WHITE shadow-lg w-[100%] m-auto flex text-center justify-center rounded border border-BLACK hover:opacity-40"
           >
             UNLOCKED
           </button>

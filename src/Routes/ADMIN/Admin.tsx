@@ -19,21 +19,27 @@ function Admin()
   ] = useMyContext();
 
   return (
-    <div className="mt-[20%] md:mt-0">
-      {superAuthenticated ? (
-        <div className="flex h-[165vh] w-[100%] m-auto">
-          <div className="w-[50%] mr-2">
-            <CreateItem />
-            <Removeitem />
-            <CreateNewAdmin />
+    <div className="h-full w-full border mt-[20%] md:mt-0 bg-gradient-to-b from-GREY to-WHITE">
+      <div className="mb-[10vh]">
+        {/* WHY DOES THIS KEEP HAPPENING */}
+      </div>
+      <div>
+        {superAuthenticated ? (
+          <div className="flex h-[165vh] w-[100%] m-auto">
+            <div className="w-[50%] mr-2">
+              <CreateItem />
+              <Removeitem />
+              <CreateNewAdmin />
+            </div>
+            <div className="w-[50%] ">
+              <Orders />
+            </div>
           </div>
-          <div className="w-[50%] ">
-            <Orders />
-          </div>
-        </div>
-      ) : (
-        <>NO ACCESS</>
-      )}
+        ) : (
+          <>NO ACCESS</>
+        )}        
+      </div>
+
     </div>
   );
 }

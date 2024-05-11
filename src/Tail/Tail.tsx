@@ -258,7 +258,7 @@ function Tail()
       {wantLogin ? (
         <div
           onClick={() => setWantLogin(false)}
-          className="fixed inset-0 w-full h-full flex items-center justify-center z-50"
+          className="fixed inset-0 w-[100vw] h-full flex items-center justify-center z-50"
         >
           <div
             onClick={(e) => e.stopPropagation()}
@@ -290,13 +290,13 @@ function Tail()
             <br />
             <button
               onClick={() => LoginHandle.Login()}
-              className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-HIGHLIGHT mt-2 mb-4 justify-center text-center text-WHITE w-[40%] rounded"
+              className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-HIGHLIGHT mt-2 mb-4 justify-center text-center text-BLACK w-[40%] rounded"
             >
               Login
             </button>
             <button
               onClick={() => LoginHandle.superLogin()}
-              className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-HIGHLIGHT mt-2 justify-center text-center text-WHITE w-[40%] rounded"
+              className="border-b-2 border-l-2 border border-BLACK hover:text-BLACK hover:opacity-90 flex m-auto bg-HIGHLIGHT mt-2 justify-center text-center text-BLACK w-[40%] rounded"
             >
               Admin
             </button>
@@ -320,7 +320,6 @@ function Tail()
 
       <div className="w-full h-[50vh] text-center text-[0.8rem] justify-center items-center flex md:flex-row flex-col text-BLACK">
         <div className="md:w-[50%] w-full h-[50vh] text-center justify-center items-center bg-GREY">
-
           <div className="h-[50%] flex flex-col justify-center ">
             <h1 className="text-[1.2rem]">
               Visit
@@ -350,50 +349,72 @@ function Tail()
           </div>
 
           <div className="h-[50%] flex flex-col justify-center">
-            <h1 className="text-[1.2rem]">
-              Contact
-            </h1>
-            <div>
-
-            </div>
             <div>
               Want more like this? see my Portfolio 
               <br />
-              
               <a className="hover:border-b hover:opacity-80 bg-GREY w-full p-1" href="https://thomas-moloney-portfolio.vercel.app/">Here</a>
             </div>
           </div>
 
         </div>
 
-        <div className="md:w-[50%] w-full h-[50vh] flex text-center justify-center items-center bg-GREY">
-          {authenticated || superAuthenticated ? (
-            <button
-              onClick={() => LoginHandle.logOut()}
-              className="font-bold w-[15%] rounded hover:border-b"
-            >
-              Log out
-            </button>
-          ) : (
-            <section className="w-[25%] h-[20%] flex flex-col justify-evenly">
-              <h2>
-                Account:
-              </h2>
-              <button
-                onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
-                className="h-[20%] w-[50%] ml-[50%] hover:border-b "
-              >
-                Login
-              </button>
-              <button
-                onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
-                className="h-[20%] w-[50%] ml-[50%] hover:border-b"
-              >
-                Register
-              </button>              
+        <div className="md:w-[50%] w-full h-[50vh] flex text-center justify-evenly items-center bg-GREY">
+
+
+            <section className="w-full h-full flex flex-col justify-evenly items-center">
+              
+              <div>
+                <h1 className="text-[1.2rem]">
+                  Contact
+                </h1>
+                  <h2 className="font-serif text-[1.1rem] w-[60%] m-auto">
+                    EMAIL
+                  </h2>
+                  <div className="m-auto w-[80%]">
+                    test@test@fakemail.com.au
+                  </div>
+                  <h2 className="font-serif text-[1.1rem] w-[60%] m-auto">
+                    PH
+                  </h2>
+                  <div className="m-auto w-[80%]">
+                    000 000 000
+                  </div>                
+              </div>
+              
+              <div className="flex flex-col justify-center items-center ">
+                <h2>
+                  Account:
+                </h2>
+                {authenticated || superAuthenticated ? (
+                  <button
+                    onClick={() => LoginHandle.logOut()}
+                    className=" w-[50%] hover:border-b"
+                  >
+                    Log out
+                  </button>
+                ) : (
+                <>                
+                  <button
+                    onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
+                    className=" w-[50%] hover:border-b "
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={() => setWantLogin((prevWantLogin) => !prevWantLogin)}
+                    className=" w-[50%] hover:border-b"
+                  >
+                    Register
+                  </button> 
+                </>
+                  
+                )}
+              
+              </div>
+             
             </section>
 
-          )}
+          
         </div>
       </div>
     </>

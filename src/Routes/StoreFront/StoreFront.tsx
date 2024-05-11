@@ -197,19 +197,23 @@ function StoreFront()
   };
 
   useEffect(() => {
+    if (searchQuery == "") {
+      setDisplayitems(allItems)
+      return
+    }
     setDisplayitems(
-      displayItems.filter((item) => {
-        return item.itemName !== searchQuery
+      allItems.filter((item) => {
+        return item.itemName.includes(searchQuery);
       })      
     )
 
   },[searchQuery])
   return (
-    <section className="w-full h-[100vh] text-BLACK flex flex-wrap justify-center mt-[5vh] md:mt-[0vh] bg-gradient-to-b from-GREY to-WHITE">
+    <section className="w-full h-full text-BLACK flex flex-wrap justify-center mt-[5vh] md:mt-[0vh] bg-gradient-to-b from-GREY to-WHITE">
         <h1 className=" w-[90%] text-center text-[2rem] rounded mt-[10vh]">
           Our items
         </h1>
-      <div className="text-BLACK bg-WHITE rounded-lg shadow-lg w-[80%] flex justify-evenly items-center h-[3rem] mt-2">
+      <div className="text-BLACK bg-WHITE rounded-lg shadow-lg w-[80%] flex flex-col md:flex-row justify-evenly items-center md:h-[3rem] h-[8rem] mt-2">
         Items Per Page:
         <div className="w-[50%] h-[3vh] flex justify-evenly text-BLACK">
           <button onClick={() => setItemsPerPage(5)} className={`${itemsPerPage == 5 ? "opacity-60" : ""} border-DARK border shadow-lg w-[20%] rounded`}>
@@ -228,7 +232,7 @@ function StoreFront()
         <input onChange={(e) => setSearchQuery(e.target.value)} placeholder="Enter search" className="border" type="search" />
       </div>
       <motion.ul
-        className="container w-full h-[50vh] flex flex-wrap justify-center"
+        className="container w-full h-[120vh] flex flex-wrap justify-center"
         variants={container}
         initial="hidden"
         animate="visible"
@@ -257,12 +261,12 @@ function StoreFront()
               />
               <div className="mb-2 text-center text-DARK border-b w-[80%] m-auto">Price: ${item.itemPrice}</div>
               <div className="relative">
-                {IDS.includes(item.itemID) || cart.includes(item.itemID) || item.itemState !== 0 ?
+                {IDS.includes(item.itemID) || cart.includes(item) || item.itemState !== 0 ?
                   <div className={`bg-WHITE text-GREY h-full w-[80%] rounded shadow-lg border border-DARK m-auto flex justify-center opacity-80 z-0`}>
                     ITEM PENDING
                   </div> :
                   <button
-                    className={`hover:opacity-90 bg-WHITE text-GREY h-full w-[80%] rounded shadow-lg border border-DARK m-auto flex justify-center z-1`}
+                    className={`hover:opacity-90 bg-WHITE text-BLACK h-full w-[80%] rounded shadow-lg border border-DARK m-auto flex justify-center z-1`}
                     onClick={() =>
                     {
                       addToCart(
@@ -306,7 +310,7 @@ function StoreFront()
 
         
       </motion.ul>
-      <section className="flex  m-auto mt-10 w-[60vw] h-[6vh]  text-center rounded  text-BLACK text-[0.8em] justify-center items-center">
+      <section className="flex  m-auto mt-10 w-[60vw] h-[10vh]  text-center rounded  text-BLACK text-[0.8em] justify-center items-center">
         <div className="bg-GREY rounded w-[20vw]">
           Current Items in cart:
           <br />
@@ -329,7 +333,7 @@ function StoreFront()
       <AnimatePresence>
         {selectedStoreItem.itemID !== -1 && (
           <motion.div
-            className="bg-GREY p-4 rounded shadow-lg text-BLACK fixed top-[10vh] md:top-[10vh] m-auto max-w-[80%] z-10"
+            className="bg-GREY p-4 rounded shadow-lg text-BLACK fixed top-[10vh] md:top-[10vh] m-auto max-w-[80%] z-40"
             style={{
               opacity: '100'
             }}
@@ -343,7 +347,7 @@ function StoreFront()
             </motion.h5>
 
             <motion.button
-              className="flex rounded bg-WHITE text-GREY border border-DARK shadow-lg justify-center m-auto w-[60%] md:w-[20%] hover:opacity-90"
+              className="flex rounded bg-WHITE text-BLACK border border-DARK shadow-lg justify-center m-auto w-[60%] md:w-[20%] hover:opacity-90"
               onClick={() => setSelectedStoreItem({
                 itemID: -1,
                 itemName: "",
