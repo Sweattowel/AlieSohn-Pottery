@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useMyContext } from "../../Context/ContextProvider";
 import axios from "axios";
+import API from "../../INTERCEPTOR/API";
 
 export default function UserDelete()
 {
@@ -24,32 +25,10 @@ export default function UserDelete()
 
   async function deleteAccount() 
   {
-    if (!userID || !userName) {
-      return;
-    }
-    const choice = superAuthenticated ? 'sutoken' : authenticated ? 'token' : 'Null'
-    const storedToken = getToken(choice);
-
-    if (!storedToken) {
-      console.log('No authorization found');
-      return;
-    }
-
-    if (!authenticated) {
-      return;
-    }
+    if (!userID || !userName) return;
 
     try {
-      const response = await axios.post(`${serverAddress}/api/deleteAccount/${userID}`, {
-        userID: userID,
-        userName: userName,
-      },
-        {
-          headers: {
-            authorization: `Bearer ${storedToken}`
-          }
-        }
-      );
+      const response = await API.post(`${serverAddress}/api/deleteAccount/${userID}`, { userID, userName });
 
       if (response.status === 200) {
         console.log("Account deleted");
@@ -62,20 +41,6 @@ export default function UserDelete()
     } catch (error) {
       console.log('Failed to delete account');
     }
-  }
-
-  function getToken(choice: string)
-  {
-    if (choice === 'Null') return
-
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      if (cookie.startsWith(`${choice}=`)) { // Corrected condition
-        return cookie.substring(`${choice}=`.length); // Corrected substring index
-      }
-    }
-    return null;
   }
 
   return (
